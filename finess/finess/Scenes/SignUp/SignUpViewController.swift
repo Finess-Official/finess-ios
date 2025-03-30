@@ -9,7 +9,8 @@ import UIKit
 
 class SignUpViewController: UIViewController {
 
-    let titleLabel: UILabel = {
+    // MARK: - Private Properties
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Регистрация"
         label.font = .systemFont(ofSize: 32, weight: .bold)
@@ -19,20 +20,15 @@ class SignUpViewController: UIViewController {
         return label
     }()
 
-    let passwordTextField = RegisterTextField(placeholder: "Пароль")
+    private let passwordTextField = RegisterTextField(placeholder: "Пароль")
 
-    let repeatPasswordTextField = RegisterTextField(placeholder: "Повторите пароль")
+    private let repeatPasswordTextField = RegisterTextField(placeholder: "Повторите пароль")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
-    }
-
-    @objc func tapGesture() {
-        passwordTextField.resignFirstResponder()
-        repeatPasswordTextField.resignFirstResponder()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -44,6 +40,7 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
 
         passwordTextField.delegate = self
+        repeatPasswordTextField.delegate = self
 
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         repeatPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -68,8 +65,17 @@ class SignUpViewController: UIViewController {
         ])
         view.addSubview(titleLabel)
     }
+
+    // MARK: - Actions
+    @objc func tapGesture() {
+        passwordTextField.resignFirstResponder()
+        repeatPasswordTextField.resignFirstResponder()
+    }
 }
 
 extension SignUpViewController: UITextFieldDelegate {
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        tapGesture()
+        return true
+    }
 }
