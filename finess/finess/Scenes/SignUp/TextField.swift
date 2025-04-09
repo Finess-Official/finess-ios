@@ -10,15 +10,26 @@ import UIKit
 
 final class RegisterTextField: UITextField {
 
+    //MARK: - Public Properties
+    public var isInErrorState: Bool = false {
+        didSet {
+            currentButtonState = isInErrorState ? .exclamationmark : .eye
+            rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
+            rightButton.tintColor = isInErrorState ? .red: .black
+            isSecureTextEntry = false
+        }
+    }
+
+    public let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
+
+    // MARK: - Private property
     private enum ButtonImage: String {
         case eye = "eye"
         case eyeFill = "eye.slash"
+        case exclamationmark = "exclamationmark.triangle"
     }
 
     private var currentButtonState: ButtonImage = .eye
-
-    // MARK: - Private property
-    private let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
 
     private lazy var rightButton: UIButton = {
         let button = UIButton()
@@ -36,6 +47,8 @@ final class RegisterTextField: UITextField {
                 currentButtonState = .eye
                 button.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
                 isSecureTextEntry = false
+            case .exclamationmark:
+                break
             }
         }), for: .touchUpInside)
         return button

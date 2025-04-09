@@ -1,38 +1,35 @@
 //
-//  ViewController.swift
+//  SignInViewController.swift
 //  finess
 //
-//  Created by Elina Karapetyan on 27.03.2025.
+//  Created by Elina Karapetyan on 06.04.2025.
 //
 
 import UIKit
 
-protocol SignUpViewControllerDelegate: AnyObject {
-    func didTapSignUp()
-    func didTapSignIn()
+protocol SignInViewControllerDelegate: AnyObject {
+    func didTapSignInButton(with password: String?)
+    func didTapSignUpButton()
 }
 
-class SignUpViewController: UIViewController {
-    
-    // MARK: - Public Properties
-    weak var delegate: SignUpViewControllerDelegate?
+class SignInViewController: UIViewController {
 
-    // MARK: - Private Properties
+    // MARK: - Public Properties
+    weak var delegate: SignInViewControllerDelegate?
+
     private enum Constants {
         static let passwordTextFieldErrorLabel = "В пароле меньше 6 символов"
-        static let repeatPasswordTextFieldErrorLabel = "Пароли не совпадают"
-        static let titleLabel = "Регистрация"
-        static let signupButtonTitle = "Зарегистрироваться"
-        static let signInButtonTitle = "Уже есть аккаунт? Войти"
+        static let titleLabel = "Вход"
+        static let signinButtonTitle = "Войти"
+        static let signupButtonTitle = "Нет аккаунта? Создайте его"
         static let passwordTextFieldPlaceholder = "Пароль"
-        static let repeatPasswordTextFieldPlaceholder = "Повторите пароль"
 
         static let disabledButton = "DisabledButton"
         static let activeButton = "ActiveButton"
 
         static let errorLableFontSize: CGFloat = 13
         static let titleFontSize: CGFloat = 32
-        static let buttonFontSize: CGFloat = 17
+        static let signinButtonFontSize: CGFloat = 17
         static let signupButtonFontSize: CGFloat = 12
         static let buttonHeight: CGFloat = 48
         static let buttonCornerRadius: CGFloat = buttonHeight / 2
@@ -45,19 +42,11 @@ class SignUpViewController: UIViewController {
         static let maxSymbolCount: Int = 72
     }
 
+    // MARK: - Private Properties
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
+        label.isHidden = true
         label.text = Constants.passwordTextFieldErrorLabel
-        label.font = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .red
-        return label
-    }()
-
-    private let repeatPasswordTextFieldErrorLabel: UILabel = {
-        let label = UILabel()
-        label.text = Constants.repeatPasswordTextFieldErrorLabel
         label.font = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -75,10 +64,10 @@ class SignUpViewController: UIViewController {
         return label
     }()
 
-    private lazy var signupButton: UIButton = {
+    private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signupButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: Constants.buttonFontSize, weight: .medium)
+        button.setTitle(Constants.signinButtonTitle, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: Constants.signinButtonFontSize, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
         button.backgroundColor = UIColor(named: Constants.disabledButton)
@@ -86,48 +75,27 @@ class SignUpViewController: UIViewController {
         button.layer.cornerRadius = Constants.buttonCornerRadius
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            if let count = repeatPasswordTextField.text?.count, count != 0 {
-                if passwordTextField.text != repeatPasswordTextField.text {
-                    repeatPasswordTextField.isInErrorState = true
-                    view.addSubview(repeatPasswordTextFieldErrorLabel)
-                    repeatPasswordTextFieldErrorLabel.topAnchor.constraint(equalTo: repeatPasswordTextField.bottomAnchor, constant: 4).isActive = true
-                    repeatPasswordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: repeatPasswordTextField.padding.left + Constants.horizontalPadding  ).isActive = true
-                } else {
-                    repeatPasswordTextField.isInErrorState = false
-                    repeatPasswordTextFieldErrorLabel.removeFromSuperview()
-                }
-            }
-            delegate?.didTapSignUp()
+            delegate?.didTapSignInButton(with: passwordTextField.text)
         }), for: .touchUpInside)
         return button
     }()
 
-    private lazy var signinButton: UIButton = {
+    private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signInButtonTitle, for: .normal)
+        button.setTitle(Constants.signupButtonTitle, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: Constants.signupButtonFontSize, weight: .medium)
         button.setTitleColor(UIColor(named: Constants.activeButton), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            delegate?.didTapSignIn()
+            delegate?.didTapSignUpButton()
         }), for: .touchUpInside)
         return button
     }()
 
     private let passwordTextField = RegisterTextField(placeholder: Constants.passwordTextFieldPlaceholder)
 
-    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPasswordTextFieldPlaceholder)
-
-    // MARK: - Init
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var signupButtonTopConstraint: NSLayoutConstraint?
 
     // MARK: - Override Methods
     override func viewDidLoad() {
@@ -147,16 +115,14 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
 
         passwordTextField.delegate = self
-        repeatPasswordTextField.delegate = self
 
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        repeatPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(titleLabel)
         view.addSubview(passwordTextField)
-        view.addSubview(repeatPasswordTextField)
-        view.addSubview(signupButton)
         view.addSubview(signinButton)
+        view.addSubview(signupButton)
+        view.addSubview(passwordTextFieldErrorLabel)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.titleTopPadding),
@@ -167,45 +133,59 @@ class SignUpViewController: UIViewController {
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
             passwordTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),
 
-            repeatPasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: Constants.spacing),
-            repeatPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            repeatPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
-            repeatPasswordTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),
+            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4),
+            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
 
-            signinButton.topAnchor.constraint(equalTo: repeatPasswordTextField.bottomAnchor),
             signinButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            signinButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
             signinButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            signinButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
 
             signupButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
             signupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
 
-            view.keyboardLayoutGuide.topAnchor.constraint(equalTo: signupButton.bottomAnchor, constant: Constants.horizontalPadding)
+            view.keyboardLayoutGuide.topAnchor.constraint(equalTo: signinButton.bottomAnchor, constant: Constants.horizontalPadding)
         ])
+
+        updateSignupButtonConstraint()
+    }
+
+    private func updateSignupButtonConstraint() {
+        if let existingConstraint = signupButtonTopConstraint {
+            NSLayoutConstraint.deactivate([existingConstraint])
+        }
+
+        let newConstraint: NSLayoutConstraint
+        if passwordTextFieldErrorLabel.isHidden {
+            newConstraint = signupButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4)
+        } else {
+            newConstraint = signupButton.topAnchor.constraint(equalTo: passwordTextFieldErrorLabel.bottomAnchor, constant: 4)
+        }
+
+        NSLayoutConstraint.activate([newConstraint])
+        signupButtonTopConstraint = newConstraint
     }
 
     private func changeButtonState(isEnabled: Bool) {
-        signupButton.isEnabled = isEnabled
-        signupButton.backgroundColor = UIColor(named: isEnabled ? Constants.activeButton: Constants.disabledButton)
+        signinButton.isEnabled = isEnabled
+        signinButton.backgroundColor = UIColor(named: isEnabled ? Constants.activeButton: Constants.disabledButton)
     }
 
     // MARK: - Actions
     @objc func tapGesture() {
         passwordTextField.resignFirstResponder()
-        repeatPasswordTextField.resignFirstResponder()
     }
 }
 
 // MARK: - UITextFieldDelegate
-extension SignUpViewController: UITextFieldDelegate {
+extension SignInViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         tapGesture()
         return true
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        if passwordTextField.text?.isEmpty ?? true || repeatPasswordTextField.text?.isEmpty ?? true {
+        if passwordTextField.text?.isEmpty ?? true {
             changeButtonState(isEnabled: false)
         } else {
             changeButtonState(isEnabled: true)
@@ -214,20 +194,19 @@ extension SignUpViewController: UITextFieldDelegate {
         if let count = passwordTextField.text?.count, count < Constants.minSymbolCount {
             changeButtonState(isEnabled: false)
             passwordTextField.isInErrorState = true
-            view.addSubview(passwordTextFieldErrorLabel)
-            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4).isActive = true
-            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36).isActive = true
+            passwordTextFieldErrorLabel.isHidden = false
         } else {
             changeButtonState(isEnabled: true)
             passwordTextField.isInErrorState = false
-            passwordTextFieldErrorLabel.removeFromSuperview()
+            passwordTextFieldErrorLabel.isHidden = true
         }
 
         if let count = passwordTextField.text?.count, count == Constants.maxSymbolCount + 1, textField == passwordTextField {
             let text = passwordTextField.text ?? ""
             passwordTextField.text = String(text.dropLast())
         }
+
+        updateSignupButtonConstraint()
     }
 }
-
 
