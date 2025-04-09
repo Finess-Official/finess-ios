@@ -21,7 +21,6 @@ protocol AuthProtocol: ObservableObject {
 }
 
 class Auth: AuthProtocol {
-
     struct Credentials {
         var accessToken: String?
         var refreshToken: String?

@@ -23,7 +23,6 @@ class SignUpViewController: UIViewController {
         label.text = Constants.lessThanSixSymbols
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = Constants.errorColor
         return label
     }()
@@ -64,7 +63,7 @@ class SignUpViewController: UIViewController {
                     repeatPasswordTextField.isInErrorState = true
                     view.addSubview(repeatPasswordTextFieldErrorLabel)
                     repeatPasswordTextFieldErrorLabel.topAnchor.constraint(equalTo: repeatPasswordTextField.bottomAnchor, constant: 4).isActive = true
-                    repeatPasswordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: repeatPasswordTextField.padding.left + Constants.horizontalPadding  ).isActive = true
+                    repeatPasswordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.textFieldLeftPadding + Constants.horizontalPadding  ).isActive = true
                 } else {
                     repeatPasswordTextField.isInErrorState = false
                     repeatPasswordTextFieldErrorLabel.removeFromSuperview()
