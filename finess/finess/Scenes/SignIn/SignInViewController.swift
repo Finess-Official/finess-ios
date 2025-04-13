@@ -17,62 +17,37 @@ class SignInViewController: UIViewController {
     // MARK: - Public Properties
     weak var delegate: SignInViewControllerDelegate?
 
-    private enum Constants {
-        static let passwordTextFieldErrorLabel = "В пароле меньше 6 символов"
-        static let titleLabel = "Вход"
-        static let signinButtonTitle = "Войти"
-        static let signupButtonTitle = "Нет аккаунта? Создайте его"
-        static let passwordTextFieldPlaceholder = "Пароль"
-
-        static let disabledButton = "DisabledButton"
-        static let activeButton = "ActiveButton"
-
-        static let errorLableFontSize: CGFloat = 13
-        static let titleFontSize: CGFloat = 32
-        static let signinButtonFontSize: CGFloat = 17
-        static let signupButtonFontSize: CGFloat = 12
-        static let buttonHeight: CGFloat = 48
-        static let buttonCornerRadius: CGFloat = buttonHeight / 2
-        static let horizontalPadding: CGFloat = 16
-        static let titleTopPadding: CGFloat = 32
-        static let textFieldHeight: CGFloat = 56
-        static let spacing: CGFloat = 36
-
-        static let minSymbolCount: Int = 6
-        static let maxSymbolCount: Int = 72
-    }
-
     // MARK: - Private Properties
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.isHidden = true
-        label.text = Constants.passwordTextFieldErrorLabel
-        label.font = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
-        label.textAlignment = .left
+        label.text = Constants.password
+        label.font = Constants.errorFont
+        label.textAlignment = Constants.textAlignment
+        label.textColor = Constants.errorColor
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .red
+        label.isHidden = true
         return label
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.titleLabel
-        label.font = .systemFont(ofSize: Constants.titleFontSize, weight: .bold)
-        label.textAlignment = .left
+        label.text = Constants.signIn
+        label.font = Constants.titleFont
+        label.textAlignment = Constants.textAlignment
+        label.textColor = Constants.textColor
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
         return label
     }()
 
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signinButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: Constants.signinButtonFontSize, weight: .medium)
-        button.setTitleColor(.white, for: .normal)
-        button.isEnabled = false
-        button.backgroundColor = UIColor(named: Constants.disabledButton)
-        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(Constants.signinButton, for: .normal)
+        button.titleLabel?.font = Constants.largeButtonFont
+        button.setTitleColor(Constants.buttonTitleColor, for: .normal)
+        button.backgroundColor = Constants.disabledButtonColor
         button.layer.cornerRadius = Constants.buttonCornerRadius
+        button.isEnabled = false
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             delegate?.didTapSignInButton(with: passwordTextField.text)
@@ -82,9 +57,9 @@ class SignInViewController: UIViewController {
 
     private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signupButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: Constants.signupButtonFontSize, weight: .medium)
-        button.setTitleColor(UIColor(named: Constants.activeButton), for: .normal)
+        button.setTitle(Constants.createAccount, for: .normal)
+        button.titleLabel?.font = Constants.middleButtonFont
+        button.setTitleColor(Constants.activeButtonColor, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
@@ -93,7 +68,7 @@ class SignInViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.passwordTextFieldPlaceholder)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password)
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 
@@ -112,7 +87,7 @@ class SignInViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = Constants.backgroundColor
 
         passwordTextField.delegate = self
 
@@ -133,8 +108,8 @@ class SignInViewController: UIViewController {
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
             passwordTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),
 
-            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4),
-            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
+            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: Constants.errorLabelTopPadding),
+            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.errorLabelLeadingPadding),
 
             signinButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
             signinButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
@@ -168,7 +143,7 @@ class SignInViewController: UIViewController {
 
     private func changeButtonState(isEnabled: Bool) {
         signinButton.isEnabled = isEnabled
-        signinButton.backgroundColor = UIColor(named: isEnabled ? Constants.activeButton: Constants.disabledButton)
+        signinButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
     }
 
     // MARK: - Actions

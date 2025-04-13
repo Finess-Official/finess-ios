@@ -9,7 +9,18 @@ import SwiftUI
 import SwiftKeychainWrapper
 import Combine
 
-class Auth: ObservableObject {
+protocol AuthProtocol: ObservableObject {
+    var loggedIn: CurrentValueSubject<Bool, Never> { get }
+
+    func getCredentials() -> Auth.Credentials
+    func setCredentials(accessToken: String, refreshToken: String)
+    func hasAccessToken() -> Bool
+    func getAccessToken() -> String?
+    func getRefreshToken() -> String?
+    func logout()
+}
+
+class Auth: AuthProtocol {
 
     struct Credentials {
         var accessToken: String?

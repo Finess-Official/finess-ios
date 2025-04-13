@@ -18,70 +18,43 @@ class SignUpViewController: UIViewController {
     weak var delegate: SignUpViewControllerDelegate?
 
     // MARK: - Private Properties
-    private enum Constants {
-        static let passwordTextFieldErrorLabel = "В пароле меньше 6 символов"
-        static let repeatPasswordTextFieldErrorLabel = "Пароли не совпадают"
-        static let titleLabel = "Регистрация"
-        static let signupButtonTitle = "Зарегистрироваться"
-        static let signInButtonTitle = "Уже есть аккаунт? Войти"
-        static let passwordTextFieldPlaceholder = "Пароль"
-        static let repeatPasswordTextFieldPlaceholder = "Повторите пароль"
-
-        static let disabledButton = "DisabledButton"
-        static let activeButton = "ActiveButton"
-
-        static let errorLableFontSize: CGFloat = 13
-        static let titleFontSize: CGFloat = 32
-        static let buttonFontSize: CGFloat = 17
-        static let signupButtonFontSize: CGFloat = 12
-        static let buttonHeight: CGFloat = 48
-        static let buttonCornerRadius: CGFloat = buttonHeight / 2
-        static let horizontalPadding: CGFloat = 16
-        static let titleTopPadding: CGFloat = 32
-        static let textFieldHeight: CGFloat = 56
-        static let spacing: CGFloat = 36
-
-        static let minSymbolCount: Int = 6
-        static let maxSymbolCount: Int = 72
-    }
-
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.passwordTextFieldErrorLabel
-        label.font = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
-        label.textAlignment = .left
+        label.text = Constants.lessThanSixSymbols
+        label.font = Constants.errorFont
+        label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .red
+        label.textColor = Constants.errorColor
         return label
     }()
 
     private let repeatPasswordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.repeatPasswordTextFieldErrorLabel
-        label.font = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
-        label.textAlignment = .left
+        label.text = Constants.repeatPassword
+        label.font = Constants.errorFont
+        label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .red
+        label.textColor = Constants.errorColor
         return label
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.titleLabel
-        label.font = .systemFont(ofSize: Constants.titleFontSize, weight: .bold)
-        label.textAlignment = .left
+        label.text = Constants.signUp
+        label.font = Constants.titleFont
+        label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = Constants.textColor
         return label
     }()
 
     private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signupButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: Constants.buttonFontSize, weight: .medium)
+        button.setTitle(Constants.signupButton, for: .normal)
+        button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
-        button.backgroundColor = UIColor(named: Constants.disabledButton)
+        button.backgroundColor = Constants.disabledButtonColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = Constants.buttonCornerRadius
         button.addAction(UIAction(handler: { [weak self] _ in
@@ -104,9 +77,9 @@ class SignUpViewController: UIViewController {
 
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signInButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: Constants.signupButtonFontSize, weight: .medium)
-        button.setTitleColor(UIColor(named: Constants.activeButton), for: .normal)
+        button.setTitle(Constants.haveAccountSignIn, for: .normal)
+        button.titleLabel?.font = Constants.middleButtonFont
+        button.setTitleColor(Constants.activeButtonColor, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
@@ -115,9 +88,9 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.passwordTextFieldPlaceholder)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password)
 
-    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPasswordTextFieldPlaceholder)
+    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPassword)
 
     // MARK: - Init
 
@@ -187,7 +160,7 @@ class SignUpViewController: UIViewController {
 
     private func changeButtonState(isEnabled: Bool) {
         signupButton.isEnabled = isEnabled
-        signupButton.backgroundColor = UIColor(named: isEnabled ? Constants.activeButton: Constants.disabledButton)
+        signupButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
     }
 
     // MARK: - Actions
@@ -215,8 +188,8 @@ extension SignUpViewController: UITextFieldDelegate {
             changeButtonState(isEnabled: false)
             passwordTextField.isInErrorState = true
             view.addSubview(passwordTextFieldErrorLabel)
-            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4).isActive = true
-            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36).isActive = true
+            passwordTextFieldErrorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: Constants.errorLabelTopPadding).isActive = true
+            passwordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.errorLabelLeadingPadding).isActive = true
         } else {
             changeButtonState(isEnabled: true)
             passwordTextField.isInErrorState = false

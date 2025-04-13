@@ -15,12 +15,12 @@ final class RegisterTextField: UITextField {
         didSet {
             currentButtonState = isInErrorState ? .exclamationmark : .eye
             rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
-            rightButton.tintColor = isInErrorState ? .red: .black
+            rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
             isSecureTextEntry = false
         }
     }
 
-    public let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
+    public let padding = Constants.textFieldPadding
 
     // MARK: - Private property
     private enum ButtonImage: String {
@@ -78,15 +78,15 @@ final class RegisterTextField: UITextField {
 
     // MARK: - Private Methods
     private func setupTextField(placeholder: String) {
-        textColor = .black
-        layer.cornerRadius = 16
+        textColor = Constants.textColor
+        layer.cornerRadius = Constants.textFieldCornerRadius
         layer.backgroundColor = UIColor.systemGray6.cgColor
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
 
         addSubview(rightButton)
 
-        heightAnchor.constraint(equalToConstant: 56).isActive = true
-        rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
+        rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }
