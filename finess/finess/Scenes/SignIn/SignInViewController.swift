@@ -14,13 +14,13 @@ protocol SignInViewControllerDelegate: AnyObject {
 
 class SignInViewController: UIViewController {
 
-    // MARK: - Public Properties
+    // MARK: - Internal Properties
     weak var delegate: SignInViewControllerDelegate?
 
     // MARK: - Private Properties
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.password
+        label.text = Constants.lessThanSixSymbols
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.errorColor
@@ -51,6 +51,7 @@ class SignInViewController: UIViewController {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             delegate?.didTapSignInButton(with: passwordTextField.text)
+            passwordTextField.text = ""
         }), for: .touchUpInside)
         return button
     }()
@@ -72,12 +73,29 @@ class SignInViewController: UIViewController {
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 
+    // MARK: - Initializer
+    init(userDidSignedUp: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        self.signupButton.isHidden = userDidSignedUp
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        passwordTextField.text = ""
+        passwordTextFieldErrorLabel.isHidden = true
+        passwordTextField.isInErrorState = false
     }
 
     override func viewDidAppear(_ animated: Bool) {

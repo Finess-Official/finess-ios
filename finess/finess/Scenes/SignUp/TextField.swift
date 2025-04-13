@@ -10,8 +10,8 @@ import UIKit
 
 final class RegisterTextField: UITextField {
 
-    //MARK: - Public Properties
-    public var isInErrorState: Bool = false {
+    //MARK: - Internal Properties
+    var isInErrorState: Bool = false {
         didSet {
             currentButtonState = isInErrorState ? .exclamationmark : .eye
             rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)

@@ -8,13 +8,13 @@
 import UIKit
 
 protocol SignUpViewControllerDelegate: AnyObject {
-    func didTapSignUp()
+    func didTapSignUp(with password: String?)
     func didTapSignIn()
 }
 
 class SignUpViewController: UIViewController {
-    
-    // MARK: - Public Properties
+
+    // MARK: - Internal Properties
     weak var delegate: SignUpViewControllerDelegate?
 
     // MARK: - Private Properties
@@ -23,6 +23,7 @@ class SignUpViewController: UIViewController {
         label.text = Constants.lessThanSixSymbols
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = Constants.errorColor
         return label
     }()
@@ -67,9 +68,9 @@ class SignUpViewController: UIViewController {
                 } else {
                     repeatPasswordTextField.isInErrorState = false
                     repeatPasswordTextFieldErrorLabel.removeFromSuperview()
+                    delegate?.didTapSignUp(with: repeatPasswordTextField.text)
                 }
             }
-            delegate?.didTapSignUp()
         }), for: .touchUpInside)
         return button
     }()
@@ -107,6 +108,15 @@ class SignUpViewController: UIViewController {
         setupUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cleanTextFields()
+        passwordTextFieldErrorLabel.isHidden = true
+        repeatPasswordTextFieldErrorLabel.isHidden = true
+        passwordTextField.isInErrorState = false
+        repeatPasswordTextField.isInErrorState = false
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -160,6 +170,11 @@ class SignUpViewController: UIViewController {
     private func changeButtonState(isEnabled: Bool) {
         signupButton.isEnabled = isEnabled
         signupButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
+    }
+
+    private func cleanTextFields() {
+        passwordTextField.text = ""
+        repeatPasswordTextField.text = ""
     }
 
     // MARK: - Actions

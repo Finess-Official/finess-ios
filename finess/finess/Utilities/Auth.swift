@@ -11,12 +11,8 @@ import Combine
 
 protocol AuthProtocol: ObservableObject {
     var loggedIn: CurrentValueSubject<Bool, Never> { get }
-
-    func getCredentials() -> Auth.Credentials
-    func setCredentials(accessToken: String, refreshToken: String)
-    func hasAccessToken() -> Bool
-    func getAccessToken() -> String?
-    func getRefreshToken() -> String?
+    func signIn(password: String)
+    func signUp(password: String)
     func logout()
 }
 
@@ -29,45 +25,53 @@ class Auth: AuthProtocol {
     enum KeychainKey: String {
         case accessToken
         case refreshToken
+        case userId
+        case accessTokenExpirationDate
+        case refreshTokenExpirationDate
     }
 
     static let shared: Auth = Auth()
-    private let keychain: KeychainWrapper = KeychainWrapper.standard
 
+    private let keychain: KeychainWrapper = KeychainWrapper.standard
+    private let authClient: AuthClient
+
+    enum AuthResult {
+        case success
+        case error(localizedText: String?)
+    }
+
+    var isSignedUp: Bool { getUserId() != nil }
     let loggedIn = CurrentValueSubject<Bool, Never>(false)
+    let authError = CurrentValueSubject<APIErrorHandler?, Never>(nil)
 
     private init() {
+        authClient = AuthClientImpl()
         withAnimation {
             loggedIn.send(hasAccessToken())
         }
     }
 
-    func getCredentials() -> Credentials {
-        return Credentials(
-            accessToken: keychain.string(forKey: KeychainKey.accessToken.rawValue),
-            refreshToken: keychain.string(forKey: KeychainKey.refreshToken.rawValue)
-        )
-    }
-
-    func setCredentials(accessToken: String, refreshToken: String) {
-        keychain.set(accessToken, forKey: KeychainKey.accessToken.rawValue)
-        keychain.set(refreshToken, forKey: KeychainKey.refreshToken.rawValue)
-
-        withAnimation {
-            loggedIn.send(true)
+    func signIn(password: String) {
+        guard let userId = getUserId() else { return }
+        authClient.request(with: AuthAPI.signIn(params: SignInParams(userId: userId, password: password))) { [weak self] result in
+            switch result {
+            case let .success(success):
+                Auth.shared.setCredentials(authData: success)
+            case let .failure(error):
+                self?.authError.send(error)
+            }
         }
     }
 
-    func hasAccessToken() -> Bool {
-        return getCredentials().accessToken != nil
-    }
-
-    func getAccessToken() -> String? {
-        return getCredentials().accessToken
-    }
-
-    func getRefreshToken() -> String? {
-        return getCredentials().refreshToken
+    func signUp(password: String) {
+        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password))) { [weak self] result in
+            switch result {
+            case let .success(success):
+                Auth.shared.setCredentials(authData: success)
+            case let .failure(error):
+                self?.authError.send(error)
+            }
+        }
     }
 
     func logout() {
@@ -79,4 +83,40 @@ class Auth: AuthProtocol {
         }
     }
 
+    private func getCredentials() -> Credentials {
+        return Credentials(
+            accessToken: keychain.string(forKey: KeychainKey.accessToken.rawValue),
+            refreshToken: keychain.string(forKey: KeychainKey.refreshToken.rawValue)
+        )
+    }
+
+    private func setCredentials(authData: AuthResponse) {
+        keychain.set(authData.accessToken, forKey: KeychainKey.accessToken.rawValue)
+        keychain.set(authData.sessionExpiresAt.timeIntervalSince1970, forKey: KeychainKey.accessTokenExpirationDate.rawValue)
+        keychain.set(authData.refreshToken, forKey: KeychainKey.refreshToken.rawValue)
+        keychain.set(authData.refreshTokenExpiresAt.timeIntervalSince1970, forKey: KeychainKey.refreshTokenExpirationDate.rawValue)
+        keychain.set(authData.userId, forKey: KeychainKey.userId.rawValue)
+
+        withAnimation {
+            loggedIn.send(true)
+        }
+    }
+
+    private func getUserId() -> String? {
+        return keychain.string(forKey: KeychainKey.userId.rawValue)
+    }
+
+    private func hasAccessToken() -> Bool {
+        guard getCredentials().accessToken != nil,
+              let refreshTokenExpirationDate = keychain.double(forKey: KeychainKey.refreshTokenExpirationDate.rawValue) else {
+            return false
+        }
+
+        let currentDate = Date().timeIntervalSince1970
+        if currentDate < refreshTokenExpirationDate {
+            return true
+        } else {
+            return false
+        }
+    }
 }
