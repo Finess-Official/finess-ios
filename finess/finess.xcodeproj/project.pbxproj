@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2BCE8CFE2DA2BB0B000AB5A8 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2BCE8CFD2DA2BB0B000AB5A8 /* SwiftKeychainWrapper */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2B9ABFE32D956E1B00221678 /* finess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = finess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BCE8CFE2DA2BB0B000AB5A8 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = finess;
 			packageProductDependencies = (
+				2BCE8CFD2DA2BB0B000AB5A8 /* SwiftKeychainWrapper */,
 			);
 			productName = finess;
 			productReference = 2B9ABFE32D956E1B00221678 /* finess.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 2B9ABFDA2D956E1B00221678;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2BCE8CFC2DA2BB0B000AB5A8 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2B9ABFE42D956E1B00221678 /* Products */;
 			projectDirPath = "";
@@ -335,6 +344,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2BCE8CFC2DA2BB0B000AB5A8 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2BCE8CFD2DA2BB0B000AB5A8 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2BCE8CFC2DA2BB0B000AB5A8 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2B9ABFDB2D956E1B00221678 /* Project object */;
 }

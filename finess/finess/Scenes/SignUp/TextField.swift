@@ -10,15 +10,26 @@ import UIKit
 
 final class RegisterTextField: UITextField {
 
+    //MARK: - Public Properties
+    public var isInErrorState: Bool = false {
+        didSet {
+            currentButtonState = isInErrorState ? .exclamationmark : .eye
+            rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
+            rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
+            isSecureTextEntry = false
+        }
+    }
+
+    public let padding = Constants.textFieldPadding
+
+    // MARK: - Private property
     private enum ButtonImage: String {
         case eye = "eye"
         case eyeFill = "eye.slash"
+        case exclamationmark = "exclamationmark.triangle"
     }
 
     private var currentButtonState: ButtonImage = .eye
-
-    // MARK: - Private property
-    private let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
 
     private lazy var rightButton: UIButton = {
         let button = UIButton()
@@ -36,6 +47,8 @@ final class RegisterTextField: UITextField {
                 currentButtonState = .eye
                 button.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
                 isSecureTextEntry = false
+            case .exclamationmark:
+                break
             }
         }), for: .touchUpInside)
         return button
@@ -65,15 +78,15 @@ final class RegisterTextField: UITextField {
 
     // MARK: - Private Methods
     private func setupTextField(placeholder: String) {
-        textColor = .black
-        layer.cornerRadius = 16
+        textColor = Constants.textColor
+        layer.cornerRadius = Constants.textFieldCornerRadius
         layer.backgroundColor = UIColor.systemGray6.cgColor
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
 
         addSubview(rightButton)
 
-        heightAnchor.constraint(equalToConstant: 56).isActive = true
-        rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
+        rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }
