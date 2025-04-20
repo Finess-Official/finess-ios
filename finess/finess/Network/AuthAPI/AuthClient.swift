@@ -13,6 +13,7 @@ enum AuthError: Error {
 
 protocol AuthClient: AnyObject {
     func request(
+        client _: URLSessionProtocol,
         with params: AuthAPI,
         completion: @escaping (
             _ result: Result<AuthResponse, APIErrorHandler>
@@ -23,6 +24,7 @@ protocol AuthClient: AnyObject {
 final class AuthClientImpl: AuthClient {
 
     func request(
+        client: URLSessionProtocol = URLSession.shared,
         with params: AuthAPI,
         completion: @escaping (Result<AuthResponse, APIErrorHandler>) -> Void
     ) {
@@ -31,7 +33,7 @@ final class AuthClientImpl: AuthClient {
             return
         }
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = client.createDataTask(with: request) { data, response, error in
             if let error = error {
                 print("Network error: \(error.localizedDescription)")
                 completion(.failure(.internalServerError))
