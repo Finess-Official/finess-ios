@@ -13,12 +13,14 @@ enum Constants {
     static let titleFont: UIFont = .systemFont(ofSize: Constants.titleFontSize, weight: .bold)
     static let largeButtonFont: UIFont = .systemFont(ofSize: Constants.largeButtonFontSize, weight: .medium)
     static let middleButtonFont: UIFont = .systemFont(ofSize: Constants.middleButtonFontSize, weight: .medium)
+    static let smallButtonFont: UIFont = .systemFont(ofSize: Constants.smallButtonFontSize, weight: .regular)
 
     // FontSize
     static let errorLableFontSize: CGFloat = 13
     static let titleFontSize: CGFloat = 32
     static let largeButtonFontSize: CGFloat = 17
     static let middleButtonFontSize: CGFloat = 12
+    static let smallButtonFontSize: CGFloat = 16
 
     // TextAlignment
     static let textAlignment: NSTextAlignment = .left
@@ -30,7 +32,10 @@ enum Constants {
     static let textColor: UIColor = .black
     static let normalButtonColor: UIColor = .black
     static let buttonTitleColor: UIColor = .white
-    static let backgroundColor: UIColor = .white
+    static let authBackgroundColor: UIColor = .white
+    static let tabBarActive = UIColor(named: "TabBarActive")
+    static let tabBarInactive = UIColor(named: "TabBarInactive")
+    static let backgroundColor = UIColor(named: "BackgroundColor")
 
     // Numeric
     static let buttonHeight: CGFloat = 48
@@ -61,4 +66,9 @@ enum Constants {
     static let signupButton = "Зарегистрироваться"
     static let haveAccountSignIn = "Уже есть аккаунт? Войти"
     static let repeatPassword = "Повторите пароль"
+    static let qrIconTitle = "QR"
+
+    // Image
+    static let qrIcon = UIImage(named: qrIconTitle)
+    static let addIcon = UIImage(named: "AddQR")
 }

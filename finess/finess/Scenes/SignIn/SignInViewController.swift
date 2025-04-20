@@ -107,7 +107,7 @@ class SignInViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setupUI() {
-        view.backgroundColor = Constants.backgroundColor
+        view.backgroundColor = Constants.authBackgroundColor
 
         passwordTextField.delegate = self
 
