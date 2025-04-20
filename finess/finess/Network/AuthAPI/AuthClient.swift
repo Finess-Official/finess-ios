@@ -34,12 +34,14 @@ final class AuthClientImpl: AuthClient {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Network error: \(error.localizedDescription)")
-                completion(.failure(.internalServerError)) //
+                completion(.failure(.internalServerError))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                self.handleHTTPStatusCode(httpResponse.statusCode, completion: completion)
+                if let errorStatus = self.handleHTTPStatusCode(httpResponse.statusCode) {
+                    completion(.failure(errorStatus))
+                }
             }
 
             guard let data = data else {
@@ -85,20 +87,22 @@ final class AuthClientImpl: AuthClient {
         return request
     }
 
-    private func handleHTTPStatusCode(_ statusCode: Int, completion: @escaping (Result<AuthResponse, APIErrorHandler>) -> Void) {
+    private func handleHTTPStatusCode(_ statusCode: Int) -> APIErrorHandler? {
         switch statusCode {
+        case 200:
+            return nil
         case 400:
-            completion(.failure(.badRequest))
+            return .badRequest
         case 401:
-            completion(.failure(.unauthorized))
+            return .unauthorized
         case 429:
-            completion(.failure(.tooManyRequests))
+            return .tooManyRequests
         case 500:
-            completion(.failure(.internalServerError))
+            return .internalServerError
         case 503:
-            completion(.failure(.serviceUnavailable))
+            return .serviceUnavailable
         default:
-            break
+            return .unkownError
         }
     }
 }

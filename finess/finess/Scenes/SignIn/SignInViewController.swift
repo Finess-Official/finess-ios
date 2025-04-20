@@ -8,7 +8,6 @@
 import UIKit
 
 protocol SignInViewControllerDelegate: AnyObject {
-    func didTapSignInButton(with password: String?)
     func didTapSignUpButton()
 }
 
@@ -18,6 +17,8 @@ class SignInViewController: UIViewController {
     weak var delegate: SignInViewControllerDelegate?
 
     // MARK: - Private Properties
+    private let loadingViewController = LoadingViewController()
+    
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.lessThanSixSymbols
@@ -50,7 +51,8 @@ class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            delegate?.didTapSignInButton(with: passwordTextField.text)
+            loadingViewController.start()
+            didTapSignInButton(with: passwordTextField.text)
             passwordTextField.text = ""
         }), for: .touchUpInside)
         return button
@@ -167,6 +169,20 @@ class SignInViewController: UIViewController {
     // MARK: - Actions
     @objc func tapGesture() {
         passwordTextField.resignFirstResponder()
+    }
+
+    private func didTapSignInButton(with password: String?) {
+        guard let password = password else { return }
+        navigationController?.pushViewController(loadingViewController, animated: false)
+        Auth.shared.signIn(password: password) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: false) {
+                    if let error = error {
+                        ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                    }
+                }
+            }
+        }
     }
 }
 

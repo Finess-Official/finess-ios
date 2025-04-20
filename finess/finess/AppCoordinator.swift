@@ -33,7 +33,6 @@ class AppCoordinator {
 
 extension AppCoordinator: MainViewControllerDelegate {
     func didTapLogout() {
-        LoadingManager.shared.showLoading(in: navigationController)
         Auth.shared.logout()
     }
 }

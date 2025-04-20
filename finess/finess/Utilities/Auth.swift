@@ -11,8 +11,8 @@ import Combine
 
 protocol AuthProtocol: ObservableObject {
     var loggedIn: CurrentValueSubject<Bool, Never> { get }
-    func signIn(password: String)
-    func signUp(password: String)
+    func signIn(password: String, completion: @escaping (APIErrorHandler?) -> Void)
+    func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void)
     func logout()
 }
 
@@ -42,7 +42,6 @@ class Auth: AuthProtocol {
 
     var isSignedUp: Bool { getUserId() != nil }
     let loggedIn = CurrentValueSubject<Bool, Never>(false)
-    let authError = CurrentValueSubject<APIErrorHandler?, Never>(nil)
 
     private init() {
         authClient = AuthClientImpl()
@@ -51,25 +50,27 @@ class Auth: AuthProtocol {
         }
     }
 
-    func signIn(password: String) {
-        guard let userId = getUserId() else { return }
-        authClient.request(with: AuthAPI.signIn(params: SignInParams(userId: userId, password: password))) { [weak self] result in
+    func signIn(password: String, completion: @escaping (APIErrorHandler?) -> Void) {
+        guard let userId = getUserId() else { completion(.unauthorized); return }
+        authClient.request(with: AuthAPI.signIn(params: SignInParams(userId: userId, password: password))) { result in
             switch result {
             case let .success(success):
                 Auth.shared.setCredentials(authData: success)
+                completion(nil)
             case let .failure(error):
-                self?.authError.send(error)
+                completion(error)
             }
         }
     }
 
-    func signUp(password: String) {
-        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password))) { [weak self] result in
+    func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void) {
+        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password))) { result in
             switch result {
             case let .success(success):
                 Auth.shared.setCredentials(authData: success)
+                completion(nil)
             case let .failure(error):
-                self?.authError.send(error)
+                completion(error)
             }
         }
     }

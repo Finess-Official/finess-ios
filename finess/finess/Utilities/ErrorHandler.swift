@@ -27,9 +27,11 @@ class ErrorHandler {
         case .badRequest:
             return "Неверный формат пароля"
         case .unauthorized:
-            return "Неверный пароль, попробуйте снова"
+            return "Неверно введенные данные, попробуйте снова"
         case .tooManyRequests:
             return "Превышен лимит запросов"
+        case .unkownError:
+            return "Произошла неизвестная ошибка"
         case .internalServerError, .serviceUnavailable:
             return error.description
         }

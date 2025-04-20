@@ -8,7 +8,6 @@
 import UIKit
 
 protocol SignUpViewControllerDelegate: AnyObject {
-    func didTapSignUp(with password: String?)
     func didTapSignIn()
 }
 
@@ -18,6 +17,8 @@ class SignUpViewController: UIViewController {
     weak var delegate: SignUpViewControllerDelegate?
 
     // MARK: - Private Properties
+    private let loadingViewController = LoadingViewController()
+    
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.lessThanSixSymbols
@@ -68,7 +69,8 @@ class SignUpViewController: UIViewController {
                 } else {
                     repeatPasswordTextField.isInErrorState = false
                     repeatPasswordTextFieldErrorLabel.removeFromSuperview()
-                    delegate?.didTapSignUp(with: repeatPasswordTextField.text)
+                    loadingViewController.start()
+                    didTapSignUp(password: repeatPasswordTextField.text)
                 }
             }
         }), for: .touchUpInside)
@@ -181,6 +183,20 @@ class SignUpViewController: UIViewController {
     @objc func tapGesture() {
         passwordTextField.resignFirstResponder()
         repeatPasswordTextField.resignFirstResponder()
+    }
+
+    private func didTapSignUp(password: String?) {
+        guard let password = password else { return }
+        navigationController?.pushViewController(loadingViewController, animated: false)
+        Auth.shared.signUp(password: password) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: false) {
+                    if let error = error {
+                        ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                    }
+                }
+            }
+        }
     }
 }
 

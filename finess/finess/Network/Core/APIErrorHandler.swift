@@ -20,6 +20,7 @@ enum APIErrorHandler: Error, Equatable {
     case tooManyRequests
     case internalServerError
     case serviceUnavailable
+    case unkownError
 
     var description: String {
         switch self {
@@ -35,6 +36,8 @@ enum APIErrorHandler: Error, Equatable {
             return "Внутренняя ошибка сервера - запрос не может быть обработан"
         case .serviceUnavailable:
             return "Сервис временно недоступен - попробуйте позже"
+        case .unkownError:
+            return "Неизвестная ошибка"
         }
     }
 }
