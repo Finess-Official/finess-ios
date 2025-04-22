@@ -8,16 +8,17 @@
 import UIKit
 
 protocol SignUpViewControllerDelegate: AnyObject {
-    func didTapSignUp()
     func didTapSignIn()
 }
 
 class SignUpViewController: UIViewController {
-    
-    // MARK: - Public Properties
+
+    // MARK: - Internal Properties
     weak var delegate: SignUpViewControllerDelegate?
 
     // MARK: - Private Properties
+    private let loadingViewController = LoadingViewController()
+    
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.lessThanSixSymbols
@@ -64,13 +65,14 @@ class SignUpViewController: UIViewController {
                     repeatPasswordTextField.isInErrorState = true
                     view.addSubview(repeatPasswordTextFieldErrorLabel)
                     repeatPasswordTextFieldErrorLabel.topAnchor.constraint(equalTo: repeatPasswordTextField.bottomAnchor, constant: 4).isActive = true
-                    repeatPasswordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: repeatPasswordTextField.padding.left + Constants.horizontalPadding  ).isActive = true
+                    repeatPasswordTextFieldErrorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.textFieldLeftPadding + Constants.horizontalPadding  ).isActive = true
                 } else {
                     repeatPasswordTextField.isInErrorState = false
                     repeatPasswordTextFieldErrorLabel.removeFromSuperview()
+                    loadingViewController.start()
+                    didTapSignUp(password: repeatPasswordTextField.text)
                 }
             }
-            delegate?.didTapSignUp()
         }), for: .touchUpInside)
         return button
     }()
@@ -108,6 +110,15 @@ class SignUpViewController: UIViewController {
         setupUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cleanTextFields()
+        passwordTextFieldErrorLabel.isHidden = true
+        repeatPasswordTextFieldErrorLabel.isHidden = true
+        passwordTextField.isInErrorState = false
+        repeatPasswordTextField.isInErrorState = false
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -163,10 +174,29 @@ class SignUpViewController: UIViewController {
         signupButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
     }
 
+    private func cleanTextFields() {
+        passwordTextField.text = ""
+        repeatPasswordTextField.text = ""
+    }
+
     // MARK: - Actions
     @objc func tapGesture() {
         passwordTextField.resignFirstResponder()
         repeatPasswordTextField.resignFirstResponder()
+    }
+
+    private func didTapSignUp(password: String?) {
+        guard let password = password else { return }
+        navigationController?.pushViewController(loadingViewController, animated: false)
+        Auth.shared.signUp(password: password) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: false) {
+                    if let error = error {
+                        ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                    }
+                }
+            }
+        }
     }
 }
 
