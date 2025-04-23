@@ -1,28 +1,28 @@
 //
-//  AuthClient.swift
+//  QRClient.swift
 //  finess
 //
-//  Created by Elina Karapetyan on 06.04.2025.
+//  Created by Elina Karapetyan on 23.04.2025.
 //
 
 import Foundation
 
-protocol AuthClient: AnyObject {
+protocol QRClient: AnyObject {
     func request(
         client _: URLSessionProtocol,
-        with params: AuthAPI,
+        with params: QRAPI,
         completion: @escaping (
-            _ result: Result<AuthResponse, APIErrorHandler>
+            _ result: Result<CreateAccountResponse, APIErrorHandler>
         ) -> Void
     )
 }
 
-final class AuthClientImpl: AuthClient {
+final class QRClientImpl: QRClient {
 
     func request(
         client: URLSessionProtocol,
-        with params: AuthAPI,
-        completion: @escaping (Result<AuthResponse, APIErrorHandler>) -> Void
+        with params: QRAPI,
+        completion: @escaping (Result<CreateAccountResponse, APIErrorHandler>) -> Void
     ) {
         guard let request = createRequest(for: params) else {
             completion(.failure(.badRequest))
@@ -48,10 +48,10 @@ final class AuthClientImpl: AuthClient {
             }
 
             let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601WithFractionalSeconds
+
             do {
-                let result = try decoder.decode(AuthResult.self, from: data)
-                let response = AuthDTOToDomainConverter.convert(from: result)
+                let result = try decoder.decode(CreateAccountResult.self, from: data)
+                let response = QRDTOToDomainConverter.convert(from: result)
                 completion(.success(response))
             } catch {
                 print("Error parsing JSON: \(error.localizedDescription)")
@@ -61,15 +61,17 @@ final class AuthClientImpl: AuthClient {
 
         task.resume()
     }
-    
-    private func createRequest(for params: AuthAPI) -> URLRequest? {
-        guard let url = URL(string: FinessApp.baseURL + FinessApp.Path.identity + params.path) else {
+
+    private func createRequest(for params: QRAPI) -> URLRequest? {
+        guard let url = URL(string: FinessApp.baseURL + FinessApp.Path.payment + params.path),
+        let accessToken = Auth.shared.getCredentials().accessToken else {
             return nil
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = params.method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         switch params.action {
         case .request:

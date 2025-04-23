@@ -13,6 +13,7 @@ protocol AuthProtocol: ObservableObject {
     var loggedIn: CurrentValueSubject<Bool, Never> { get }
     func signIn(password: String, completion: @escaping (APIErrorHandler?) -> Void)
     func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void)
+    func getCredentials() -> Auth.Credentials
     func logout()
 }
 
@@ -84,7 +85,7 @@ class Auth: AuthProtocol {
         }
     }
 
-    private func getCredentials() -> Credentials {
+    func getCredentials() -> Credentials {
         return Credentials(
             accessToken: keychain.string(forKey: KeychainKey.accessToken.rawValue),
             refreshToken: keychain.string(forKey: KeychainKey.refreshToken.rawValue)

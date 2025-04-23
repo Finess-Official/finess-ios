@@ -51,6 +51,12 @@ class CreateQRViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
+            provider.createAccount(
+                ownerName: nameTextField.text,
+                inn: innTextField.text,
+                bik: bankBikTextField.text,
+                accountNumber: cardNumberTextField.text
+            )
         }), for: .touchUpInside)
         return button
     }()
@@ -59,6 +65,8 @@ class CreateQRViewController: UIViewController {
     private let cardNumberTextField = RegisterTextField(placeholder: "Номер карты или счёта", mode: .required)
     private let innTextField = RegisterTextField(placeholder: "ИНН", mode: .required)
     private let bankBikTextField = RegisterTextField(placeholder: "БИК банка", mode: .required)
+
+    private let provider = QRProvider()
 
     init() {
         super.init(nibName: nil, bundle: nil)

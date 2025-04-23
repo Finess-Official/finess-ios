@@ -12,5 +12,6 @@ enum FinessApp {
     
     enum Path {
         static let identity = "/api/identity/v1"
+        static let payment = "/api/payment/v1"
     }
 }

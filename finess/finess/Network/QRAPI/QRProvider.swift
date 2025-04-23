@@ -8,11 +8,25 @@
 import Foundation
 
 class QRProvider {
-    func createAccount() {
+    let client: QRClient
 
+    init() {
+        self.client = QRClientImpl()
     }
-
-    func createQR() {
-        
+    
+    func createAccount(ownerName: String?,
+                       inn: String?,
+                       bik: String?,
+                       accountNumber: String?) {
+        guard let ownerName = ownerName,
+              let inn = inn,
+              let bik = bik,
+              let accountNumber = accountNumber else {
+            return
+        }
+        let params = CreateAccountParams(ownerName: ownerName, inn: inn, bik: bik, accountNumber: accountNumber)
+        client.request(client: URLSession.shared, with: QRAPI.createAccount(params: params)) { result in
+            print("hello world \(result)")
+        }
     }
 }
