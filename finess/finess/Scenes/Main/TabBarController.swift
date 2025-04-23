@@ -27,7 +27,8 @@ class TabBarController: UITabBarController {
         tabBar.layer.borderWidth = 0.5
         tabBar.layer.masksToBounds = true
 
-        let mainViewController = MainViewController()
+//        let mainViewController = MainViewController()
+        let mainViewController = CreateQRViewController()
         let mainNavigation = UINavigationController(rootViewController: mainViewController)
         mainNavigation.navigationBar.isHidden = true
         mainViewController.tabBarItem = UITabBarItem(title: Constants.qrIconTitle, image: Constants.qrIcon, tag: Tabs.qr.rawValue)

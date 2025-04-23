@@ -41,12 +41,16 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
 
+    // MARK: - Private Methods
+    private func setupUI() {
         view.backgroundColor = Constants.backgroundColor
         view.addSubview(titleLabel)
         view.addSubview(createQRCodeButton)
         view.addSubview(scanQRCodeButton)
-        
+
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),

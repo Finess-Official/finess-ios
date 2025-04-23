@@ -71,7 +71,7 @@ class SignInViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 

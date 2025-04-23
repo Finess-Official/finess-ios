@@ -90,9 +90,9 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
 
-    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPassword)
+    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPassword, mode: .secure)
 
     // MARK: - Init
 

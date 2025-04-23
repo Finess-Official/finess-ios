@@ -11,11 +11,14 @@ import UIKit
 final class RegisterTextField: UITextField {
 
     //MARK: - Internal Properties
+    enum Mode {
+        case required
+        case secure
+    }
+
     var isInErrorState: Bool = false {
         didSet {
             currentButtonState = isInErrorState ? .exclamationmark : .eye
-            rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
-            rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
             isSecureTextEntry = false
         }
     }
@@ -27,13 +30,32 @@ final class RegisterTextField: UITextField {
         case eye = "eye"
         case eyeFill = "eye.slash"
         case exclamationmark = "exclamationmark.triangle"
+        case asterisk = "asterisk"
     }
 
-    private var currentButtonState: ButtonImage = .eye
+    private var currentButtonState: ButtonImage? {
+        didSet {
+            switch currentButtonState {
+            case .eye:
+                rightButton.setImage(UIImage(systemName: ButtonImage.eyeFill.rawValue), for: .normal)
+            case .eyeFill:
+                rightButton.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
+            case .asterisk:
+                rightButton.setImage(UIImage(systemName: ButtonImage.asterisk.rawValue), for: .normal)
+                rightButton.tintColor = Constants.errorColor
+            case .exclamationmark:
+                rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
+                rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
+            case .none:
+                break
+            }
+        }
+    }
+
+    private var currentMode: Mode
 
     private lazy var rightButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
         button.tintColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
@@ -47,14 +69,15 @@ final class RegisterTextField: UITextField {
                 currentButtonState = .eye
                 button.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
                 isSecureTextEntry = false
-            case .exclamationmark:
+            case .exclamationmark, .asterisk, .none:
                 break
             }
         }), for: .touchUpInside)
         return button
     }()
 
-    init(placeholder: String) {
+    init(placeholder: String, mode: Mode) {
+        self.currentMode = mode
         super.init(frame: .zero)
         setupTextField(placeholder: placeholder)
     }
@@ -88,5 +111,12 @@ final class RegisterTextField: UITextField {
         heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
         rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+
+        switch currentMode {
+        case .required:
+            currentButtonState = .asterisk
+        case .secure:
+            currentButtonState = .eye
+        }
     }
 }
