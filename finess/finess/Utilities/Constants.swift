@@ -54,6 +54,7 @@ enum Constants {
     static let mainViewButtonInnerViewCornerRadius: CGFloat = mainViewButtonInnerViewSize / 2
     static let mainViewButtonHeight: CGFloat = 105
     static let tabBarBorderWidth = 0.5
+    static let maximumFractionDigits = 2
 
     // Padding
     static let textFieldPadding = UIEdgeInsets(top: .zero, left: Constants.textFieldLeftPadding, bottom: .zero, right: Constants.textFieldRightPadding)
@@ -86,6 +87,8 @@ enum Constants {
     static let bankBik = "БИК банка"
     static let create = "Создать"
     static let scan = "Сканировать"
+    static let enterSumm = "Введите сумму для перевода"
+    static let summToTransfer = "Сумма для перевода"
 
     // Image
     static let qrIcon = UIImage(named: qrIconTitle)

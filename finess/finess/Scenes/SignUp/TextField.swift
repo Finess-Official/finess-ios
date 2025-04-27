@@ -35,6 +35,7 @@ final class RegisterTextField: UITextField {
 
     private var currentButtonState: ButtonImage? {
         didSet {
+            rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
             switch currentButtonState {
             case .eye:
                 rightButton.setImage(UIImage(systemName: ButtonImage.eyeFill.rawValue), for: .normal)
@@ -45,7 +46,6 @@ final class RegisterTextField: UITextField {
                 rightButton.tintColor = Constants.errorColor
             case .exclamationmark:
                 rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
-                rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
             case .none:
                 break
             }

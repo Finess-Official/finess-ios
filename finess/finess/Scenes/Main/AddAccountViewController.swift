@@ -2,24 +2,24 @@
 //  CreateQRViewController.swift
 //  finess
 //
-//  Created by Elina Karapetyan on 27.04.2025.
+//  Created by Elina Karapetyan on 20.04.2025.
 //
 
 import UIKit
 
-protocol CreateQRViewControllerDelegate: AnyObject {
-    
+protocol AddAccountViewControllerDelegate: AnyObject {
+    func accountDidCreated()
 }
 
-class CreateQRViewController: UIViewController {
+class AddAccountViewController: UIViewController {
 
     // MARK: - Internal properties
-    weak var delegate: CreateQRViewControllerDelegate?
+    weak var delegate: AddAccountViewControllerDelegate?
 
     // MARK: - Private properties
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.createQR
+        label.text = Constants.addAccount
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -38,7 +38,7 @@ class CreateQRViewController: UIViewController {
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.enterSumm
+        label.text = Constants.recipient
         label.font = Constants.smallButtonFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -46,9 +46,9 @@ class CreateQRViewController: UIViewController {
         return label
     }()
 
-    private lazy var createQRButton: UIButton = {
+    private lazy var addAccountButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.create, for: .normal)
+        button.setTitle(Constants.add, for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(Constants.buttonTitleColor, for: .normal)
         button.backgroundColor = Constants.disabledButtonColor
@@ -58,23 +58,46 @@ class CreateQRViewController: UIViewController {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             loadingViewController.start()
+            provider.createAccount(
+                ownerName: nameTextField.text,
+                inn: innTextField.text,
+                bik: bankBikTextField.text,
+                accountNumber: cardNumberTextField.text
+            ) { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.loadingViewController.stop() {
+                        switch result {
+                        case .success(let success):
+                            self?.delegate?.accountDidCreated()
+                        case .failure(let error):
+                            ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                        }
+                    }
+                }
+            }
         }), for: .touchUpInside)
         return button
     }()
 
-    private let summTextField = RegisterTextField(placeholder: Constants.summToTransfer, mode: .required)
+    private let nameTextField = RegisterTextField(placeholder: Constants.name, mode: .required)
+    private let cardNumberTextField = RegisterTextField(placeholder: Constants.cardNumber, mode: .required)
+    private let innTextField = RegisterTextField(placeholder: Constants.inn, mode: .required)
+    private let bankBikTextField = RegisterTextField(placeholder: Constants.bankBik, mode: .required)
     private let provider = QRProvider()
     private let loadingViewController = LoadingViewController()
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        summTextField.delegate = self
+        nameTextField.delegate = self
+        cardNumberTextField.delegate = self
+        innTextField.delegate = self
+        bankBikTextField.delegate = self
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -86,8 +109,11 @@ class CreateQRViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(subtitleLabel)
-        contentStackView.addArrangedSubview(summTextField)
-        view.addSubview(createQRButton)
+        contentStackView.addArrangedSubview(nameTextField)
+        contentStackView.addArrangedSubview(cardNumberTextField)
+        contentStackView.addArrangedSubview(innTextField)
+        contentStackView.addArrangedSubview(bankBikTextField)
+        view.addSubview(addAccountButton)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -97,46 +123,46 @@ class CreateQRViewController: UIViewController {
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
 
-            createQRButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.mediumSpacing),
-            createQRButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            createQRButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            createQRButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            addAccountButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.mediumSpacing),
+            addAccountButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            addAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            addAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
         ])
 
-        summTextField.becomeFirstResponder()
-        summTextField.keyboardType = .decimalPad
+        nameTextField.becomeFirstResponder()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
     }
 
     private func changeButtonState(isEnabled: Bool) {
-        createQRButton.isEnabled = isEnabled
-        createQRButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
+        addAccountButton.isEnabled = isEnabled
+        addAccountButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
     }
 
     // MARK: - Actions
     @objc func tapGesture() {
-        summTextField.resignFirstResponder()
+        nameTextField.resignFirstResponder()
+        cardNumberTextField.resignFirstResponder()
+        innTextField.resignFirstResponder()
+        bankBikTextField.resignFirstResponder()
     }
 }
 
 // MARK: - UITextFieldDelegate
-extension CreateQRViewController: UITextFieldDelegate {
+extension AddAccountViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        let summTextFieldIsEmpty = summTextField.text?.isEmpty ?? true
+        let nameTextFieldIsEmpty = nameTextField.text?.isEmpty ?? true
+        let cardNumberTextFieldIsEmpty = cardNumberTextField.text?.isEmpty ?? true
+        let innTextFieldIsEmpty = innTextField.text?.isEmpty ?? true
+        let bankBikTextField = bankBikTextField.text?.isEmpty ?? true
 
-        if !summTextFieldIsEmpty {
+        if !nameTextFieldIsEmpty &&
+            !cardNumberTextFieldIsEmpty &&
+            !innTextFieldIsEmpty &&
+            !bankBikTextField {
             changeButtonState(isEnabled: true)
         } else {
             changeButtonState(isEnabled: false)
         }
-    }
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        let replacementText = (currentText as NSString).replacingCharacters(in: range, with: string)
-
-        return replacementText.isValidDecimal(maximumFractionDigits: Constants.maximumFractionDigits)
-
     }
 }
