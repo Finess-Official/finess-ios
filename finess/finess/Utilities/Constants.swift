@@ -33,18 +33,27 @@ enum Constants {
     static let normalButtonColor: UIColor = .black
     static let buttonTitleColor: UIColor = .white
     static let authBackgroundColor: UIColor = .white
+    static let mainViewButtonBackgroundColor: UIColor = .white
     static let tabBarActive = UIColor(named: "TabBarActive")
     static let tabBarInactive = UIColor(named: "TabBarInactive")
     static let backgroundColor = UIColor(named: "BackgroundColor")
+    static let tabBarBorderColor = UIColor.gray.cgColor
 
     // Numeric
     static let buttonHeight: CGFloat = 48
     static let buttonCornerRadius: CGFloat = buttonHeight / 2
     static let textFieldHeight: CGFloat = 56
-    static let spacing: CGFloat = 36
+    static let largeSpacing: CGFloat = 48
+    static let mediumSpacing: CGFloat = 32
+    static let smallSpacing: CGFloat = 16
     static let minSymbolCount: Int = 6
     static let maxSymbolCount: Int = 72
     static let textFieldCornerRadius: CGFloat = 16
+    static let mainViewButtonCornerRadius: CGFloat = 24
+    static let mainViewButtonInnerViewSize: CGFloat = 50
+    static let mainViewButtonInnerViewCornerRadius: CGFloat = mainViewButtonInnerViewSize / 2
+    static let mainViewButtonHeight: CGFloat = 105
+    static let tabBarBorderWidth = 0.5
 
     // Padding
     static let textFieldPadding = UIEdgeInsets(top: .zero, left: Constants.textFieldLeftPadding, bottom: .zero, right: Constants.textFieldRightPadding)
@@ -67,6 +76,16 @@ enum Constants {
     static let haveAccountSignIn = "Уже есть аккаунт? Войти"
     static let repeatPassword = "Повторите пароль"
     static let qrIconTitle = "QR"
+    static let createQR = "Создать QR"
+    static let recipient = "Получатель"
+    static let addAccount = "Добавить счёт"
+    static let add = "Добавить"
+    static let name = "ФИО"
+    static let cardNumber = "Номер карты или счёта"
+    static let inn = "ИНН"
+    static let bankBik = "БИК банка"
+    static let create = "Создать"
+    static let scan = "Сканировать"
 
     // Image
     static let qrIcon = UIImage(named: qrIconTitle)

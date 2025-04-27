@@ -7,16 +7,16 @@
 
 import UIKit
 
+protocol MainViewControllerDelegate: AnyObject {
+    func didTapCreateQRCodeButton()
+}
+
 class MainViewController: UIViewController {
 
-    // MARK: - Private properties
-//    private lazy var qrCodeImageView: UIImageView = {
-//        let imageView = UIImageView(image: genQRCode(from: "some string that we want to put into QR code"))
-//        imageView.contentMode = .scaleAspectFit
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        return imageView
-//    }()
+    // MARK: - Internal properties
+    weak var delegate: MainViewControllerDelegate?
 
+    // MARK: - Private properties
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.qrIconTitle
@@ -27,14 +27,18 @@ class MainViewController: UIViewController {
         return label
     }()
 
-    private let createQRCodeButton: MainViewButton = {
-        let button = MainViewButton(title: "Создать", image: Constants.addIcon)
+    private lazy var createQRCodeButton: MainViewButton = {
+        let button = MainViewButton(title: Constants.create, image: Constants.addIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = true
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.delegate?.didTapCreateQRCodeButton()
+        }), for: .touchUpInside)
         return button
     }()
 
     private let scanQRCodeButton: MainViewButton = {
-        let button = MainViewButton(title: "Сканировать", image: Constants.qrIcon)
+        let button = MainViewButton(title: Constants.scan, image: Constants.qrIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -52,32 +56,18 @@ class MainViewController: UIViewController {
         view.addSubview(scanQRCodeButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
 
-            createQRCodeButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
-            createQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            createQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            createQRCodeButton.heightAnchor.constraint(equalToConstant: 105),
+            createQRCodeButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.mediumSpacing),
+            createQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            createQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            createQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
 
-            scanQRCodeButton.topAnchor.constraint(equalTo: createQRCodeButton.bottomAnchor, constant: 32),
-            scanQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scanQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scanQRCodeButton.heightAnchor.constraint(equalToConstant: 105),
+            scanQRCodeButton.topAnchor.constraint(equalTo: createQRCodeButton.bottomAnchor, constant: Constants.mediumSpacing),
+            scanQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            scanQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            scanQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
         ])
-    }
-
-    func genQRCode(from input: String) -> UIImage? {
-        let data = input.data(using: String.Encoding.ascii)
-        if let filter = CIFilter(name: "CIQRCodeGenerator") {
-            filter.setValue(data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 10, y: 10)
-
-            if let output = filter.outputImage?.transformed(by: transform) {
-                return UIImage(ciImage: output)
-            }
-        }
-
-        return nil
     }
 }

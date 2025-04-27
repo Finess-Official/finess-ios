@@ -13,6 +13,8 @@ enum Tabs: Int {
 
 class TabBarController: UITabBarController {
 
+    private let mainCoordinator = MainCoordinator()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -23,17 +25,11 @@ class TabBarController: UITabBarController {
         tabBar.barTintColor = Constants.tabBarInactive
         tabBar.backgroundColor = Constants.backgroundColor
 
-        tabBar.layer.borderColor = UIColor.gray.cgColor
-        tabBar.layer.borderWidth = 0.5
+        tabBar.layer.borderColor = Constants.tabBarBorderColor
+        tabBar.layer.borderWidth = Constants.tabBarBorderWidth
         tabBar.layer.masksToBounds = true
 
-//        let mainViewController = MainViewController()
-        let mainViewController = CreateQRViewController()
-        let mainNavigation = UINavigationController(rootViewController: mainViewController)
-        mainNavigation.navigationBar.isHidden = true
-        mainViewController.tabBarItem = UITabBarItem(title: Constants.qrIconTitle, image: Constants.qrIcon, tag: Tabs.qr.rawValue)
-
-        setViewControllers([mainNavigation], animated: false)
+        setViewControllers([mainCoordinator.start()], animated: false)
     }
 
 }

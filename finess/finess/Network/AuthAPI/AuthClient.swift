@@ -20,7 +20,7 @@ protocol AuthClient: AnyObject {
 final class AuthClientImpl: AuthClient {
 
     func request(
-        client: URLSessionProtocol,
+        client: URLSessionProtocol = URLSession.shared,
         with params: AuthAPI,
         completion: @escaping (Result<AuthResponse, APIErrorHandler>) -> Void
     ) {

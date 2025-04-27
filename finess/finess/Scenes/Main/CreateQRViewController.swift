@@ -17,7 +17,7 @@ class CreateQRViewController: UIViewController {
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Создать QR"
+        label.text = Constants.addAccount
         return label
     }()
 
@@ -25,14 +25,14 @@ class CreateQRViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.spacing = 16
+        stackView.spacing = Constants.smallSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Получатель"
+        label.text = Constants.recipient
         label.font = Constants.smallButtonFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -42,7 +42,7 @@ class CreateQRViewController: UIViewController {
 
     private lazy var createQRButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(Constants.add, for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(Constants.buttonTitleColor, for: .normal)
         button.backgroundColor = Constants.disabledButtonColor
@@ -61,10 +61,10 @@ class CreateQRViewController: UIViewController {
         return button
     }()
 
-    private let nameTextField = RegisterTextField(placeholder: "Имя", mode: .required)
-    private let cardNumberTextField = RegisterTextField(placeholder: "Номер карты или счёта", mode: .required)
-    private let innTextField = RegisterTextField(placeholder: "ИНН", mode: .required)
-    private let bankBikTextField = RegisterTextField(placeholder: "БИК банка", mode: .required)
+    private let nameTextField = RegisterTextField(placeholder: Constants.name, mode: .required)
+    private let cardNumberTextField = RegisterTextField(placeholder: Constants.cardNumber, mode: .required)
+    private let innTextField = RegisterTextField(placeholder: Constants.inn, mode: .required)
+    private let bankBikTextField = RegisterTextField(placeholder: Constants.bankBik, mode: .required)
 
     private let provider = QRProvider()
 
@@ -82,14 +82,12 @@ class CreateQRViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameTextField.becomeFirstResponder()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
-        view.addGestureRecognizer(tapGesture)
         setupUI()
     }
 
     // MARK: - Private methods
     private func setupUI() {
+        view.backgroundColor = Constants.backgroundColor
         view.addSubview(titleLabel)
         view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(subtitleLabel)
@@ -100,18 +98,22 @@ class CreateQRViewController: UIViewController {
         view.addSubview(createQRButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
 
-            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 48),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.largeSpacing),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
 
-            createQRButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: 32),
+            createQRButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.mediumSpacing),
             createQRButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            createQRButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            createQRButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            createQRButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            createQRButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
         ])
+
+        nameTextField.becomeFirstResponder()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
+        view.addGestureRecognizer(tapGesture)
     }
 
     private func changeButtonState(isEnabled: Bool) {
