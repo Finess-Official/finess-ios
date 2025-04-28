@@ -9,7 +9,6 @@ import Foundation
 
 protocol QRClient: AnyObject {
     func request(
-        client _: URLSessionProtocol,
         with params: QRAPI,
         completion: @escaping (
             _ result: Result<CreateAccountResponse, APIErrorHandler>
@@ -19,8 +18,13 @@ protocol QRClient: AnyObject {
 
 final class QRClientImpl: QRClient {
 
+    private let client: URLSessionProtocol
+
+    init(client: URLSessionProtocol = URLSession.shared) {
+        self.client = client
+    }
+
     func request(
-        client: URLSessionProtocol,
         with params: QRAPI,
         completion: @escaping (Result<CreateAccountResponse, APIErrorHandler>) -> Void
     ) {

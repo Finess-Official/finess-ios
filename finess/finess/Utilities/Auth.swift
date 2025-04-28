@@ -53,7 +53,7 @@ class Auth: AuthProtocol {
 
     func signIn(password: String, completion: @escaping (APIErrorHandler?) -> Void) {
         guard let userId = getUserId() else { completion(.unauthorized); return }
-        authClient.request(client: URLSession.shared, with: AuthAPI.signIn(params: SignInParams(userId: userId, password: password))) { result in
+        authClient.request(with: AuthAPI.signIn(params: SignInParams(userId: userId, password: password))) { result in
             switch result {
             case let .success(success):
                 Auth.shared.setCredentials(authData: success)
@@ -65,7 +65,7 @@ class Auth: AuthProtocol {
     }
 
     func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void) {
-        authClient.request(client: URLSession.shared, with: AuthAPI.signUp(params: SignUpParams(password: password))) { result in
+        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password))) { result in
             switch result {
             case let .success(success):
                 Auth.shared.setCredentials(authData: success)

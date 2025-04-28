@@ -9,7 +9,6 @@ import Foundation
 
 protocol AuthClient: AnyObject {
     func request(
-        client _: URLSessionProtocol,
         with params: AuthAPI,
         completion: @escaping (
             _ result: Result<AuthResponse, APIErrorHandler>
@@ -19,8 +18,13 @@ protocol AuthClient: AnyObject {
 
 final class AuthClientImpl: AuthClient {
 
+    private let client: URLSessionProtocol
+
+    init(client: URLSessionProtocol = URLSession.shared) {
+        self.client = client
+    }
+
     func request(
-        client: URLSessionProtocol = URLSession.shared,
         with params: AuthAPI,
         completion: @escaping (Result<AuthResponse, APIErrorHandler>) -> Void
     ) {

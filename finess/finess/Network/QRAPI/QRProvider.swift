@@ -28,7 +28,7 @@ class QRProvider {
         }
 
         let params = CreateAccountParams(ownerName: ownerName, inn: inn, bik: bik, accountNumber: accountNumber)
-        client.request(client: URLSession.shared, with: QRAPI.createAccount(params: params)) { result in
+        client.request(with: QRAPI.createAccount(params: params)) { result in
             completion(result)
         }
     }
