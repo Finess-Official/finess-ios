@@ -8,58 +8,66 @@
 import UIKit
 
 protocol MainViewControllerDelegate: AnyObject {
-    func didTapLogout()
+    func didTapCreateQRCodeButton()
 }
 
 class MainViewController: UIViewController {
 
+    // MARK: - Internal properties
     weak var delegate: MainViewControllerDelegate?
 
-    private lazy var logoutButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Logout", for: .normal)
-        button.backgroundColor = .systemBlue
+    // MARK: - Private properties
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.qrIconTitle
+        label.font = Constants.titleFont
+        label.textAlignment = Constants.textAlignment
+        label.textColor = Constants.textColor
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var createQRCodeButton: MainViewButton = {
+        let button = MainViewButton(title: Constants.create, image: Constants.addIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = true
         button.addAction(UIAction(handler: { [weak self] _ in
-            self?.delegate?.didTapLogout()
+            self?.delegate?.didTapCreateQRCodeButton()
         }), for: .touchUpInside)
         return button
     }()
 
-    private lazy var qrCodeImageView: UIImageView = {
-        let imageView = UIImageView(image: genQRCode(from: "some string that we want to put into QR code"))
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private let scanQRCodeButton: MainViewButton = {
+        let button = MainViewButton(title: Constants.scan, image: Constants.qrIcon)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .yellow
-        view.addSubview(logoutButton)
-        view.addSubview(qrCodeImageView)
-        NSLayoutConstraint.activate([
-            logoutButton.heightAnchor.constraint(equalToConstant: 50),
-            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoutButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
-            qrCodeImageView.topAnchor.constraint(equalTo: logoutButton.bottomAnchor, constant: 30),
-
-        ])
+        setupUI()
     }
 
-    func genQRCode(from input: String) -> UIImage? {
-        let data = input.data(using: String.Encoding.ascii)
-        if let filter = CIFilter(name: "CIQRCodeGenerator") {
-            filter.setValue(data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 10, y: 10)
+    // MARK: - Private Methods
+    private func setupUI() {
+        view.backgroundColor = Constants.backgroundColor
+        view.addSubview(titleLabel)
+        view.addSubview(createQRCodeButton)
+        view.addSubview(scanQRCodeButton)
 
-            if let output = filter.outputImage?.transformed(by: transform) {
-                return UIImage(ciImage: output)
-            }
-        }
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
 
-        return nil
+            createQRCodeButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.mediumSpacing),
+            createQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            createQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            createQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
+
+            scanQRCodeButton.topAnchor.constraint(equalTo: createQRCodeButton.bottomAnchor, constant: Constants.mediumSpacing),
+            scanQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            scanQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            scanQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
+        ])
     }
 }

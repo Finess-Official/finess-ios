@@ -13,12 +13,14 @@ enum Constants {
     static let titleFont: UIFont = .systemFont(ofSize: Constants.titleFontSize, weight: .bold)
     static let largeButtonFont: UIFont = .systemFont(ofSize: Constants.largeButtonFontSize, weight: .medium)
     static let middleButtonFont: UIFont = .systemFont(ofSize: Constants.middleButtonFontSize, weight: .medium)
+    static let smallButtonFont: UIFont = .systemFont(ofSize: Constants.smallButtonFontSize, weight: .regular)
 
     // FontSize
     static let errorLableFontSize: CGFloat = 13
     static let titleFontSize: CGFloat = 32
     static let largeButtonFontSize: CGFloat = 17
     static let middleButtonFontSize: CGFloat = 12
+    static let smallButtonFontSize: CGFloat = 16
 
     // TextAlignment
     static let textAlignment: NSTextAlignment = .left
@@ -30,16 +32,29 @@ enum Constants {
     static let textColor: UIColor = .black
     static let normalButtonColor: UIColor = .black
     static let buttonTitleColor: UIColor = .white
-    static let backgroundColor: UIColor = .white
+    static let authBackgroundColor: UIColor = .white
+    static let mainViewButtonBackgroundColor: UIColor = .white
+    static let tabBarActive = UIColor(named: "TabBarActive")
+    static let tabBarInactive = UIColor(named: "TabBarInactive")
+    static let backgroundColor = UIColor(named: "BackgroundColor")
+    static let tabBarBorderColor = UIColor.gray.cgColor
 
     // Numeric
     static let buttonHeight: CGFloat = 48
     static let buttonCornerRadius: CGFloat = buttonHeight / 2
     static let textFieldHeight: CGFloat = 56
-    static let spacing: CGFloat = 36
+    static let largeSpacing: CGFloat = 48
+    static let mediumSpacing: CGFloat = 32
+    static let smallSpacing: CGFloat = 16
     static let minSymbolCount: Int = 6
     static let maxSymbolCount: Int = 72
     static let textFieldCornerRadius: CGFloat = 16
+    static let mainViewButtonCornerRadius: CGFloat = 24
+    static let mainViewButtonInnerViewSize: CGFloat = 50
+    static let mainViewButtonInnerViewCornerRadius: CGFloat = mainViewButtonInnerViewSize / 2
+    static let mainViewButtonHeight: CGFloat = 105
+    static let tabBarBorderWidth = 0.5
+    static let maximumFractionDigits = 2
 
     // Padding
     static let textFieldPadding = UIEdgeInsets(top: .zero, left: Constants.textFieldLeftPadding, bottom: .zero, right: Constants.textFieldRightPadding)
@@ -61,4 +76,21 @@ enum Constants {
     static let signupButton = "Зарегистрироваться"
     static let haveAccountSignIn = "Уже есть аккаунт? Войти"
     static let repeatPassword = "Повторите пароль"
+    static let qrIconTitle = "QR"
+    static let createQR = "Создать QR"
+    static let recipient = "Получатель"
+    static let addAccount = "Добавить счёт"
+    static let add = "Добавить"
+    static let name = "ФИО"
+    static let cardNumber = "Номер карты или счёта"
+    static let inn = "ИНН"
+    static let bankBik = "БИК банка"
+    static let create = "Создать"
+    static let scan = "Сканировать"
+    static let enterSumm = "Введите сумму для перевода"
+    static let summToTransfer = "Сумма для перевода"
+
+    // Image
+    static let qrIcon = UIImage(named: qrIconTitle)
+    static let addIcon = UIImage(named: "AddQR")
 }

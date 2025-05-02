@@ -71,7 +71,7 @@ class SignInViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 
@@ -107,7 +107,7 @@ class SignInViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setupUI() {
-        view.backgroundColor = Constants.backgroundColor
+        view.backgroundColor = Constants.authBackgroundColor
 
         passwordTextField.delegate = self
 
@@ -123,7 +123,7 @@ class SignInViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.titleTopPadding),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
 
-            passwordTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.spacing),
+            passwordTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.mediumSpacing),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
             passwordTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),

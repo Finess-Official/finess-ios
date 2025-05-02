@@ -15,17 +15,17 @@ class AuthCoordinator {
     private let window: UIWindow
     private let signUpViewController: SignUpViewController
     private let signInViewController: SignInViewController
-    private let mainViewController: MainViewController
+    private let tabBarController: TabBarController
 
     private let navigationController: UINavigationController?
 
-    init(window: UIWindow, navigationController: UINavigationController?, mainViewController: MainViewController) {
+    init(window: UIWindow, navigationController: UINavigationController?, tabBarController: TabBarController) {
         self.window = window
         self.navigationController = navigationController
 
         self.signUpViewController = SignUpViewController()
         self.signInViewController = SignInViewController(userDidSignedUp: Auth.shared.isSignedUp)
-        self.mainViewController = mainViewController
+        self.tabBarController = tabBarController
 
         self.signUpViewController.delegate = self
         self.signInViewController.delegate = self
@@ -44,7 +44,7 @@ class AuthCoordinator {
 
     private func navigateToScreen(hasLoggedIn: Bool) {
         if hasLoggedIn {
-            navigationController?.setViewControllers([mainViewController], animated: false)
+            navigationController?.setViewControllers([tabBarController], animated: false)
         } else {
             navigationController?.setViewControllers([signInViewController], animated: false)
         }

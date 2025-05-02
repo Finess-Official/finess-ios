@@ -25,7 +25,7 @@ class ErrorHandler {
         case .customApiError(_):
             return "Произошла ошибка, попробуйте повторить"
         case .badRequest:
-            return "Неверный формат пароля"
+            return "Неверный формат введенных данных"
         case .unauthorized:
             return "Неверно введенные данные, попробуйте снова"
         case .tooManyRequests:

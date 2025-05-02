@@ -13,26 +13,19 @@ class AppCoordinator {
     
     private let window: UIWindow
     private let navigationController: UINavigationController?
-    private let mainViewController: MainViewController
+    private let tabBarController: TabBarController
     private var authCoordinator: AuthCoordinator?
 
     init(window: UIWindow, navigationController: UINavigationController?) {
         self.window = window
         self.navigationController = navigationController
         self.navigationController?.navigationBar.isHidden = true
-        self.mainViewController = MainViewController()
-        mainViewController.delegate = self
+        self.tabBarController = TabBarController()
     }
 
     func start() {
         self.window.rootViewController = self.navigationController
-        self.authCoordinator = AuthCoordinator(window: window, navigationController: navigationController, mainViewController: mainViewController)
+        self.authCoordinator = AuthCoordinator(window: window, navigationController: navigationController, tabBarController: tabBarController)
         self.authCoordinator?.start()
-    }
-}
-
-extension AppCoordinator: MainViewControllerDelegate {
-    func didTapLogout() {
-        Auth.shared.logout()
     }
 }
