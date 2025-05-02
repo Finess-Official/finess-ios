@@ -19,7 +19,7 @@ class AddAccountViewController: UIViewController {
     // MARK: - Private properties
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.addAccount
+        label.text = NSLocalizedString("addAccount", comment: "")
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -38,7 +38,7 @@ class AddAccountViewController: UIViewController {
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.recipient
+        label.text = NSLocalizedString("recipient", comment: "")
         label.font = Constants.smallButtonFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -48,7 +48,7 @@ class AddAccountViewController: UIViewController {
 
     private lazy var addAccountButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.add, for: .normal)
+        button.setTitle(NSLocalizedString("add", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(Constants.buttonTitleColor, for: .normal)
         button.backgroundColor = Constants.disabledButtonColor
@@ -79,10 +79,10 @@ class AddAccountViewController: UIViewController {
         return button
     }()
 
-    private let nameTextField = RegisterTextField(placeholder: Constants.name, mode: .required)
-    private let cardNumberTextField = RegisterTextField(placeholder: Constants.cardNumber, mode: .required)
-    private let innTextField = RegisterTextField(placeholder: Constants.inn, mode: .required)
-    private let bankBikTextField = RegisterTextField(placeholder: Constants.bankBik, mode: .required)
+    private let nameTextField = RegisterTextField(placeholder: NSLocalizedString("name", comment: ""), mode: .required)
+    private let cardNumberTextField = RegisterTextField(placeholder: NSLocalizedString("cardNumber", comment: ""), mode: .required)
+    private let innTextField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
+    private let bankBikTextField = RegisterTextField(placeholder: NSLocalizedString("bankBIK", comment: ""), mode: .required)
     private let provider = QRProvider()
     private let loadingViewController = LoadingViewController()
 

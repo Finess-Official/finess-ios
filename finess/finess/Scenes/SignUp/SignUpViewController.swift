@@ -21,7 +21,7 @@ class SignUpViewController: UIViewController {
     
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.lessThanSixSymbols
+        label.text = NSLocalizedString("lessThanSixSymbols", comment: "")
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +31,7 @@ class SignUpViewController: UIViewController {
 
     private let repeatPasswordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.repeatPassword
+        label.text = NSLocalizedString("repeatPassword", comment: "")
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ class SignUpViewController: UIViewController {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.signUp
+        label.text = NSLocalizedString("signUp", comment: "")
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +51,7 @@ class SignUpViewController: UIViewController {
 
     private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signupButton, for: .normal)
+        button.setTitle(NSLocalizedString("signUpAction", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
@@ -79,7 +79,7 @@ class SignUpViewController: UIViewController {
 
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.haveAccountSignIn, for: .normal)
+        button.setTitle(NSLocalizedString("haveAccountSignIn", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.middleButtonFont
         button.setTitleColor(Constants.activeButtonColor, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -90,9 +90,9 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
+    private let passwordTextField = RegisterTextField(placeholder: NSLocalizedString("password", comment: ""), mode: .secure)
 
-    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPassword, mode: .secure)
+    private let repeatPasswordTextField = RegisterTextField(placeholder: NSLocalizedString("repeatPassword", comment: ""), mode: .secure)
 
     // MARK: - Init
 

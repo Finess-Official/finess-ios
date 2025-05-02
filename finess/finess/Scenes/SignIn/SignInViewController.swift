@@ -21,7 +21,7 @@ class SignInViewController: UIViewController {
     
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.lessThanSixSymbols
+        label.text = NSLocalizedString("lessThanSixSymbols", comment: "")
         label.font = Constants.errorFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.errorColor
@@ -32,7 +32,7 @@ class SignInViewController: UIViewController {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.signIn
+        label.text = NSLocalizedString("signIn", comment: "")
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -42,7 +42,7 @@ class SignInViewController: UIViewController {
 
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.signinButton, for: .normal)
+        button.setTitle(NSLocalizedString("signInAction", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(Constants.buttonTitleColor, for: .normal)
         button.backgroundColor = Constants.disabledButtonColor
@@ -60,7 +60,7 @@ class SignInViewController: UIViewController {
 
     private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.createAccount, for: .normal)
+        button.setTitle(NSLocalizedString("createAccount", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.middleButtonFont
         button.setTitleColor(Constants.activeButtonColor, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +71,7 @@ class SignInViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
+    private let passwordTextField = RegisterTextField(placeholder: NSLocalizedString("password", comment: ""), mode: .secure)
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 

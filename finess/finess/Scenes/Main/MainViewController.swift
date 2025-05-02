@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
     // MARK: - Private properties
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.qrIconTitle
+        label.text = NSLocalizedString("QRTitle", comment: "")
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -28,7 +28,7 @@ class MainViewController: UIViewController {
     }()
 
     private lazy var createQRCodeButton: MainViewButton = {
-        let button = MainViewButton(title: Constants.create, image: Constants.addIcon)
+        let button = MainViewButton(title: NSLocalizedString("create", comment: ""), image: Constants.addIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.addAction(UIAction(handler: { [weak self] _ in
@@ -38,7 +38,7 @@ class MainViewController: UIViewController {
     }()
 
     private let scanQRCodeButton: MainViewButton = {
-        let button = MainViewButton(title: Constants.scan, image: Constants.qrIcon)
+        let button = MainViewButton(title: NSLocalizedString("scan", comment: ""), image: Constants.qrIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

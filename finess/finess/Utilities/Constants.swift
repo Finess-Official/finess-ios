@@ -26,17 +26,17 @@ enum Constants {
     static let textAlignment: NSTextAlignment = .left
 
     // UIColor
-    static let disabledButtonColor = UIColor(named: "DisabledButton")
-    static let activeButtonColor = UIColor(named: "ActiveButton")
+    static let disabledButtonColor = UIColor.disabledButton
+    static let activeButtonColor = UIColor.activeButton
     static let errorColor: UIColor = .red
     static let textColor: UIColor = .black
     static let normalButtonColor: UIColor = .black
     static let buttonTitleColor: UIColor = .white
     static let authBackgroundColor: UIColor = .white
     static let mainViewButtonBackgroundColor: UIColor = .white
-    static let tabBarActive = UIColor(named: "TabBarActive")
-    static let tabBarInactive = UIColor(named: "TabBarInactive")
-    static let backgroundColor = UIColor(named: "BackgroundColor")
+    static let tabBarActive = UIColor.tabBarActive
+    static let tabBarInactive = UIColor.tabBarInactive
+    static let backgroundColor = UIColor.background
     static let tabBarBorderColor = UIColor.gray.cgColor
 
     // Numeric
@@ -65,32 +65,7 @@ enum Constants {
     static let errorLabelTopPadding: CGFloat = 4
     static let titleTopPadding: CGFloat = 32
 
-    // Text
-    static let lessThanSixSymbols = "В пароле меньше 6 символов"
-    static let password = "Пароль"
-    static let signIn = "Вход"
-    static let signinButton = "Войти"
-    static let createAccount = "Нет аккаунта? Создайте его"
-    static let passwordsDontMatch = "Пароли не совпадают"
-    static let signUp = "Регистрация"
-    static let signupButton = "Зарегистрироваться"
-    static let haveAccountSignIn = "Уже есть аккаунт? Войти"
-    static let repeatPassword = "Повторите пароль"
-    static let qrIconTitle = "QR"
-    static let createQR = "Создать QR"
-    static let recipient = "Получатель"
-    static let addAccount = "Добавить счёт"
-    static let add = "Добавить"
-    static let name = "ФИО"
-    static let cardNumber = "Номер карты или счёта"
-    static let inn = "ИНН"
-    static let bankBik = "БИК банка"
-    static let create = "Создать"
-    static let scan = "Сканировать"
-    static let enterSumm = "Введите сумму для перевода"
-    static let summToTransfer = "Сумма для перевода"
-
     // Image
-    static let qrIcon = UIImage(named: qrIconTitle)
-    static let addIcon = UIImage(named: "AddQR")
+    static let qrIcon = UIImage.QR
+    static let addIcon = UIImage.addQR
 }

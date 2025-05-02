@@ -20,7 +20,7 @@ class MainCoordinator {
 
     func start() -> UINavigationController {
         mainNavigationController = UINavigationController(rootViewController: mainViewController)
-        mainViewController.tabBarItem = UITabBarItem(title: Constants.qrIconTitle, image: Constants.qrIcon, tag: Tabs.qr.rawValue)
+        mainViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("QRTitle", comment: ""), image: Constants.qrIcon, tag: Tabs.qr.rawValue)
         mainNavigationController.navigationBar.tintColor = .black
         return mainNavigationController
     }
