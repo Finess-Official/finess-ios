@@ -39,4 +39,14 @@ extension QRAPI {
             action: .requestWithJSONBody(params)
         )
     }
+
+    static func createQR(
+        params: CreateQRParams
+    ) -> QRAPI {
+        return QRAPI(
+            method: .post,
+            path: "/qrcodes",
+            action: .requestWithJSONBody(params)
+        )
+    }
 }

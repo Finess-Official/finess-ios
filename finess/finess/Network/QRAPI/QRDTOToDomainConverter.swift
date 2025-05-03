@@ -2,19 +2,17 @@
 //  QRDTOToDomainConverter.swift
 //  finess
 //
-//  Created by Elina Karapetyan on 23.04.2025.
+//  Created by Elina Karapetyan on 03.05.2025.
 //
 
 import Foundation
 
 struct QRDTOToDomainConverter {
-    static func convert(from dto: CreateAccountResult) -> CreateAccountResponse {
-        return CreateAccountResponse(
+    static func convert(from dto: CreateQRResult) -> CreateQRResponse {
+        return CreateQRResponse(
             id: dto.id,
-            ownerName: dto.ownerName,
-            inn: dto.inn,
-            bik: dto.bik,
-            accountNumber: dto.accountNumber
+            accountId: dto.accountId,
+            amount: dto.amount
         )
     }
 }

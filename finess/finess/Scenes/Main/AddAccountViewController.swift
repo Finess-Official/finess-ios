@@ -1,5 +1,5 @@
 //
-//  CreateQRViewController.swift
+//  AddAccountViewController.swift
 //  finess
 //
 //  Created by Elina Karapetyan on 20.04.2025.
@@ -79,14 +79,16 @@ class AddAccountViewController: UIViewController {
         return button
     }()
 
-    private let nameTextField = RegisterTextField(placeholder: NSLocalizedString("name", comment: ""), mode: .required)
-    private let cardNumberTextField = RegisterTextField(placeholder: NSLocalizedString("cardNumber", comment: ""), mode: .required)
-    private let innTextField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
-    private let bankBikTextField = RegisterTextField(placeholder: NSLocalizedString("bankBIK", comment: ""), mode: .required)
-    private let provider = QRProvider()
+
+    private let nameTextField = RegisterTextField(placeholder: Constants.name, mode: .required)
+    private let cardNumberTextField = RegisterTextField(placeholder: Constants.cardNumber, mode: .required)
+    private let innTextField = RegisterTextField(placeholder: Constants.inn, mode: .required)
+    private let bankBikTextField = RegisterTextField(placeholder: Constants.bankBik, mode: .required)
+    private let provider: QRProvider
     private let loadingViewController = LoadingViewController()
 
-    init() {
+    init(provider: QRProvider) {
+        self.provider = provider
         super.init(nibName: nil, bundle: nil)
         nameTextField.delegate = self
         cardNumberTextField.delegate = self
