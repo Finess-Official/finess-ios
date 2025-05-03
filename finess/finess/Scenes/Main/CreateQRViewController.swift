@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CreateQRViewControllerDelegate: AnyObject {
-    func didTapCreateButton()
+    func didTapCreateButton(with accountId: String)
 }
 
 class CreateQRViewController: UIViewController {
@@ -58,20 +58,7 @@ class CreateQRViewController: UIViewController {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             loadingViewController.start()
-            provider.createQR(amount: summTextField.text) { [weak self] result in
-                DispatchQueue.main.async {
-                    self?.loadingViewController.stop() { [weak self] in
-                        guard let self else { return }
-                        switch result {
-                        case .success(let success):
-                            self.delegate?.didTapCreateButton()
-                        case .failure(let error):
-                            self.showError(error, loggingService: self.loggingService)
-                        }
-                    }
-                }
-            }
-            delegate?.didTapCreateButton()
+            didTapCreateButton()
         }), for: .touchUpInside)
         return button
     }()
@@ -133,6 +120,25 @@ class CreateQRViewController: UIViewController {
     // MARK: - Actions
     @objc func tapGesture() {
         summTextField.resignFirstResponder()
+    }
+
+    private func didTapCreateButton() {
+        navigationController?.pushViewController(loadingViewController, animated: false)
+        provider.createQR(amount: summTextField.text) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.loadingViewController.stop() { [weak self] in
+                    self?.navigationController?.popViewController(animated: false) { [weak self] in
+                        guard let self else { return }
+                        switch result {
+                        case .success(let success):
+                            self.delegate?.didTapCreateButton(with: success.accountId)
+                        case .failure(let error):
+                            self.showError(error, loggingService: loggingService)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
