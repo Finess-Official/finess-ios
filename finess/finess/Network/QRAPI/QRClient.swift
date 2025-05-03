@@ -17,37 +17,61 @@ protocol QRClient: AnyObject {
 }
 
 final class QRClientImpl: QRClient {
-
+    
     private let client: URLSessionProtocol
+    private let logger: APILoggingService
 
-    init(client: URLSessionProtocol = URLSession.shared) {
+    init(
+        client: URLSessionProtocol = URLSession.shared,
+        logger: APILoggingService = APILoggingService()
+    ) {
         self.client = client
+        self.logger = logger
     }
 
     func request(
         with params: QRAPI,
         completion: @escaping (Result<CreateAccountResponse, APIErrorHandler>) -> Void
     ) {
-        guard let request = createRequest(for: params) else {
-            completion(.failure(.badRequest))
-            return
+        let result = createRequest(for: params)
+        switch result {
+        case .success(let request):
+            let task = createDataTask(request: request, completion: completion)
+            task.resume()
+        case .failure(let error):
+            completion(.failure(error).logFailure(using: logger))
         }
+    }
 
-        let task = client.createDataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Network error: \(error.localizedDescription)")
-                completion(.failure(.internalServerError))
+    private func createDataTask(request: URLRequest, completion: @escaping (Result<CreateAccountResponse, APIErrorHandler>) -> Void) -> URLSessionDataTask {
+        client.createDataTask(with: request) { [weak self] data, response, error in
+            guard let self else { return }
+            if let error = error as? URLError {
+                switch error.code {
+                case .notConnectedToInternet,
+                     .timedOut,
+                     .cannotFindHost,
+                     .cannotConnectToHost,
+                     .networkConnectionLost,
+                     .dnsLookupFailed,
+                     .secureConnectionFailed:
+                    completion(.failure(.networkError).logFailure(using: logger))
+                default:
+                    completion(.failure(.customApiError(CustomApiError(code: error.code.rawValue, message: error.localizedDescription))).logFailure(using: logger))
+                }
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                if let errorStatus = self.handleHTTPStatusCode(httpResponse.statusCode) {
-                    completion(.failure(errorStatus))
+                guard httpResponse.isSuccess else {
+                    let errorStatus = httpResponse.apiError
+                    completion(.failure(errorStatus).logFailure(using: logger))
+                    return
                 }
             }
 
             guard let data = data else {
-                completion(.failure(.internalServerError))
+                completion(.failure(.internalServerError).logFailure(using: logger))
                 return
             }
 
@@ -58,19 +82,17 @@ final class QRClientImpl: QRClient {
                 let response = QRDTOToDomainConverter.convert(from: result)
                 completion(.success(response))
             } catch {
-                print("Error parsing JSON: \(error.localizedDescription)")
-                completion(.failure(.internalServerError))
+                completion(.failure(.decodingError).logFailure(using: logger))
             }
         }
-
-        task.resume()
     }
 
-    private func createRequest(for params: QRAPI) -> URLRequest? {
-        guard let url = URL(string: FinessApp.baseURL + FinessApp.Path.payment + params.path),
-        let accessToken = Auth.shared.getCredentials().accessToken else {
-            return nil
-        }
+    private func createRequest(for params: QRAPI) -> Result<URLRequest, APIErrorHandler> {
+        guard let url = URL(string: FinessApp.baseURL + FinessApp.Path.payment + params.path)
+        else { return .failure(APIErrorHandler.badRequest).logFailure(using: logger) }
+
+        guard let accessToken = Auth.shared.getCredentials().accessToken
+        else { return .failure(APIErrorHandler.unauthorized).logFailure(using: logger) }
 
         var request = URLRequest(url: url)
         request.httpMethod = params.method.rawValue
@@ -84,30 +106,11 @@ final class QRClientImpl: QRClient {
             do {
                 request.httpBody = try JSONEncoder().encode(body)
             } catch {
-                return nil
+                return .failure(APIErrorHandler.decodingError).logFailure(using: logger)
             }
         }
 
-        return request
-    }
-
-    private func handleHTTPStatusCode(_ statusCode: Int) -> APIErrorHandler? {
-        switch statusCode {
-        case 200:
-            return nil
-        case 400:
-            return .badRequest
-        case 401:
-            return .unauthorized
-        case 429:
-            return .tooManyRequests
-        case 500:
-            return .internalServerError
-        case 503:
-            return .serviceUnavailable
-        default:
-            return .unkownError
-        }
+        return .success(request)
     }
 }
 

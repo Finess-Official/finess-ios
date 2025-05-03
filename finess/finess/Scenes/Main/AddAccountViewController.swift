@@ -65,12 +65,12 @@ class AddAccountViewController: UIViewController {
                 accountNumber: cardNumberTextField.text
             ) { [weak self] result in
                 DispatchQueue.main.async {
-                    self?.loadingViewController.stop() {
+                    self?.loadingViewController.stop() { [weak self] in
                         switch result {
                         case .success(let success):
                             self?.delegate?.accountDidCreated()
                         case .failure(let error):
-                            ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                            self?.showError(error)
                         }
                     }
                 }
