@@ -1,697 +1,296 @@
 {
-    "sourceLanguage": "en",
-    "strings": {
-        "developerLogBadRequest": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[400] Bad Request — possibly a client-side issue."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[400] Bad Request — possibly a client-side issue."
-                    }
-                }
-            }
+  "sourceLanguage" : "en",
+  "strings" : {
+    "developerLogBadRequest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[400] Bad Request — possibly a client-side issue."
+          }
         },
-        "add": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Add"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Добавить"
-                    }
-                }
-            }
-        },
-        "developerLogDecodingError": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "JSON decoding failed — check model structure and API response."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "JSON decoding failed — check model structure and API response."
-                    }
-                }
-            }
-        },
-        "addAccount": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Add account"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Добавить счёт"
-                    }
-                }
-            }
-        },
-        "developerLogInternalServerError": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[500] Internal Server Error — backend failure."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[500] Internal Server Error — backend failure."
-                    }
-                }
-            }
-        },
-        "bankBIK": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Bank BIK"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "БИК банка"
-                    }
-                }
-            }
-        },
-        "developerLogNetworkError": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Network error — possible offline mode or unreachable host."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Network error — possible offline mode or unreachable host."
-                    }
-                }
-            }
-        },
-        "cardNumber": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Card number"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Номер карты или счёта"
-                    }
-                }
-            }
-        },
-        "developerLogServiceUnavailable": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[503] Service Unavailable — the API is currently unreachable."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[503] Service Unavailable — the API is currently unreachable."
-                    }
-                }
-            }
-        },
-        "create": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Create"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Создать"
-                    }
-                }
-            }
-        },
-        "developerLogTooManyRequests": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[429] Too Many Requests — API rate limit exceeded."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[429] Too Many Requests — API rate limit exceeded."
-                    }
-                }
-            }
-        },
-        "createAccount": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Don't have an account? Create one"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Нет аккаунта? Создайте его"
-                    }
-                }
-            }
-        },
-        "developerLogUnauthorized": {
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[401] Unauthorized — check access token or session."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "[401] Unauthorized — check access token or session."
-                    }
-                }
-            }
-        },
-        "createQR": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Create QR"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Создать QR"
-                    }
-                }
-            }
-        },
-        "developerLogUnkownError": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "Unexpected error — unknown failure reason.",
-                        "value": "Create QR"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Unexpected error — unknown failure reason."
-                    }
-                }
-            }
-        },
-        "enterSumm": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Enter the amount to transfer"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Введите сумму для перевода"
-                    }
-                }
-            }
-        },
-        "error": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Error"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Ошибка"
-                    }
-                }
-            }
-        },
-        "haveAccountSignIn": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Already have an account? Sign In"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Уже есть аккаунт? Войти"
-                    }
-                }
-            }
-        },
-        "ok": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "OK"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "ОК"
-                    }
-                }
-            }
-        },
-        "inn": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "INN"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "ИНН"
-                    }
-                }
-            }
-        },
-        "userMessageBadRequest": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Invalid request. Please try again later."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Неверный запрос. Попробуйте позже."
-                    }
-                }
-            }
-        },
-        "lessThanSixSymbols": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Password is less than 6 characters"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "В пароле меньше 6 символов"
-                    }
-                }
-            }
-        },
-        "userMessageDecodingError": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Data processing error."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Ошибка обработки данных."
-                    }
-                }
-            }
-        },
-        "name": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Name"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "ФИО"
-                    }
-                }
-            }
-        },
-        "userMessageInternalServerError": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Server error. Please try again later."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Ошибка сервера. Повторите позже."
-                    }
-                }
-            }
-        },
-        "password": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Password"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Пароль"
-                    }
-                }
-            }
-        },
-        "userMessageNetworkError": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "No internet connection."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Нет подключения к интернету."
-                    }
-                }
-            }
-        },
-        "passwordsDontMatch": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "The passwords do not match"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Пароли не совпадают"
-                    }
-                }
-            }
-        },
-        "userMessageServiceUnavailable": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Service temporarily unavailable."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Сервис временно недоступен."
-                    }
-                }
-            }
-        },
-        "QRTitle": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "QR"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "QR"
-                    }
-                }
-            }
-        },
-        "userMessageTooManyRequests": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Too many requests. Please wait a moment."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Слишком много запросов. Подождите немного."
-                    }
-                }
-            }
-        },
-        "recipient": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Recipient"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Получатель"
-                    }
-                }
-            }
-        },
-        "userMessageUnauthorized": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Authorization failed. Please log in again."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Авторизация не удалась. Войдите снова."
-                    }
-                }
-            }
-        },
-        "repeatPassword": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Repeat password"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Повторите пароль"
-                    }
-                }
-            }
-        },
-        "userMessageUnkownError": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Unknown error occurred."
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Неизвестная ошибка."
-                    }
-                }
-            }
-        },
-        "scan": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Scan"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Сканировать"
-                    }
-                }
-            }
-        },
-        "signIn": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Sign In"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Вход"
-                    }
-                }
-            }
-        },
-        "signInAction": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Sign In"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Войти"
-                    }
-                }
-            }
-        },
-        "signUp": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Sign Up"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Регистрация"
-                    }
-                }
-            }
-        },
-        "signUpAction": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Sign Up"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Зарегистрироваться"
-                    }
-                }
-            }
-        },
-        "summToTransfer": {
-            "extractionState": "manual",
-            "localizations": {
-                "en": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Amount to transfer"
-                    }
-                },
-                "ru": {
-                    "stringUnit": {
-                        "state": "translated",
-                        "value": "Сумма для перевода"
-                    }
-                }
-            }
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[400] Bad Request — possibly a client-side issue."
+          }
         }
+      }
     },
-    "version": "1.0"
+    "developerLogDecodingError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON decoding failed — check model structure and API response."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON decoding failed — check model structure and API response."
+          }
+        }
+      }
+    },
+    "developerLogInternalServerError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[500] Internal Server Error — backend failure."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[500] Internal Server Error — backend failure."
+          }
+        }
+      }
+    },
+    "developerLogNetworkError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network error — possible offline mode or unreachable host."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network error — possible offline mode or unreachable host."
+          }
+        }
+      }
+    },
+    "developerLogServiceUnavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[503] Service Unavailable — the API is currently unreachable."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[503] Service Unavailable — the API is currently unreachable."
+          }
+        }
+      }
+    },
+    "developerLogTooManyRequests" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[429] Too Many Requests — API rate limit exceeded."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[429] Too Many Requests — API rate limit exceeded."
+          }
+        }
+      }
+    },
+    "developerLogUnauthorized" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[401] Unauthorized — check access token or session."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[401] Unauthorized — check access token or session."
+          }
+        }
+      }
+    },
+    "developerLogUnkownError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected error — unknown failure reason."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected error — unknown failure reason."
+          }
+        }
+      }
+    },
+    "error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка"
+          }
+        }
+      }
+    },
+    "ok" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОК"
+          }
+        }
+      }
+    },
+    "userMessageBadRequest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid request. Please try again later."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неверный запрос. Попробуйте позже."
+          }
+        }
+      }
+    },
+    "userMessageDecodingError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data processing error."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка обработки данных."
+          }
+        }
+      }
+    },
+    "userMessageInternalServerError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server error. Please try again later."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка сервера. Повторите позже."
+          }
+        }
+      }
+    },
+    "userMessageNetworkError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет подключения к интернету."
+          }
+        }
+      }
+    },
+    "userMessageServiceUnavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Service temporarily unavailable."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сервис временно недоступен."
+          }
+        }
+      }
+    },
+    "userMessageTooManyRequests" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too many requests. Please wait a moment."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слишком много запросов. Подождите немного."
+          }
+        }
+      }
+    },
+    "userMessageUnauthorized" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authorization failed. Please log in again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизация не удалась. Войдите снова."
+          }
+        }
+      }
+    },
+    "userMessageUnkownError" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown error occurred."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестная ошибка."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
 }
