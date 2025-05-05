@@ -19,7 +19,7 @@ class CreateQRViewController: UIViewController {
     // MARK: - Private properties
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.createQR
+        label.text = NSLocalizedString("createQR", comment: "")
         label.font = Constants.titleFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -38,7 +38,7 @@ class CreateQRViewController: UIViewController {
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.enterSumm
+        label.text = NSLocalizedString("enterSumm", comment: "")
         label.font = Constants.smallButtonFont
         label.textAlignment = Constants.textAlignment
         label.textColor = Constants.textColor
@@ -48,7 +48,7 @@ class CreateQRViewController: UIViewController {
 
     private lazy var createQRButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.create, for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
         button.titleLabel?.font = Constants.largeButtonFont
         button.setTitleColor(Constants.buttonTitleColor, for: .normal)
         button.backgroundColor = Constants.disabledButtonColor
@@ -62,7 +62,7 @@ class CreateQRViewController: UIViewController {
         return button
     }()
 
-    private let summTextField = RegisterTextField(placeholder: Constants.summToTransfer, mode: .required)
+    private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
     private let provider = QRProvider()
     private let loadingViewController = LoadingViewController()
 
