@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CreateQRViewControllerDelegate: AnyObject {
-    
+    func didTapCreateButton()
 }
 
 class CreateQRViewController: UIViewController {
@@ -58,15 +58,29 @@ class CreateQRViewController: UIViewController {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             loadingViewController.start()
+            provider.createQR(amount: summTextField.text) { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.loadingViewController.stop() { [weak self] in
+                        switch result {
+                        case .success(let success):
+                            self?.delegate?.didTapCreateButton()
+                        case .failure(let error):
+                            self?.showError(error)
+                        }
+                    }
+                }
+            }
+            delegate?.didTapCreateButton()
         }), for: .touchUpInside)
         return button
     }()
 
     private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
-    private let provider = QRProvider()
+    private let provider: QRProvider
     private let loadingViewController = LoadingViewController()
 
-    init() {
+    init(provider: QRProvider) {
+        self.provider = provider
         super.init(nibName: nil, bundle: nil)
         summTextField.delegate = self
     }

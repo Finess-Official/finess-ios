@@ -9,11 +9,14 @@ import UIKit
 
 class MainCoordinator {
     private let mainViewController = MainViewController()
-    private let addAccountViewController = AddAccountViewController()
-    private let createQRViewController = CreateQRViewController()
+    private let qrProvider = QRProvider()
+    private let addAccountViewController: AddAccountViewController
+    private let createQRViewController: CreateQRViewController
     private var mainNavigationController = UINavigationController()
 
     init() {
+        self.addAccountViewController = AddAccountViewController(provider: qrProvider)
+        self.createQRViewController = CreateQRViewController(provider: qrProvider)
         mainViewController.delegate = self
         addAccountViewController.delegate = self
     }
@@ -36,4 +39,8 @@ extension MainCoordinator: AddAccountViewControllerDelegate {
     func accountDidCreated() {
         mainNavigationController.pushViewController(createQRViewController, animated: true)
     }
+}
+
+extension MainCoordinator: CreateQRViewControllerDelegate {
+    func didTapCreateButton() {}
 }

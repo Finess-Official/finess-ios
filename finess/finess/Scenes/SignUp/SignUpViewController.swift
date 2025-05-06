@@ -192,7 +192,7 @@ class SignUpViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.navigationController?.popViewController(animated: false) {
                     if let error = error {
-                        ErrorHandler.shared.showError(error, navigationController: self?.navigationController)
+                        self?.showError(error)
                     }
                 }
             }
