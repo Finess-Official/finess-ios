@@ -75,7 +75,7 @@ class CreateQRViewController: UIViewController {
         return button
     }()
 
-    private let summTextField = RegisterTextField(placeholder: Constants.summToTransfer, mode: .required)
+    private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
     private let provider: QRProvider
     private let loadingViewController = LoadingViewController()
 

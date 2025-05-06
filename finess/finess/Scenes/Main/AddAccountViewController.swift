@@ -80,10 +80,10 @@ class AddAccountViewController: UIViewController {
     }()
 
 
-    private let nameTextField = RegisterTextField(placeholder: Constants.name, mode: .required)
-    private let cardNumberTextField = RegisterTextField(placeholder: Constants.cardNumber, mode: .required)
-    private let innTextField = RegisterTextField(placeholder: Constants.inn, mode: .required)
-    private let bankBikTextField = RegisterTextField(placeholder: Constants.bankBik, mode: .required)
+    private let nameTextField = RegisterTextField(placeholder: NSLocalizedString("name", comment: ""), mode: .required)
+    private let cardNumberTextField = RegisterTextField(placeholder: NSLocalizedString("cardNumber", comment: ""), mode: .required)
+    private let innTextField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
+    private let bankBikTextField = RegisterTextField(placeholder: NSLocalizedString("bankBIK", comment: ""), mode: .required)
     private let provider: QRProvider
     private let loadingViewController = LoadingViewController()
 
