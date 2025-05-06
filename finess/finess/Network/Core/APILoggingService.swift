@@ -18,7 +18,10 @@ final class APILoggingService {
     func loggingMessage(for error: APIErrorHandler) -> String {
         switch error {
         case .customApiError(let error):
-            return "\(NSLocalizedString("developerLogUnkownError", comment: "")): \(error?.code ?? .zero) \(error?.message ?? "")"
+            let title = NSLocalizedString("developerLogUnkownError", comment: "")
+            let code = error?.code ?? .zero
+            let message = error?.message ?? ""
+            return String(format: "%@: Code %d, Message: %@", title, code, message)
         case .badRequest:
             return NSLocalizedString("developerLogBadRequest", comment: "")
         case .unauthorized:

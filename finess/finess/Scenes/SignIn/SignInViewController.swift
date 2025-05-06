@@ -71,7 +71,8 @@ class SignInViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: NSLocalizedString("password", comment: ""), mode: .secure)
+    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
+    private let loggingService = APILoggingService()
 
     private var signupButtonTopConstraint: NSLayoutConstraint?
 
@@ -176,9 +177,10 @@ class SignInViewController: UIViewController {
         navigationController?.pushViewController(loadingViewController, animated: false)
         Auth.shared.signIn(password: password) { [weak self] error in
             DispatchQueue.main.async {
-                self?.navigationController?.popViewController(animated: false) {
+                self?.navigationController?.popViewController(animated: false) { [weak self] in
+                    guard let self else { return }
                     if let error = error {
-                        self?.showError(error)
+                        self.showError(error, loggingService: self.loggingService)
                     }
                 }
             }

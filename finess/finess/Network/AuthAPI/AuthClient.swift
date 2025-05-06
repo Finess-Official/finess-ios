@@ -19,14 +19,11 @@ protocol AuthClient: AnyObject {
 final class AuthClientImpl: AuthClient {
 
     private let client: URLSessionProtocol
-    private let logger: APILoggingService
 
     init(
-        client: URLSessionProtocol = URLSession.shared,
-        logger: APILoggingService = APILoggingService()
+        client: URLSessionProtocol = URLSession.shared
     ) {
         self.client = client
-        self.logger = logger
     }
 
     func request(
@@ -39,7 +36,7 @@ final class AuthClientImpl: AuthClient {
             let task = createDataTask(request: request, completion: completion)
             task.resume()
         case .failure(let error):
-            completion(.failure(error).logFailure(using: logger))
+            completion(.failure(error))
         }
     }
 
@@ -55,9 +52,9 @@ final class AuthClientImpl: AuthClient {
                      .networkConnectionLost,
                      .dnsLookupFailed,
                      .secureConnectionFailed:
-                    completion(.failure(.networkError).logFailure(using: logger))
+                    completion(.failure(.networkError))
                 default:
-                    completion(.failure(.customApiError(CustomApiError(code: error.code.rawValue, message: error.localizedDescription))).logFailure(using: logger))
+                    completion(.failure(.customApiError(CustomApiError(code: error.code.rawValue, message: error.localizedDescription))))
                 }
                 return
             }
@@ -65,13 +62,13 @@ final class AuthClientImpl: AuthClient {
             if let httpResponse = response as? HTTPURLResponse {
                 guard httpResponse.isSuccess else {
                     let errorStatus = httpResponse.apiError
-                    completion(.failure(errorStatus).logFailure(using: logger))
+                    completion(.failure(errorStatus))
                     return
                 }
             }
 
             guard let data = data else {
-                completion(.failure(.internalServerError).logFailure(using: logger))
+                completion(.failure(.internalServerError))
                 return
             }
 
@@ -83,14 +80,14 @@ final class AuthClientImpl: AuthClient {
                 let response = AuthDTOToDomainConverter.convert(from: result)
                 completion(.success(response))
             } catch {
-                completion(.failure(.decodingError).logFailure(using: logger))
+                completion(.failure(.decodingError))
             }
         }
     }
 
     private func createRequest(for params: AuthAPI) -> Result<URLRequest, APIErrorHandler> {
         guard let url = URL(string: FinessApp.baseURL + FinessApp.Path.identity + params.path)
-        else { return .failure(.badRequest).logFailure(using: logger) }
+        else { return .failure(.badRequest) }
 
         var request = URLRequest(url: url)
         request.httpMethod = params.method.rawValue
@@ -103,7 +100,7 @@ final class AuthClientImpl: AuthClient {
             do {
                 request.httpBody = try JSONEncoder().encode(body)
             } catch {
-                return .failure(.decodingError).logFailure(using: logger)
+                return .failure(.decodingError)
             }
         }
 

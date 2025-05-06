@@ -8,7 +8,9 @@
 import UIKit
 
 extension UIViewController {
-    func showError(_ error: APIErrorHandler) {
+    func showError(_ error: APIErrorHandler, loggingService: APILoggingService) {
+        loggingService.log(error: error)
+        
         let alert = UIAlertController(
             title: NSLocalizedString("error", comment: ""),
             message: alertMessage(for: error),
