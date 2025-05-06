@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainViewControllerDelegate: AnyObject {
     func didTapCreateQRCodeButton()
+    func didTapScanQRCodeButton()
 }
 
 class MainViewController: UIViewController {
@@ -40,6 +41,9 @@ class MainViewController: UIViewController {
     private let scanQRCodeButton: MainViewButton = {
         let button = MainViewButton(title: NSLocalizedString("scan", comment: ""), image: Constants.qrIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.delegate?.didTapScanQRCodeButton()
+        }), for: .touchUpInside)
         return button
     }()
 
