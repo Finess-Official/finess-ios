@@ -9,6 +9,9 @@ import AVFoundation
 import Foundation
 
 public final class DefaultCameraAuthorizationRequester: CameraAuthorizationRequester {
+
+    public init() {}
+    
     public func requestCameraAuthorization(_ completion: @escaping @MainActor (CameraAuthorizationStatus) -> Void) {
         AVCaptureDevice.requestAccess(for: .video) { granted in
             DispatchQueue.main.async {

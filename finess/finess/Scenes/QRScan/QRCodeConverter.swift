@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FinessCamera
 
 struct QRCodeConverter {
     enum Constants {

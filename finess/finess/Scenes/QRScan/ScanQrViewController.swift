@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import FinessCamera
 
 public protocol ScanQrViewControllerDelegate: AnyObject {
     func scanQrViewController(
