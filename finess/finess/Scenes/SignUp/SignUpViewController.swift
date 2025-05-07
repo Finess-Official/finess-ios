@@ -90,8 +90,8 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let passwordTextField = RegisterTextField(placeholder: Constants.password, mode: .secure)
-    private let repeatPasswordTextField = RegisterTextField(placeholder: Constants.repeatPassword, mode: .secure)
+    private let passwordTextField = RegisterTextField(placeholder: NSLocalizedString("password", comment: ""), mode: .secure)
+    private let repeatPasswordTextField = RegisterTextField(placeholder: NSLocalizedString("repeatPassword", comment: ""), mode: .secure)
     private let loggingService = APILoggingService()
 
     // MARK: - Init

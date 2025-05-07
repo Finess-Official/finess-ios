@@ -61,11 +61,12 @@ class CreateQRViewController: UIViewController {
             provider.createQR(amount: summTextField.text) { [weak self] result in
                 DispatchQueue.main.async {
                     self?.loadingViewController.stop() { [weak self] in
+                        guard let self else { return }
                         switch result {
                         case .success(let success):
-                            self?.delegate?.didTapCreateButton()
+                            self.delegate?.didTapCreateButton()
                         case .failure(let error):
-                            self?.showError(error)
+                            self.showError(error, loggingService: self.loggingService)
                         }
                     }
                 }
@@ -78,6 +79,7 @@ class CreateQRViewController: UIViewController {
     private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
     private let provider: QRProvider
     private let loadingViewController = LoadingViewController()
+    private let loggingService = APILoggingService()
 
     init(provider: QRProvider) {
         self.provider = provider

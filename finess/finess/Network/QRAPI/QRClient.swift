@@ -44,9 +44,7 @@ final class QRClientImpl: QRClient {
         map: @escaping (DTO) -> Domain,
         completion: @escaping (Result<Domain, APIErrorHandler>) -> Void
     ) -> URLSessionDataTask {
-        client.createDataTask(with: request) { [weak self] data, response, error in
-            guard let self else { return }
-
+        client.createDataTask(with: request) { data, response, error in
             if let error = error as? URLError {
                 switch error.code {
                 case .notConnectedToInternet,
