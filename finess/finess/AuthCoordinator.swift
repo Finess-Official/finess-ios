@@ -46,8 +46,7 @@ class AuthCoordinator {
         if hasLoggedIn {
             navigationController?.setViewControllers([tabBarController], animated: false)
         } else {
-//            navigationController?.setViewControllers([signInViewController], animated: false)
-            navigationController?.pushViewController(ScanQrViewController(), animated: true)
+            navigationController?.setViewControllers([signInViewController], animated: false)
         }
     }
 }

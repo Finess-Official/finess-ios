@@ -24,11 +24,6 @@ class TabBarController: UITabBarController {
         tabBar.tintColor = Constants.tabBarActive
         tabBar.barTintColor = Constants.tabBarInactive
         tabBar.backgroundColor = Constants.backgroundColor
-
-        tabBar.layer.borderColor = Constants.tabBarBorderColor
-        tabBar.layer.borderWidth = Constants.tabBarBorderWidth
-        tabBar.layer.masksToBounds = true
-
         setViewControllers([mainCoordinator.start()], animated: false)
     }
 

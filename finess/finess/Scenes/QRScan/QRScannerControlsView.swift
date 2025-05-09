@@ -31,7 +31,6 @@ final class QRScannerControlsView: UIView {
         super.init(frame: .zero)
 
         let m = 8.0
-        let horizontalMargin = 20 * 4.5
 
         [focusView, titleLabel].forEach {
             addSubview($0)
@@ -39,7 +38,7 @@ final class QRScannerControlsView: UIView {
         }
 
         let constraints = [
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: Constants.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.trailingAnchor.constraint(
                 lessThanOrEqualTo: trailingAnchor,

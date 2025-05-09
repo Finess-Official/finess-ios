@@ -12,25 +12,29 @@ class MainCoordinator {
     private let qrProvider = QRProvider()
     private let addAccountViewController: AddAccountViewController
     private let createQRViewController: CreateQRViewController
-    private var mainNavigationController = UINavigationController()
+    private var mainNavigationController: UINavigationController
 
     init() {
         self.addAccountViewController = AddAccountViewController(provider: qrProvider)
         self.createQRViewController = CreateQRViewController(provider: qrProvider)
+        self.mainNavigationController = UINavigationController(rootViewController: mainViewController)
         mainViewController.delegate = self
         addAccountViewController.delegate = self
         createQRViewController.delegate = self
     }
 
     func start() -> UINavigationController {
-        mainNavigationController = UINavigationController(rootViewController: mainViewController)
-        mainViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("QRTitle", comment: ""), image: Constants.qrIcon, tag: Tabs.qr.rawValue)
         mainNavigationController.navigationBar.tintColor = .black
         return mainNavigationController
     }
 }
 
 extension MainCoordinator: MainViewControllerDelegate {
+    func didTapScanQRCodeButton() {
+        mainNavigationController.modalPresentationStyle = .fullScreen
+        mainNavigationController.present(ScanQrViewController(), animated: true)
+    }
+
     func didTapCreateQRCodeButton() {
         mainNavigationController.pushViewController(addAccountViewController, animated: true)
     }
