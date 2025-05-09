@@ -60,7 +60,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Номер карты"
+            "value" : "Номер карты или счёта"
           }
         }
       }
@@ -86,13 +86,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create Account"
+            "value" : "Don't have an account? Create one"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создать аккаунт"
+            "value" : "Нет аккаунта? Создайте его"
           }
         }
       }
@@ -246,7 +246,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter summ to transfer"
+            "value" : "Enter the amount to transfer"
           }
         },
         "ru" : {
@@ -279,13 +279,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Already have an account"
+            "value" : "Already have an account? Sign In"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Уже есть аккаунт"
+            "value" : "Уже есть аккаунт? Войти"
           }
         }
       }
@@ -311,13 +311,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Less than six symbols"
+            "value" : "Password is less than 6 characters"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Меньше 6 символов"
+            "value" : "В пароле меньше 6 символов"
           }
         }
       }
@@ -333,7 +333,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Имя"
+            "value" : "ФИО"
           }
         }
       }
@@ -355,7 +355,24 @@
         }
       }
     },
+    "openSettings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть настройки"
+          }
+        }
+      }
+    },
     "password" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -371,7 +388,25 @@
         }
       }
     },
+    "passwordsDontMatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The passwords do not match"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пароли не совпадают"
+          }
+        }
+      }
+    },
     "QRTitle" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -392,7 +427,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Resipient"
+            "value" : "Recipient"
           }
         },
         "ru" : {
@@ -435,7 +470,40 @@
         }
       }
     },
+    "scanAndTransfer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You will be able to scan QR codes and quickly transfer money"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы сможете сканировать QR-коды и быстро переводить деньги"
+          }
+        }
+      }
+    },
+    "scanQR" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отсканируйте QR"
+          }
+        }
+      }
+    },
     "signIn" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -504,13 +572,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Summ "
+            "value" : "Amount to transfer"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сумма"
+            "value" : "Сумма для перевода"
           }
         }
       }
@@ -639,6 +707,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Неизвестная ошибка."
+          }
+        }
+      }
+    },
+    "сameraAccess" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please share the access to the camera"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предоставьте доступ к камере"
           }
         }
       }
