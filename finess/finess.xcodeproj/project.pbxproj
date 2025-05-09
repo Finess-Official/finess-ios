@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2BA45AB82DC558990057FBC3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 2BA45AB72DC558990057FBC3 /* Logging */; };
 		2BCE8CFE2DA2BB0B000AB5A8 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2BCE8CFD2DA2BB0B000AB5A8 /* SwiftKeychainWrapper */; };
+		2BFDE0A82DCADAA300413434 /* FinessCamera in Frameworks */ = {isa = PBXBuildFile; productRef = 2BFDE0A72DCADAA300413434 /* FinessCamera */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2BA45AB82DC558990057FBC3 /* Logging in Frameworks */,
+				2BFDE0A82DCADAA300413434 /* FinessCamera in Frameworks */,
 				2BCE8CFE2DA2BB0B000AB5A8 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				2BCE8CFD2DA2BB0B000AB5A8 /* SwiftKeychainWrapper */,
 				2BA45AB72DC558990057FBC3 /* Logging */,
+				2BFDE0A72DCADAA300413434 /* FinessCamera */,
 			);
 			productName = finess;
 			productReference = 2B9ABFE32D956E1B00221678 /* finess.app */;
@@ -120,6 +123,7 @@
 			packageReferences = (
 				2BCE8CFC2DA2BB0B000AB5A8 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				2BA45AB62DC558990057FBC3 /* XCRemoteSwiftPackageReference "swift-log" */,
+				2BFDE0A62DCADAA300413434 /* XCLocalSwiftPackageReference "../FinessCamera" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2B9ABFE42D956E1B00221678 /* Products */;
@@ -354,6 +358,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		2BFDE0A62DCADAA300413434 /* XCLocalSwiftPackageReference "../FinessCamera" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../FinessCamera;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		2BA45AB62DC558990057FBC3 /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -383,6 +394,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2BCE8CFC2DA2BB0B000AB5A8 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
+		};
+		2BFDE0A72DCADAA300413434 /* FinessCamera */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FinessCamera;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
