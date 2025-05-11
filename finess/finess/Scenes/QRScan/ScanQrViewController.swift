@@ -11,7 +11,7 @@ import FinessCamera
 
 public protocol ScanQrViewControllerDelegate: AnyObject {
     func scanQrViewController(
-        didRecognizeAccountId: String
+        didRecognizeQRCodeId: String
     )
 }
 
@@ -138,14 +138,14 @@ extension ScanQrViewController: CaptureSessionQRCodesDelegate {
             invalidateFocusResetTimer()
             scanInputView.updateQRObjectFocusFrame(code.previewFrame)
 
-            guard let accountId = codeConverter.convert(code: code) else {
+            guard let qrCodeId = codeConverter.convert(code: code) else {
                 return
             }
             guard !isQRCodeFinded else { return }
 
             isQRCodeFinded = true
             delegate?.scanQrViewController(
-                didRecognizeAccountId: accountId
+                didRecognizeQRCodeId: qrCodeId
             )
         } else {
             setupFocusResetTimer()

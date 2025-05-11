@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CreateQRViewControllerDelegate: AnyObject {
-    func didTapCreateButton(with accountId: String)
+    func didTapCreateButton(with qrCodeId: String)
 }
 
 class CreateQRViewController: UIViewController {
@@ -131,7 +131,7 @@ class CreateQRViewController: UIViewController {
                         guard let self else { return }
                         switch result {
                         case .success(let success):
-                            self.delegate?.didTapCreateButton(with: success.accountId)
+                            self.delegate?.didTapCreateButton(with: success.id)
                         case .failure(let error):
                             self.showError(error, loggingService: loggingService)
                         }
