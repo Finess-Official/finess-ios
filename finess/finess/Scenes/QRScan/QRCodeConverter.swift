@@ -11,20 +11,20 @@ import FinessCamera
 struct QRCodeConverter {
     enum Constants {
         static let deeplinkScheme = "finess"
-        static let deeplinkHost = "payment"
-        static let accountId = "accountId"
+        static let deeplinkHost = "payment-qr"
+        static let qrCodeId = "qrCodeId"
     }
 
     func convert(code: QRCodeCaptureSession.QRCode) -> String? {
-        if let accountId = deeplinkConverter(codeValue: code.value) {
-            return accountId
+        if let qrCodeId = deeplinkConverter(codeValue: code.value) {
+            return qrCodeId
         }
         return nil
     }
 
     private func deeplinkConverter(codeValue: String) -> String? {
         guard let qrURL = URL(string: codeValue),
-            let accountId = qrURL.params[Constants.accountId]
+            let qrCodeId = qrURL.params[Constants.qrCodeId]
         else {
             return nil
         }
@@ -34,7 +34,7 @@ struct QRCodeConverter {
         else { return nil }
 
         if scheme == Constants.deeplinkScheme && host == Constants.deeplinkHost {
-            return accountId
+            return qrCodeId
         }
         return nil
     }

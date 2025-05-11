@@ -12,6 +12,7 @@ class MainCoordinator {
     private let qrProvider = QRProvider()
     private let addAccountViewController: AddAccountViewController
     private let createQRViewController: CreateQRViewController
+    private let scanQrViewController = ScanQrViewController()
     private var mainNavigationController: UINavigationController
 
     init() {
@@ -21,6 +22,7 @@ class MainCoordinator {
         mainViewController.delegate = self
         addAccountViewController.delegate = self
         createQRViewController.delegate = self
+        scanQrViewController.delegate = self
     }
 
     func start() -> UINavigationController {
@@ -32,7 +34,7 @@ class MainCoordinator {
 extension MainCoordinator: MainViewControllerDelegate {
     func didTapScanQRCodeButton() {
         mainNavigationController.modalPresentationStyle = .fullScreen
-        mainNavigationController.present(ScanQrViewController(), animated: true)
+        mainNavigationController.present(scanQrViewController, animated: true)
     }
 
     func didTapCreateQRCodeButton() {
@@ -47,8 +49,14 @@ extension MainCoordinator: AddAccountViewControllerDelegate {
 }
 
 extension MainCoordinator: CreateQRViewControllerDelegate {
-    func didTapCreateButton(with accountId: String) {
-        let qrViewController = QRViewController(accountId: accountId)
+    func didTapCreateButton(with qrCodeId: String) {
+        let qrViewController = QRViewController(qrCodeId: qrCodeId)
         mainNavigationController.pushViewController(qrViewController, animated: true)
+    }
+}
+
+extension MainCoordinator: ScanQrViewControllerDelegate {
+    func scanQrViewController(didRecognizeQRCodeId: String) {
+        
     }
 }

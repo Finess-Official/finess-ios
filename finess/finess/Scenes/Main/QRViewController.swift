@@ -9,7 +9,7 @@ import UIKit
 
 class QRViewController: UIViewController {
 
-    private let accountId: String
+    private let qrCodeId: String
 
     private lazy var qrCodeImageView: UIImageView = {
         let imageView = UIImageView()
@@ -18,8 +18,8 @@ class QRViewController: UIViewController {
         return imageView
     }()
 
-    init(accountId: String) {
-        self.accountId = accountId
+    init(qrCodeId: String) {
+        self.qrCodeId = qrCodeId
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,7 +34,7 @@ class QRViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        qrCodeImageView.image = generateQRCode(from: "finess://payment-qr?accountId=\(accountId)")
+        qrCodeImageView.image = generateQRCode(from: "finess://payment-qr?qrCodeId=\(qrCodeId)")
     }
 
     private func setupUI() {

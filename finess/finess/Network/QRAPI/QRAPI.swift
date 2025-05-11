@@ -49,4 +49,12 @@ extension QRAPI {
             action: .requestWithJSONBody(params)
         )
     }
+
+    static func getQR(qrCodeId: String) -> QRAPI {
+        return QRAPI(
+            method: .get,
+            path: "/qrcodes/\(qrCodeId)",
+            action: .request
+        )
+    }
 }
