@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoadingViewController: UIViewController {
+class LoadingView: UIView {
 
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -16,16 +16,14 @@ class LoadingViewController: UIViewController {
         return indicator
     }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func configure() {
+        backgroundColor = .white
 
-        view.backgroundColor = .white
-
-        view.addSubview(activityIndicator)
+        addSubview(activityIndicator)
 
         NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 

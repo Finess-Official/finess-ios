@@ -57,7 +57,7 @@ class CreateQRViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            loadingViewController.start()
+            loadingView.start()
             didTapCreateButton()
         }), for: .touchUpInside)
         return button
@@ -65,7 +65,7 @@ class CreateQRViewController: UIViewController {
 
     private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
     private let provider: QRProvider
-    private let loadingViewController = LoadingViewController()
+    private let loadingView = LoadingView()
     private let loggingService = APILoggingService()
 
     init(provider: QRProvider) {
@@ -123,10 +123,9 @@ class CreateQRViewController: UIViewController {
     }
 
     private func didTapCreateButton() {
-        navigationController?.pushViewController(loadingViewController, animated: false)
         provider.createQR(amount: summTextField.text) { [weak self] result in
             DispatchQueue.main.async {
-                self?.loadingViewController.stop() { [weak self] in
+                self?.loadingView.stop() { [weak self] in
                     self?.navigationController?.popViewController(animated: false) { [weak self] in
                         guard let self else { return }
                         switch result {

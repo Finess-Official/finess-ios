@@ -65,6 +65,22 @@
         }
       }
     },
+    "cardNumberTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card number"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Номер счета зачисления"
+          }
+        }
+      }
+    },
     "create" : {
       "localizations" : {
         "en" : {
@@ -438,6 +454,22 @@
         }
       }
     },
+    "recipientTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The name of recipient"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ФИО получателя"
+          }
+        }
+      }
+    },
     "repeatPassword" : {
       "localizations" : {
         "en" : {
@@ -579,6 +611,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сумма для перевода"
+          }
+        }
+      }
+    },
+    "transferDetails" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer Details"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Детали перевода"
+          }
+        }
+      }
+    },
+    "transferSummTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer summ"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сумма перевода"
           }
         }
       }

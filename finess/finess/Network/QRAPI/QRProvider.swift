@@ -77,15 +77,20 @@ final class QRProvider {
     }
 
     func getQR(
-        qrCodeId: String?,
-        completion: @escaping (Result<CreateQRResponse, APIErrorHandler>) -> Void
+        qrCodeId: String,
+        completion: @escaping (Result<TransferDetailsResponse, APIErrorHandler>) -> Void
     ) {
-        guard let qrCodeId else { return }
-        
         client.request(
             with: QRAPI.getQR(qrCodeId: qrCodeId),
             map: QRDTOToDomainConverter.convert(from:),
-            completion: completion
+            completion: { result in
+                switch result {
+                case .success(let success):
+                    print("success")
+                case .failure(let failure):
+                    completion(.failure(failure))
+                }
+            }
         )
     }
 }

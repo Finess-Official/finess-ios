@@ -57,7 +57,7 @@ class AddAccountViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            loadingViewController.start()
+            loadingView.start()
             provider.createAccount(
                 ownerName: nameTextField.text,
                 inn: innTextField.text,
@@ -65,7 +65,7 @@ class AddAccountViewController: UIViewController {
                 accountNumber: cardNumberTextField.text
             ) { [weak self] result in
                 DispatchQueue.main.async {
-                    self?.loadingViewController.stop() { [weak self] in
+                    self?.loadingView.stop() { [weak self] in
                         guard let self else { return }
                         switch result {
                         case .success(let success):
@@ -86,7 +86,7 @@ class AddAccountViewController: UIViewController {
     private let innTextField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
     private let bankBikTextField = RegisterTextField(placeholder: NSLocalizedString("bankBIK", comment: ""), mode: .required)
     private let provider: QRProvider
-    private let loadingViewController = LoadingViewController()
+    private let loadingView = LoadingView()
     private let loggingService = APILoggingService()
 
     init(provider: QRProvider) {

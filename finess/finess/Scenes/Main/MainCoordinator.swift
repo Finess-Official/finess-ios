@@ -56,7 +56,9 @@ extension MainCoordinator: CreateQRViewControllerDelegate {
 }
 
 extension MainCoordinator: ScanQrViewControllerDelegate {
-    func scanQrViewController(didRecognizeQRCodeId: String) {
-        
+    func scanQrViewController(didRecognizeQRCodeId id: String) {
+        mainNavigationController.dismiss(animated: true, completion: {
+            self.mainNavigationController.present(TransferDetailsViewController(qrCodeId: id), animated: true)
+        })
     }
 }

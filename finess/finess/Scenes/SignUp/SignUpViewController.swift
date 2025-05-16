@@ -17,7 +17,7 @@ class SignUpViewController: UIViewController {
     weak var delegate: SignUpViewControllerDelegate?
 
     // MARK: - Private Properties
-    private let loadingViewController = LoadingViewController()
+    private let loadingView = LoadingView()
     
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
@@ -69,7 +69,7 @@ class SignUpViewController: UIViewController {
                 } else {
                     repeatPasswordTextField.isInErrorState = false
                     repeatPasswordTextFieldErrorLabel.removeFromSuperview()
-                    loadingViewController.start()
+                    loadingView.start()
                     didTapSignUp(password: repeatPasswordTextField.text)
                 }
             }
@@ -187,7 +187,6 @@ class SignUpViewController: UIViewController {
 
     private func didTapSignUp(password: String?) {
         guard let password = password else { return }
-        navigationController?.pushViewController(loadingViewController, animated: false)
         Auth.shared.signUp(password: password) { [weak self] error in
             DispatchQueue.main.async {
                 self?.navigationController?.popViewController(animated: false) { [weak self] in
