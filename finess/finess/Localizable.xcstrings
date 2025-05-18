@@ -779,6 +779,22 @@
           }
         }
       }
+    },
+    "returnToMain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to Main Screen"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуться на главный экран"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

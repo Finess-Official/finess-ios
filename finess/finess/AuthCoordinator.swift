@@ -47,8 +47,11 @@ class AuthCoordinator {
             navigationController?.setViewControllers([tabBarController], animated: false)
         } else {
             navigationController?.setViewControllers([signInViewController], animated: false)
-//            navigationController?.setViewControllers([tabBarController], animated: false)
         }
+    }
+    
+    func showSignIn() {
+        navigationController?.setViewControllers([signInViewController], animated: true)
     }
 }
 

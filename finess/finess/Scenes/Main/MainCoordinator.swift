@@ -50,7 +50,7 @@ extension MainCoordinator: AddAccountViewControllerDelegate {
 
 extension MainCoordinator: CreateQRViewControllerDelegate {
     func didTapCreateButton(with qrCodeId: String) {
-        let qrViewController = QRViewController(qrCodeId: qrCodeId)
+        let qrViewController = PaymentQRViewController(qrCodeId: qrCodeId)
         mainNavigationController.pushViewController(qrViewController, animated: true)
     }
 }
