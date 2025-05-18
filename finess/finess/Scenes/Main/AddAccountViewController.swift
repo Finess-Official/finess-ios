@@ -20,9 +20,9 @@ class AddAccountViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("addAccount", comment: "")
-        label.font = Constants.titleFont
-        label.textAlignment = Constants.textAlignment
-        label.textColor = Constants.textColor
+        label.font = .tinkoffTitle1()
+        label.textAlignment = .center
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -39,9 +39,9 @@ class AddAccountViewController: UIViewController {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("recipient", comment: "")
-        label.font = Constants.smallButtonFont
-        label.textAlignment = Constants.textAlignment
-        label.textColor = Constants.textColor
+        label.font = .tinkoffHeading()
+        label.textAlignment = .center
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -49,14 +49,23 @@ class AddAccountViewController: UIViewController {
     private lazy var addAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("add", comment: ""), for: .normal)
-        button.titleLabel?.font = Constants.largeButtonFont
-        button.setTitleColor(Constants.buttonTitleColor, for: .normal)
-        button.backgroundColor = Constants.disabledButtonColor
-        button.layer.cornerRadius = Constants.buttonCornerRadius
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.tinkoffBlack, for: .normal)
+        button.backgroundColor = .tinkoffYellow.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
         button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
+            // Add button press animation
+            UIView.animate(withDuration: 0.1, animations: {
+                self.addAccountButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                UIView.animate(withDuration: 0.1) {
+                    self.addAccountButton.transform = .identity
+                }
+            }
+            
             loadingView.start()
             provider.createAccount(
                 ownerName: nameTextField.text,
@@ -80,11 +89,46 @@ class AddAccountViewController: UIViewController {
         return button
     }()
 
+    private let nameTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("name", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return textField
+    }()
 
-    private let nameTextField = RegisterTextField(placeholder: NSLocalizedString("name", comment: ""), mode: .required)
-    private let cardNumberTextField = RegisterTextField(placeholder: NSLocalizedString("cardNumber", comment: ""), mode: .required)
-    private let innTextField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
-    private let bankBikTextField = RegisterTextField(placeholder: NSLocalizedString("bankBIK", comment: ""), mode: .required)
+    private let cardNumberTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("cardNumber", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return textField
+    }()
+
+    private let innTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("inn", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return textField
+    }()
+
+    private let bankBikTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("bankBik", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return textField
+    }()
+
     private let provider: QRProvider
     private let loadingView = LoadingView()
     private let loggingService = APILoggingService()
@@ -107,9 +151,14 @@ class AddAccountViewController: UIViewController {
         setupUI()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateUIElements()
+    }
+
     // MARK: - Private methods
     private func setupUI() {
-        view.backgroundColor = Constants.backgroundColor
+        view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(subtitleLabel)
@@ -120,27 +169,57 @@ class AddAccountViewController: UIViewController {
         view.addSubview(addAccountButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.largeSpacing),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            addAccountButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.mediumSpacing),
-            addAccountButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            addAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            addAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            addAccountButton.heightAnchor.constraint(equalToConstant: 50),
+            addAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            addAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            view.keyboardLayoutGuide.topAnchor.constraint(equalTo: addAccountButton.bottomAnchor),
         ])
 
         nameTextField.becomeFirstResponder()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
     }
+    
+    private func animateUIElements() {
+        // Animate title with bounce
+        titleLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0.3,
+            usingSpringWithDamping: 0.6,
+            initialSpringVelocity: 0.2,
+            options: [],
+            animations: {
+                self.titleLabel.transform = .identity
+            }
+        )
+
+        // Fade in other elements
+        let views = [contentStackView, addAccountButton]
+        views.forEach { $0.alpha = 0 }
+        
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0.6,
+            options: [],
+            animations: {
+                views.forEach { $0.alpha = 1 }
+            }
+        )
+    }
 
     private func changeButtonState(isEnabled: Bool) {
         addAccountButton.isEnabled = isEnabled
-        addAccountButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
+        addAccountButton.backgroundColor = isEnabled ? .tinkoffYellow : .tinkoffYellow.withAlphaComponent(0.5)
+        addAccountButton.setTitleColor(isEnabled ? .tinkoffBlack : .tinkoffBlack.withAlphaComponent(0.5), for: .normal)
     }
 
     // MARK: - Actions

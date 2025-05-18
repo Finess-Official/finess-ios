@@ -33,18 +33,12 @@
         }
       }
     },
-    "bankBIK" : {
+    "bankBik" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bank BIK"
-          }
-        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "БИК банка"
+            "value" : "БИК Банка"
           }
         }
       }
@@ -599,14 +593,8 @@
         }
       }
     },
-    "summToTransfer" : {
+    "summ" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Amount to transfer"
-          }
-        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",

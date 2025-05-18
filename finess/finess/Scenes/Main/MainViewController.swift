@@ -17,22 +17,32 @@ class MainViewController: UIViewController {
     // MARK: - Internal properties
     weak var delegate: MainViewControllerDelegate?
 
-    // MARK: - Private properties
+    // MARK: - Private properties    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("QRTitle", comment: "")
-        label.font = Constants.titleFont
-        label.textAlignment = Constants.textAlignment
-        label.textColor = Constants.textColor
+        label.font = .tinkoffTitle1()
+        label.textAlignment = .center
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    private let buttonsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = Constants.mediumSpacing
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
 
     private lazy var createQRCodeButton: MainViewButton = {
         let button = MainViewButton(title: NSLocalizedString("create", comment: ""), image: Constants.addIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.isUserInteractionEnabled = true
+        button.addTinkoffShadow()
         button.addAction(UIAction(handler: { [weak self] _ in
+            self?.animateButtonTap(button)
             self?.delegate?.didTapCreateQRCodeButton()
         }), for: .touchUpInside)
         return button
@@ -41,7 +51,9 @@ class MainViewController: UIViewController {
     private lazy var scanQRCodeButton: MainViewButton = {
         let button = MainViewButton(title: NSLocalizedString("scan", comment: ""), image: Constants.qrIcon)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTinkoffShadow()
         button.addAction(UIAction(handler: { [weak self] _ in
+            self?.animateButtonTap(button)
             self?.delegate?.didTapScanQRCodeButton()
         }), for: .touchUpInside)
         return button
@@ -52,26 +64,74 @@ class MainViewController: UIViewController {
         setupUI()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateUIElements()
+    }
+
     // MARK: - Private Methods
     private func setupUI() {
-        view.backgroundColor = Constants.backgroundColor
+        view.backgroundColor = .white
+        
         view.addSubview(titleLabel)
-        view.addSubview(createQRCodeButton)
-        view.addSubview(scanQRCodeButton)
+        view.addSubview(buttonsStackView)
+        
+        buttonsStackView.addArrangedSubview(createQRCodeButton)
+        buttonsStackView.addArrangedSubview(scanQRCodeButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
 
-            createQRCodeButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.mediumSpacing),
-            createQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            createQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
-            createQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
-
-            scanQRCodeButton.topAnchor.constraint(equalTo: createQRCodeButton.bottomAnchor, constant: Constants.mediumSpacing),
-            scanQRCodeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            scanQRCodeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
-            scanQRCodeButton.heightAnchor.constraint(equalToConstant: Constants.mainViewButtonHeight),
+            buttonsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            
+            createQRCodeButton.heightAnchor.constraint(equalToConstant: 80),
+            scanQRCodeButton.heightAnchor.constraint(equalToConstant: 80)
         ])
+    }
+    
+    private func animateUIElements() {
+        // Начальное состояние
+        titleLabel.alpha = 0
+        buttonsStackView.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        
+        // Анимация заголовка
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0,
+            options: [],
+            animations: {
+                self.titleLabel.alpha = 1
+            }
+        )
+        
+        // Анимация кнопок
+        UIView.animate(
+            withDuration: 0.8,
+            delay: 0.2,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0.2,
+            options: [],
+            animations: {
+                self.buttonsStackView.transform = .identity
+            }
+        )
+    }
+    
+    private func animateButtonTap(_ button: UIButton) {
+        UIView.animate(
+            withDuration: 0.1,
+            animations: {
+                button.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            },
+            completion: { _ in
+                UIView.animate(withDuration: 0.1) {
+                    button.transform = .identity
+                }
+            }
+        )
     }
 }
