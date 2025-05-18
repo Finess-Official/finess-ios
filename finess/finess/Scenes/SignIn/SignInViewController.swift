@@ -22,9 +22,9 @@ class SignInViewController: UIViewController {
     private let passwordTextFieldErrorLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("lessThanSixSymbols", comment: "")
-        label.font = .pnfBody()
+        label.font = .tinkoffBody()
         label.textAlignment = .center
-        label.textColor = .pnfOrange
+        label.textColor = Constants.errorColor
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
         return label
@@ -33,26 +33,20 @@ class SignInViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("signIn", comment: "")
-        label.font = .pnfTitle()
+        label.font = .tinkoffTitle1()
         label.textAlignment = .center
-        label.textColor = .pnfOrange
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "logo") // Make sure to add a logo asset
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
     }()
 
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("signInAction", comment: ""), for: .normal)
-        button.applyPnFStyle()
-        button.isEnabled = false
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.tinkoffBlack, for: .normal)
+        button.backgroundColor = .tinkoffYellow
+        button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
@@ -66,8 +60,10 @@ class SignInViewController: UIViewController {
     private lazy var signupButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("createAccount", comment: ""), for: .normal)
-        button.titleLabel?.font = .pnfHeading()
-        button.setTitleColor(.pnfGreen, for: .normal)
+        button.titleLabel?.font = .tinkoffBody()
+        button.backgroundColor = .clear
+        button.setTitleColor(.tinkoffGray, for: .normal)
+        button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
@@ -78,9 +74,9 @@ class SignInViewController: UIViewController {
 
     private let passwordTextField: RegisterTextField = {
         let textField = RegisterTextField(placeholder: NSLocalizedString("password", comment: ""), mode: .secure)
-        textField.layer.cornerRadius = 15
-        textField.layer.borderWidth = 2
-        textField.layer.borderColor = UIColor.pnfTeal.cgColor
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
         textField.backgroundColor = .white
         return textField
     }()
@@ -111,7 +107,7 @@ class SignInViewController: UIViewController {
         passwordTextField.text = ""
         passwordTextFieldErrorLabel.isHidden = true
         passwordTextField.isInErrorState = false
-        navigationController?.navigationBar.applyPnFStyle()
+        navigationController?.navigationBar.applyTinkoffStyle()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -122,12 +118,11 @@ class SignInViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setupUI() {
-        view.addPnFGradientBackground()
+        view.backgroundColor = .tinkoffBackground
 
         passwordTextField.delegate = self
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
 
-        view.addSubview(logoImageView)
         view.addSubview(titleLabel)
         view.addSubview(passwordTextField)
         view.addSubview(signinButton)
@@ -135,12 +130,8 @@ class SignInViewController: UIViewController {
         view.addSubview(passwordTextFieldErrorLabel)
 
         NSLayoutConstraint.activate([
-            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 120),
-            logoImageView.heightAnchor.constraint(equalToConstant: 120),
 
-            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
@@ -157,7 +148,7 @@ class SignInViewController: UIViewController {
             signinButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             signinButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            signupButton.heightAnchor.constraint(equalToConstant: 44),
+//            signupButton.heightAnchor.constraint(equalToConstant: 44),
             signupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
@@ -168,19 +159,6 @@ class SignInViewController: UIViewController {
     }
 
     private func animateUIElements() {
-        // Animate logo
-        logoImageView.transform = CGAffineTransform(translationX: 0, y: -200)
-        UIView.animate(
-            withDuration: 1.0,
-            delay: 0,
-            usingSpringWithDamping: 0.7,
-            initialSpringVelocity: 0.5,
-            options: [],
-            animations: {
-                self.logoImageView.transform = .identity
-            }
-        )
-
         // Animate title with bounce
         titleLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         UIView.animate(
@@ -215,7 +193,7 @@ class SignInViewController: UIViewController {
 
         let newConstraint: NSLayoutConstraint
         if passwordTextFieldErrorLabel.isHidden {
-            newConstraint = signupButton.topAnchor.constraint(equalTo: signinButton.bottomAnchor, constant: 16)
+            newConstraint = signupButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 16)
         } else {
             newConstraint = signupButton.topAnchor.constraint(equalTo: passwordTextFieldErrorLabel.bottomAnchor, constant: 16)
         }
@@ -226,9 +204,8 @@ class SignInViewController: UIViewController {
 
     private func changeButtonState(isEnabled: Bool) {
         signinButton.isEnabled = isEnabled
-        UIView.animate(withDuration: 0.3) {
-            self.signinButton.backgroundColor = isEnabled ? .pnfOrange : .pnfOrange.withAlphaComponent(0.5)
-        }
+        signinButton.backgroundColor = isEnabled ? .tinkoffYellow : .tinkoffYellow.withAlphaComponent(0.5)
+        signinButton.setTitleColor(isEnabled ? .tinkoffBlack : .tinkoffBlack.withAlphaComponent(0.5), for: .normal)
     }
 
     // MARK: - Actions
@@ -249,15 +226,25 @@ class SignInViewController: UIViewController {
         
         Auth.shared.signIn(password: password) { [weak self] error in
             DispatchQueue.main.async {
-                self?.navigationController?.popViewController(animated: false) { [weak self] in
-                    guard let self else { return }
-                    if let error = error {
-                        self.showError(error, loggingService: self.loggingService)
-                    }
+                guard let self else { return }
+                if let error = error {
+                    // Add shake animation for error
+                    let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+                    animation.timingFunction = CAMediaTimingFunction(name: .linear)
+                    animation.duration = 0.6
+                    animation.values = [-10.0, 10.0, -10.0, 10.0, -5.0, 5.0, -2.5, 2.5, 0.0]
+                    self.passwordTextField.layer.add(animation, forKey: "shake")
+                    
+                    self.showError(error, loggingService: self.loggingService)
+                } else {
+                    self.navigationController?.popViewController(animated: false)
                 }
+                self.loadingView.stop()
             }
         }
     }
+
+
 }
 
 // MARK: - UITextFieldDelegate
@@ -278,14 +265,6 @@ extension SignInViewController: UITextFieldDelegate {
             changeButtonState(isEnabled: false)
             passwordTextField.isInErrorState = true
             passwordTextFieldErrorLabel.isHidden = false
-            
-            // Shake animation for error
-            let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
-            animation.timingFunction = CAMediaTimingFunction(name: .linear)
-            animation.duration = 0.6
-            animation.values = [-10.0, 10.0, -10.0, 10.0, -5.0, 5.0, -2.5, 2.5, 0.0]
-            passwordTextField.layer.add(animation, forKey: "shake")
-            
         } else {
             changeButtonState(isEnabled: true)
             passwordTextField.isInErrorState = false

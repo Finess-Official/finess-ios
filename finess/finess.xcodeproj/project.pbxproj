@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2B9ABFE32D956E1B00221678 /* finess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = finess.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B9ABFE32D956E1B00221678 /* FinessPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinessPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -62,7 +62,7 @@
 		2B9ABFE42D956E1B00221678 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2B9ABFE32D956E1B00221678 /* finess.app */,
+				2B9ABFE32D956E1B00221678 /* FinessPay.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,7 +92,7 @@
 				2BFDE0A72DCADAA300413434 /* FinessCamera */,
 			);
 			productName = finess;
-			productReference = 2B9ABFE32D956E1B00221678 /* finess.app */;
+			productReference = 2B9ABFE32D956E1B00221678 /* FinessPay.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -161,6 +161,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 73GBQDWDN7;
@@ -177,7 +178,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = e.finess;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FinessPay;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -189,6 +190,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 73GBQDWDN7;
@@ -205,7 +207,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = e.finess;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FinessPay;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

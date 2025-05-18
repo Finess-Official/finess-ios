@@ -39,7 +39,7 @@ enum Constants {
     static let mainViewButtonBackgroundColor: UIColor = .white
     static let tabBarActive = UIColor.tabBarActive
     static let tabBarInactive = UIColor.tabBarInactive
-    static let backgroundColor = UIColor.background
+    static let backgroundColor = UIColor.white
     static let tabBarBorderColor = UIColor.gray.cgColor
 
     // Numeric
