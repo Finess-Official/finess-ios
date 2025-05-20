@@ -39,8 +39,6 @@ class AppCoordinator {
     }
     
     private func showSuccessNotification() {
-        print("Showing success notification")
-        
         let notificationView = UIView()
         notificationView.backgroundColor = .white
         notificationView.layer.cornerRadius = 24
@@ -50,10 +48,9 @@ class AppCoordinator {
         notificationView.layer.shadowOffset = CGSize(width: 0, height: 4)
         notificationView.layer.shadowRadius = 16
         notificationView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Green circle with checkmark
+
         let iconContainer = UIView()
-        iconContainer.backgroundColor = UIColor(red: 0.22, green: 0.78, blue: 0.36, alpha: 1) // #38C35C
+        iconContainer.backgroundColor = UIColor(red: 0.22, green: 0.78, blue: 0.36, alpha: 1)
         iconContainer.layer.cornerRadius = 18
         iconContainer.translatesAutoresizingMaskIntoConstraints = false
         
@@ -66,7 +63,7 @@ class AppCoordinator {
         iconContainer.addSubview(checkmark)
         
         let label = UILabel()
-        label.text = "Баланс пополнен"
+        label.text = "Успешный перевод"
         label.textColor = .tinkoffBlack
         label.font = .tinkoffBody()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +73,6 @@ class AppCoordinator {
         
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first else {
-            print("Failed to get window")
             return
         }
         
@@ -125,15 +121,12 @@ class AppCoordinator {
 // MARK: - DeepLinkHandlerDelegate
 extension AppCoordinator: DeepLinkHandlerDelegate {
     func handle(deepLinkType: DeepLinkType) {
-        print("Handling deep link type: \(deepLinkType)")
         switch deepLinkType {
         case .mainScreen:
             if Auth.shared.isSignedUp {
-                print("User is signed up, showing main screen")
                 navigationController?.setViewControllers([tabBarController], animated: true)
                 returnToMainScreen()
             } else {
-                print("User is not signed up, showing sign in")
                 authCoordinator?.showSignIn()
             }
         case .tkassa:
@@ -145,7 +138,6 @@ extension AppCoordinator: DeepLinkHandlerDelegate {
                 authCoordinator?.showSignIn()
             }
         case .unknown:
-            print("Unknown deep link type")
             break
         }
     }

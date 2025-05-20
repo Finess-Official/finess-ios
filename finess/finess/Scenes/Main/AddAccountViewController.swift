@@ -180,7 +180,7 @@ class AddAccountViewController: UIViewController {
             addAccountButton.heightAnchor.constraint(equalToConstant: 50),
             addAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            view.keyboardLayoutGuide.topAnchor.constraint(equalTo: addAccountButton.bottomAnchor),
+            addAccountButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.smallSpacing)
         ])
 
         nameTextField.becomeFirstResponder()

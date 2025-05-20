@@ -8,14 +8,6 @@ class PaymentWebViewController: UIViewController {
         return webView
     }()
     
-    private let closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        button.tintColor = .tinkoffBlack
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     private let url: URL
     
     init(url: URL) {
@@ -38,21 +30,13 @@ class PaymentWebViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(webView)
-        view.addSubview(closeButton)
         
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            closeButton.widthAnchor.constraint(equalToConstant: 32),
-            closeButton.heightAnchor.constraint(equalToConstant: 32),
-            
-            webView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 16),
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
     
     private func setupWebView() {
@@ -62,10 +46,6 @@ class PaymentWebViewController: UIViewController {
     private func loadPaymentForm() {
         let request = URLRequest(url: url)
         webView.load(request)
-    }
-    
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
     }
 }
 
