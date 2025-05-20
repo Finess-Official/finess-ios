@@ -87,7 +87,8 @@ class SignInViewController: UIViewController {
     // MARK: - Initializer
     init(userDidSignedUp: Bool) {
         super.init(nibName: nil, bundle: nil)
-        self.signupButton.isHidden = userDidSignedUp
+//        self.signupButton.isHidden = userDidSignedUp
+        self.signupButton.isHidden = false
     }
     
     required init?(coder: NSCoder) {

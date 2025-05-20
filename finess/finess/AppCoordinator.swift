@@ -34,6 +34,7 @@ class AppCoordinator {
         tabBarController.selectedIndex = Tabs.qr.rawValue
         if let navController = tabBarController.selectedViewController as? UINavigationController {
             navController.popToRootViewController(animated: true)
+            navController.dismiss(animated: true)
         }
     }
 }
@@ -43,6 +44,13 @@ extension AppCoordinator: DeepLinkHandlerDelegate {
     func handle(deepLinkType: DeepLinkType) {
         switch deepLinkType {
         case .mainScreen:
+            if Auth.shared.isSignedUp {
+                navigationController?.setViewControllers([tabBarController], animated: true)
+                returnToMainScreen()
+            } else {
+                authCoordinator?.showSignIn()
+            }
+        case .tkassa:
             if Auth.shared.isSignedUp {
                 navigationController?.setViewControllers([tabBarController], animated: true)
                 returnToMainScreen()

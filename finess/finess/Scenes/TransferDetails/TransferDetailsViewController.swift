@@ -195,39 +195,49 @@ class TransferDetailsViewController: UIViewController {
         provider.initializePayment(qrCodeId: qrCodeId) { [weak self] result in
             guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                self.loadingView.stop { [weak self] in
-                    guard let self = self else { return }
-
-                    switch result {
-                    case .success(let task):
-                        if let url = task.acquiringPaymentUrl {
-                            loadingView.isHidden = true
+            switch result {
+            case .success(let task):
+                if let url = task.acquiringPaymentUrl {
+                    DispatchQueue.main.async {
+                        self.loadingView.stop() {
+                            self.loadingView.isHidden = true
                             if let url = URL(string: url) {
-                                UIApplication.shared.open(url)
+                                let paymentVC = PaymentWebViewController(url: url)
+                                paymentVC.modalPresentationStyle = .fullScreen
+                                self.present(paymentVC, animated: true)
                             }
-                        } else {
-                            provider.getPaymentInitStatus(paymentTaskId: task.id) { [weak self] result in
-                                guard let self = self else { return }
-                                switch result {
-                                case .success(let acquiringPaymentUrl):
-                                    DispatchQueue.main.async {
-                                        if let url = acquiringPaymentUrl {
-                                            self.loadingView.isHidden = true
-                                            let testurl = "http://51.250.29.29:8081/payment/form/1"
-                                            if let url = URL(string: testurl) {
-                                                UIApplication.shared.open(url)
-                                            }
+                        }
+                    }
+                } else {
+                    provider.getPaymentInitStatus(paymentTaskId: task.id) { [weak self] result in
+                        guard let self = self else { return }
+                        switch result {
+                        case .success(let acquiringPaymentUrl):
+                            DispatchQueue.main.async {
+                                if let url = acquiringPaymentUrl {
+                                    self.loadingView.stop() {
+                                        self.loadingView.isHidden = true
+                                        if let url = URL(string: url) {
+                                            let paymentVC = PaymentWebViewController(url: url)
+                                            self.present(paymentVC, animated: true)
                                         }
                                     }
-                                case .failure(let error):
-                                    loadingView.isHidden = true
+                                }
+                            }
+                        case .failure(let error):
+                            DispatchQueue.main.async {
+                                self.loadingView.stop() {
+                                    self.loadingView.isHidden = true
                                     self.showError(error, loggingService: self.loggingService)
                                 }
                             }
                         }
-                    case .failure(let error):
-                        loadingView.isHidden = true
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.loadingView.stop() {
+                        self.loadingView.isHidden = true
                         self.showError(error, loggingService: self.loggingService)
                     }
                 }

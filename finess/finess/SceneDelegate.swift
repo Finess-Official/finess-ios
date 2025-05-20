@@ -47,6 +47,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         switch host {
         case "main_screen":
             type = .mainScreen
+        case "tkassa":
+            type = .tkassa
         default:
             type = .unknown
         }

@@ -10,6 +10,7 @@ import UIKit
 enum DeepLinkType {
     case mainScreen
     case unknown
+    case tkassa
 }
 
 protocol DeepLinkHandlerDelegate: AnyObject {
