@@ -10,5 +10,4 @@ import Foundation
 struct TransferDetailsResponse {
     let name: String
     let cardNumber: String
-    let transferSumm: String
 }

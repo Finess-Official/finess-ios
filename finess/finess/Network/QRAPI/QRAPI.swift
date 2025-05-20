@@ -40,6 +40,14 @@ extension QRAPI {
         )
     }
 
+    static func getAccount(accountId: String) -> QRAPI {
+        return QRAPI(
+            method: .get,
+            path: "/accounts/\(accountId)",
+            action: .request
+        )
+    }
+
     static func createQR(
         params: CreateQRParams
     ) -> QRAPI {
@@ -54,6 +62,22 @@ extension QRAPI {
         return QRAPI(
             method: .get,
             path: "/qrcodes/\(qrCodeId)",
+            action: .request
+        )
+    }
+
+    static func initPayment(params: PaymentCreationParams) -> QRAPI {
+        return QRAPI(
+            method: .post,
+            path: "/payments:init",
+            action: .requestWithJSONBody(params)
+        )
+    }
+
+    static func getInitStatus(paymentId: String) -> QRAPI {
+        return QRAPI(
+            method: .get,
+            path: "/payments/initializations/\(paymentId)",
             action: .request
         )
     }

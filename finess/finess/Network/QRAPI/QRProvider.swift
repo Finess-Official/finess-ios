@@ -78,20 +78,71 @@ final class QRProvider {
 
     func getQR(
         qrCodeId: String,
-        completion: @escaping (Result<TransferDetailsResponse, APIErrorHandler>) -> Void
+        qrCompletion: @escaping (Result<Float, APIErrorHandler>) -> Void,
+        accountCompletion: @escaping (Result<TransferDetailsResponse, APIErrorHandler>) -> Void
     ) {
         client.request(
             with: QRAPI.getQR(qrCodeId: qrCodeId),
             map: QRDTOToDomainConverter.convert(from:),
-            completion: { result in
+            completion: { [weak self] result in
+                guard let self else { return }
                 switch result {
                 case .success(let success):
-                    print("success")
+                    qrCompletion(.success(success.amount))
+                    self.client.request(with: QRAPI.getAccount(accountId: success.accountId), map: AccountDTOToDomainConverter.convert(from:)) { result in
+                        switch result {
+                        case .success(let success):
+                            accountCompletion(.success(TransferDetailsResponse(name: success.ownerName, cardNumber: success.accountNumber)))
+                        case .failure(let failure):
+                            qrCompletion(.failure(failure))
+                            accountCompletion(.failure(failure))
+                        }
+                    }
                 case .failure(let failure):
-                    completion(.failure(failure))
+                    qrCompletion(.failure(failure))
+                    accountCompletion(.failure(failure))
                 }
             }
         )
+    }
+
+    func initializePayment(
+        qrCodeId: String,
+        completion: @escaping (Result<PaymentInitializationTask, APIErrorHandler>) -> Void
+    ) {
+        let params = PaymentCreationParams(
+            type: "QRCODE",
+            qrCodeId: qrCodeId
+        )
+
+        client.request(
+            with: QRAPI.initPayment(params: params),
+            map: PaymentDTOToDomainConverter.convert(from:),
+            completion: completion
+        )
+    }
+
+    func getPaymentInitStatus(
+        paymentTaskId: String,
+        completion: @escaping (Result<String?, APIErrorHandler>) -> Void) {
+            client.request(
+                with: QRAPI.getInitStatus(paymentId: paymentTaskId),
+                map: PaymentDTOToDomainConverter.convert(from:)) { [weak self] result in
+                    guard let self else { return }
+                    switch result {
+                    case .success(let success):
+                        switch success.status {
+                        case .initialized:
+                            completion(.success(success.acquiringPaymentUrl))
+                        case .inProgress:
+                            self.getPaymentInitStatus(paymentTaskId: success.id, completion: completion)
+                        case .failed:
+                            completion(.failure(.badRequest))
+                        }
+                    case .failure(let failure):
+                        completion(.failure(failure))
+                    }
+                }
     }
 }
 

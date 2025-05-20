@@ -480,6 +480,22 @@
         }
       }
     },
+    "returnToMain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to Main Screen"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуться на главный экран"
+          }
+        }
+      }
+    },
     "scan" : {
       "localizations" : {
         "en" : {
@@ -595,10 +611,32 @@
     },
     "summ" : {
       "localizations" : {
-        "ru" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Summ"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "Сумма для перевода"
+          }
+        }
+      }
+    },
+    "transferAction" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Перевести"
           }
         }
       }
@@ -776,22 +814,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Предоставьте доступ к камере"
-          }
-        }
-      }
-    },
-    "returnToMain" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Return to Main Screen"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вернуться на главный экран"
           }
         }
       }

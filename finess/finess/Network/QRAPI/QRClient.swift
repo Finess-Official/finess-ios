@@ -74,8 +74,11 @@ final class QRClientImpl: QRClient {
                 return
             }
 
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601WithFractionalSeconds
+
             do {
-                let dto = try JSONDecoder().decode(DTO.self, from: data)
+                let dto = try decoder.decode(DTO.self, from: data)
                 let domain = map(dto)
                 completion(.success(domain))
             } catch {

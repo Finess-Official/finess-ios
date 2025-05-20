@@ -43,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
               let host = components.host else { return }
 
         let type: DeepLinkType
+
         switch host {
         case "main_screen":
             type = .mainScreen
@@ -50,7 +51,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             type = .unknown
         }
 
-        appCoordinator?.handle(deepLinkType: DeepLinkType.mainScreen)
+        appCoordinator?.handle(deepLinkType: type)
     }
 
     private func canHandle(_ url: URL) -> Bool {
