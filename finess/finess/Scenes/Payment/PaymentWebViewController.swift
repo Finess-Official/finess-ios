@@ -73,9 +73,7 @@ extension PaymentWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.url,
            url.scheme == "finesspay" {
-            // Закрываем WebView
             dismiss(animated: true) {
-                // Открываем диплинк через URL Scheme
                 UIApplication.shared.open(url)
             }
             decisionHandler(.cancel)
