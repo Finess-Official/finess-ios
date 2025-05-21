@@ -10,6 +10,7 @@ import UIKit
 protocol BeaconViewControllerDelegate: AnyObject {
     func didTapBroadcastButton()
     func didTapScanButton()
+    func didTapStopBroadcasting()
 }
 
 class BeaconViewController: UIViewController {
@@ -54,7 +55,21 @@ class BeaconViewController: UIViewController {
     private var scanningModeActive = false
     private var broadcastWaves: [UIView] = []
     private var stopButton: UIButton?
+    private let beaconManager: BeaconManager
 
+    init(beaconManager: BeaconManager) {
+        self.beaconManager = beaconManager
+        super.init(nibName: nil, bundle: nil)
+
+        beaconManager.onBeaconFound = { [weak self] uuid, major, minor, rssi in
+            print("Ураааа: \(uuid)")
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -66,7 +81,7 @@ class BeaconViewController: UIViewController {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewDidDisappear(animated)
         setBroadcastingMode(false)
         setScanningMode(false)
     }
@@ -114,17 +129,15 @@ class BeaconViewController: UIViewController {
 
     @objc private func broadcastButtonTapped() {
         animateButtonTap(broadcastButton)
-        setBroadcastingMode(true)
         delegate?.didTapBroadcastButton()
     }
 
     @objc private func scanButtonTapped() {
         animateButtonTap(scanButton)
-        setScanningMode(true)
         delegate?.didTapScanButton()
     }
 
-    private func setBroadcastingMode(_ active: Bool) {
+    func setBroadcastingMode(_ active: Bool) {
         broadcastingModeActive = active
         scanningModeActive = false
         buttonsStackView.isHidden = active
@@ -138,7 +151,7 @@ class BeaconViewController: UIViewController {
         }
     }
 
-    private func setScanningMode(_ active: Bool) {
+    func setScanningMode(_ active: Bool) {
         scanningModeActive = active
         broadcastingModeActive = false
         buttonsStackView.isHidden = active
@@ -173,6 +186,7 @@ class BeaconViewController: UIViewController {
 
     @objc private func stopBroadcastTapped() {
         setBroadcastingMode(false)
+        delegate?.didTapStopBroadcasting()
     }
 
     @objc private func stopScanTapped() {

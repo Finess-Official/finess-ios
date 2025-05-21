@@ -71,6 +71,9 @@ class MainViewController: UIViewController {
 
     // MARK: - Private Methods
     private func setupUI() {
+        let rightMenuItem = UIBarButtonItem(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: self, action: #selector(logOutButtonTapped))
+        self.navigationItem.setRightBarButton(rightMenuItem, animated: false)
+
         view.backgroundColor = .white
         
         view.addSubview(titleLabel)
@@ -131,5 +134,10 @@ class MainViewController: UIViewController {
                 }
             }
         )
+    }
+
+    @objc
+    private func logOutButtonTapped() {
+        Auth.shared.logout()
     }
 }

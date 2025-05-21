@@ -101,9 +101,9 @@ final class RegisterTextField: UITextField {
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
 
         if currentMode == .secure {
-            addSubview(rightButton)
-            rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
-            rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        addSubview(rightButton)
+        rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
+        rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
             currentButtonState = .eye
         }
     }

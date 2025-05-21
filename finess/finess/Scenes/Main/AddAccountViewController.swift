@@ -73,11 +73,18 @@ class AddAccountViewController: UIViewController {
                 bik: bankBikTextField.text,
                 accountNumber: cardNumberTextField.text
             ) { [weak self] result in
+                guard let self else { return }
                 DispatchQueue.main.async {
-                    self?.loadingView.stop() { [weak self] in
+                    self.loadingView.stop() { [weak self] in
                         guard let self else { return }
                         switch result {
                         case .success(let success):
+                            if let name = self.nameTextField.text,
+                               let cardNumber = self.cardNumberTextField.text,
+                               let inn = innTextField.text,
+                               let bik = bankBikTextField.text {
+                                Auth.shared.saveAccountData(name: name, cardNumber: cardNumber, inn: inn, bik: bik)
+                            }
                             self.delegate?.accountDidCreated()
                         case .failure(let error):
                             self.showError(error, loggingService: self.loggingService)
