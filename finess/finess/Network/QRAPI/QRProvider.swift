@@ -111,8 +111,7 @@ final class QRProvider {
         completion: @escaping (Result<PaymentInitializationTask, APIErrorHandler>) -> Void
     ) {
         let params = PaymentCreationParams(
-            type: "QRCODE",
-            qrCodeId: qrCodeId
+            associationId: .init(type: "QRCODE", qrCodeId: qrCodeId)
         )
 
         client.request(

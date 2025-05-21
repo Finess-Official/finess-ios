@@ -86,6 +86,7 @@ class Auth: AuthProtocol {
     }
 
     func getCredentials() -> Credentials {
+        print("Access token \(keychain.string(forKey: KeychainKey.accessToken.rawValue))")
         return Credentials(
             accessToken: keychain.string(forKey: KeychainKey.accessToken.rawValue),
             refreshToken: keychain.string(forKey: KeychainKey.refreshToken.rawValue)

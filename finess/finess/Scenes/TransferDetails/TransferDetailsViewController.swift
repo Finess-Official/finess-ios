@@ -99,9 +99,12 @@ class TransferDetailsViewController: UIViewController {
         return stackView
     }()
 
-    private let loadingView = LoadingView()
     private let provider = QRProvider()
     private let loggingService = APILoggingService()
+
+    private let recipientShimmer = ShimmerView()
+    private let cardNumberShimmer = ShimmerView()
+    private let transferSummShimmer = ShimmerView()
 
     init(qrCodeId: String) {
         self.qrCodeId = qrCodeId
@@ -116,22 +119,70 @@ class TransferDetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
+        startShimmers()
         fetchTransferDetails()
     }
 
     private func setupUI() {
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
-        loadingView.configure()
-        loadingView.isHidden = true
         view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(recipientTitle)
-        contentStackView.addArrangedSubview(recipient)
+        let recipientContainer = UIView()
+        recipientContainer.translatesAutoresizingMaskIntoConstraints = false
+        recipient.translatesAutoresizingMaskIntoConstraints = false
+        recipientShimmer.translatesAutoresizingMaskIntoConstraints = false
+        recipientContainer.addSubview(recipient)
+        recipientContainer.addSubview(recipientShimmer)
+        NSLayoutConstraint.activate([
+            recipient.topAnchor.constraint(equalTo: recipientContainer.topAnchor),
+            recipient.leadingAnchor.constraint(equalTo: recipientContainer.leadingAnchor),
+            recipient.trailingAnchor.constraint(equalTo: recipientContainer.trailingAnchor),
+            recipient.bottomAnchor.constraint(equalTo: recipientContainer.bottomAnchor),
+            recipientShimmer.topAnchor.constraint(equalTo: recipientContainer.topAnchor),
+            recipientShimmer.leadingAnchor.constraint(equalTo: recipientContainer.leadingAnchor),
+            recipientShimmer.trailingAnchor.constraint(equalTo: recipientContainer.trailingAnchor),
+            recipientShimmer.bottomAnchor.constraint(equalTo: recipientContainer.bottomAnchor),
+            recipientShimmer.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        contentStackView.addArrangedSubview(recipientContainer)
         contentStackView.addArrangedSubview(cardNumberTitle)
-        contentStackView.addArrangedSubview(cardNumber)
+        let cardNumberContainer = UIView()
+        cardNumberContainer.translatesAutoresizingMaskIntoConstraints = false
+        cardNumber.translatesAutoresizingMaskIntoConstraints = false
+        cardNumberShimmer.translatesAutoresizingMaskIntoConstraints = false
+        cardNumberContainer.addSubview(cardNumber)
+        cardNumberContainer.addSubview(cardNumberShimmer)
+        NSLayoutConstraint.activate([
+            cardNumber.topAnchor.constraint(equalTo: cardNumberContainer.topAnchor),
+            cardNumber.leadingAnchor.constraint(equalTo: cardNumberContainer.leadingAnchor),
+            cardNumber.trailingAnchor.constraint(equalTo: cardNumberContainer.trailingAnchor),
+            cardNumber.bottomAnchor.constraint(equalTo: cardNumberContainer.bottomAnchor),
+            cardNumberShimmer.topAnchor.constraint(equalTo: cardNumberContainer.topAnchor),
+            cardNumberShimmer.leadingAnchor.constraint(equalTo: cardNumberContainer.leadingAnchor),
+            cardNumberShimmer.trailingAnchor.constraint(equalTo: cardNumberContainer.trailingAnchor),
+            cardNumberShimmer.bottomAnchor.constraint(equalTo: cardNumberContainer.bottomAnchor),
+            cardNumberShimmer.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        contentStackView.addArrangedSubview(cardNumberContainer)
         contentStackView.addArrangedSubview(transferSummTitle)
-        contentStackView.addArrangedSubview(transferSumm)
+        let transferSummContainer = UIView()
+        transferSummContainer.translatesAutoresizingMaskIntoConstraints = false
+        transferSumm.translatesAutoresizingMaskIntoConstraints = false
+        transferSummShimmer.translatesAutoresizingMaskIntoConstraints = false
+        transferSummContainer.addSubview(transferSumm)
+        transferSummContainer.addSubview(transferSummShimmer)
+        NSLayoutConstraint.activate([
+            transferSumm.topAnchor.constraint(equalTo: transferSummContainer.topAnchor),
+            transferSumm.leadingAnchor.constraint(equalTo: transferSummContainer.leadingAnchor),
+            transferSumm.trailingAnchor.constraint(equalTo: transferSummContainer.trailingAnchor),
+            transferSumm.bottomAnchor.constraint(equalTo: transferSummContainer.bottomAnchor),
+            transferSummShimmer.topAnchor.constraint(equalTo: transferSummContainer.topAnchor),
+            transferSummShimmer.leadingAnchor.constraint(equalTo: transferSummContainer.leadingAnchor),
+            transferSummShimmer.trailingAnchor.constraint(equalTo: transferSummContainer.trailingAnchor),
+            transferSummShimmer.bottomAnchor.constraint(equalTo: transferSummContainer.bottomAnchor),
+            transferSummShimmer.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        contentStackView.addArrangedSubview(transferSummContainer)
         view.addSubview(titleLabel)
-        view.addSubview(loadingView)
         view.addSubview(transferButton)
 
         NSLayoutConstraint.activate([
@@ -145,53 +196,65 @@ class TransferDetailsViewController: UIViewController {
             transferButton.heightAnchor.constraint(equalToConstant: 50),
             transferButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             transferButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            transferButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            transferButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
         ])
         contentStackView.setCustomSpacing(24, after: transferSumm)
     }
 
+    private func startShimmers() {
+        recipientShimmer.isHidden = false
+        cardNumberShimmer.isHidden = false
+        transferSummShimmer.isHidden = false
+        recipient.isHidden = true
+        cardNumber.isHidden = true
+        transferSumm.isHidden = true
+        recipientShimmer.startShimmering()
+        cardNumberShimmer.startShimmering()
+        transferSummShimmer.startShimmering()
+    }
+
+    private func stopShimmers() {
+        recipientShimmer.stopShimmering()
+        cardNumberShimmer.stopShimmering()
+        transferSummShimmer.stopShimmering()
+        recipientShimmer.isHidden = true
+        cardNumberShimmer.isHidden = true
+        transferSummShimmer.isHidden = true
+        recipient.isHidden = false
+        cardNumber.isHidden = false
+        transferSumm.isHidden = false
+    }
+
     private func fetchTransferDetails() {
-        loadingView.isHidden = false
-        loadingView.start()
         provider.getQR(qrCodeId: qrCodeId) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
                 case .success(let success):
                     self.transferSumm.text = "\(success) ₽"
+                    self.stopShimmers()
                 case .failure(let failure):
-                    self.loadingView.stop {
-                        self.showError(failure, loggingService: self.loggingService)
-                        self.loadingView.isHidden = true
-                    }
+                    self.showError(failure, loggingService: self.loggingService)
+                    self.stopShimmers()
                 }
             }
         } accountCompletion: { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
-                self.loadingView.stop {
-                    switch result {
-                    case .success(let success):
-                        self.cardNumber.text = success.cardNumber
-                        self.recipient.text = success.name
-                        self.loadingView.isHidden = true
-                    case .failure(let failure):
-                        self.showError(failure, loggingService: self.loggingService)
-                    }
+                switch result {
+                case .success(let success):
+                    self.cardNumber.text = success.cardNumber
+                    self.recipient.text = success.name
+                    self.stopShimmers()
+                case .failure(let failure):
+                    self.showError(failure, loggingService: self.loggingService)
+                    self.stopShimmers()
                 }
             }
         }
     }
 
     @objc private func transferButtonTapped() {
-        loadingView.isHidden = false
-        loadingView.start()
-        
         provider.initializePayment(qrCodeId: qrCodeId) { [weak self] result in
             guard let self = self else { return }
             
@@ -199,13 +262,10 @@ class TransferDetailsViewController: UIViewController {
             case .success(let task):
                 if let url = task.acquiringPaymentUrl {
                     DispatchQueue.main.async {
-                        self.loadingView.stop() {
-                            self.loadingView.isHidden = true
-                            if let url = URL(string: url) {
-                                let paymentVC = PaymentWebViewController(url: url)
-                                paymentVC.modalPresentationStyle = .fullScreen
-                                self.present(paymentVC, animated: true)
-                            }
+                        if let url = URL(string: url) {
+                            let paymentVC = PaymentWebViewController(url: url)
+                            paymentVC.modalPresentationStyle = .fullScreen
+                            self.present(paymentVC, animated: true)
                         }
                     }
                 } else {
@@ -215,31 +275,22 @@ class TransferDetailsViewController: UIViewController {
                         case .success(let acquiringPaymentUrl):
                             DispatchQueue.main.async {
                                 if let url = acquiringPaymentUrl {
-                                    self.loadingView.stop() {
-                                        self.loadingView.isHidden = true
-                                        if let url = URL(string: url) {
-                                            let paymentVC = PaymentWebViewController(url: url)
-                                            self.present(paymentVC, animated: true)
-                                        }
+                                    if let url = URL(string: url) {
+                                        let paymentVC = PaymentWebViewController(url: url)
+                                        self.present(paymentVC, animated: true)
                                     }
                                 }
                             }
                         case .failure(let error):
                             DispatchQueue.main.async {
-                                self.loadingView.stop() {
-                                    self.loadingView.isHidden = true
-                                    self.showError(error, loggingService: self.loggingService)
-                                }
+                                self.showError(error, loggingService: self.loggingService)
                             }
                         }
                     }
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.loadingView.stop() {
-                        self.loadingView.isHidden = true
-                        self.showError(error, loggingService: self.loggingService)
-                    }
+                    self.showError(error, loggingService: self.loggingService)
                 }
             }
         }

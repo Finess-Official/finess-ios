@@ -1,6 +1,11 @@
 import Foundation
 
 struct PaymentCreationParams: Codable {
-    let type: String
-    let qrCodeId: String
+
+    let associationId: AssociationId
+
+    struct AssociationId: Codable {
+        let type: String
+        let qrCodeId: String
+    }
 }
