@@ -96,7 +96,7 @@ class MainViewController: UIViewController {
     private func animateUIElements() {
         // Начальное состояние
         titleLabel.alpha = 0
-        buttonsStackView.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        buttonsStackView.alpha = 0
         
         // Анимация заголовка
         UIView.animate(
@@ -108,15 +108,13 @@ class MainViewController: UIViewController {
             }
         )
         
-        // Анимация кнопок
+        // Анимация кнопок (fade-in)
         UIView.animate(
-            withDuration: 0.8,
-            delay: 0.2,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 0.2,
+            withDuration: 0.6,
+            delay: 0,
             options: [],
             animations: {
-                self.buttonsStackView.transform = .identity
+                self.buttonsStackView.alpha = 1
             }
         )
     }

@@ -38,10 +38,7 @@ class BeaconViewController: UIViewController {
         let button = MainViewButton(title: NSLocalizedString("broadcast", comment: ""), image: UIImage(systemName: "dot.radiowaves.left.and.right"))
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTinkoffShadow()
-        button.addAction(UIAction(handler: { [weak self] _ in
-            self?.animateButtonTap(button)
-            self?.delegate?.didTapBroadcastButton()
-        }), for: .touchUpInside)
+        button.addTarget(self, action: #selector(broadcastButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -49,12 +46,14 @@ class BeaconViewController: UIViewController {
         let button = MainViewButton(title: NSLocalizedString("scan", comment: ""), image: UIImage(systemName: "wave.3.right"))
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTinkoffShadow()
-        button.addAction(UIAction(handler: { [weak self] _ in
-            self?.animateButtonTap(button)
-            self?.delegate?.didTapScanButton()
-        }), for: .touchUpInside)
+        button.addTarget(self, action: #selector(scanButtonTapped), for: .touchUpInside)
         return button
     }()
+
+    private var broadcastingModeActive = false
+    private var scanningModeActive = false
+    private var broadcastWaves: [UIView] = []
+    private var stopButton: UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +63,12 @@ class BeaconViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateUIElements()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setBroadcastingMode(false)
+        setScanningMode(false)
     }
 
     private func setupUI() {
@@ -88,12 +93,12 @@ class BeaconViewController: UIViewController {
 
     private func animateUIElements() {
         titleLabel.alpha = 0
-        buttonsStackView.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        buttonsStackView.alpha = 0
         UIView.animate(withDuration: 0.6, delay: 0, options: [], animations: {
             self.titleLabel.alpha = 1
         })
-        UIView.animate(withDuration: 0.8, delay: 0.2, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.2, options: [], animations: {
-            self.buttonsStackView.transform = .identity
+        UIView.animate(withDuration: 0.6, delay: 0, options: [], animations: {
+            self.buttonsStackView.alpha = 1
         })
     }
 
@@ -107,14 +112,121 @@ class BeaconViewController: UIViewController {
         })
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc private func broadcastButtonTapped() {
+        animateButtonTap(broadcastButton)
+        setBroadcastingMode(true)
+        delegate?.didTapBroadcastButton()
     }
-    */
 
+    @objc private func scanButtonTapped() {
+        animateButtonTap(scanButton)
+        setScanningMode(true)
+        delegate?.didTapScanButton()
+    }
+
+    private func setBroadcastingMode(_ active: Bool) {
+        broadcastingModeActive = active
+        scanningModeActive = false
+        buttonsStackView.isHidden = active
+        if active {
+            showCenterButton(title: "Стоп", color: UIColor(red: 0.22, green: 0.78, blue: 0.36, alpha: 1), action: #selector(stopBroadcastTapped))
+            startBroadcastWaves(outward: true)
+        } else {
+            hideCenterButton()
+            stopBroadcastWaves()
+            buttonsStackView.isHidden = false
+        }
+    }
+
+    private func setScanningMode(_ active: Bool) {
+        scanningModeActive = active
+        broadcastingModeActive = false
+        buttonsStackView.isHidden = active
+        if active {
+            showCenterButton(title: "Стоп", color: UIColor.systemBlue, action: #selector(stopScanTapped))
+            startBroadcastWaves(outward: false)
+        } else {
+            hideCenterButton()
+            stopBroadcastWaves()
+            buttonsStackView.isHidden = false
+        }
+    }
+
+    private func showCenterButton(title: String, color: UIColor, action: Selector) {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = color
+        button.layer.cornerRadius = 50
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: action, for: .touchUpInside)
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 100),
+            button.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        stopButton = button
+    }
+
+    @objc private func stopBroadcastTapped() {
+        setBroadcastingMode(false)
+    }
+
+    @objc private func stopScanTapped() {
+        setScanningMode(false)
+    }
+
+    private func hideCenterButton() {
+        stopButton?.removeFromSuperview()
+        stopButton = nil
+    }
+
+    private func startBroadcastWaves(outward: Bool) {
+        guard let stopButton = stopButton else { return }
+        let waveDiameter: CGFloat = max(view.bounds.width, view.bounds.height) * 1.1
+        for i in 0..<3 {
+            let wave = UIView()
+            let color: UIColor = broadcastingModeActive ? UIColor(red: 0.22, green: 0.78, blue: 0.36, alpha: 0.15) : UIColor.systemBlue.withAlphaComponent(0.15)
+            wave.backgroundColor = color
+            wave.layer.cornerRadius = waveDiameter / 2
+            wave.translatesAutoresizingMaskIntoConstraints = false
+            view.insertSubview(wave, belowSubview: stopButton)
+            NSLayoutConstraint.activate([
+                wave.centerXAnchor.constraint(equalTo: stopButton.centerXAnchor),
+                wave.centerYAnchor.constraint(equalTo: stopButton.centerYAnchor),
+                wave.widthAnchor.constraint(equalToConstant: waveDiameter),
+                wave.heightAnchor.constraint(equalToConstant: waveDiameter)
+            ])
+            broadcastWaves.append(wave)
+            animateWave(wave, delay: Double(i) * 0.5, outward: outward)
+        }
+    }
+
+    private func animateWave(_ wave: UIView, delay: Double, outward: Bool) {
+        if outward {
+            wave.alpha = 0.7
+            wave.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
+            UIView.animate(withDuration: 2.0, delay: delay, options: [.repeat, .curveEaseOut], animations: {
+                wave.alpha = 0.0
+                wave.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            })
+        } else {
+            wave.alpha = 0.0
+            wave.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            UIView.animate(withDuration: 2.0, delay: delay, options: [.repeat, .curveEaseOut], animations: {
+                wave.alpha = 0.7
+                wave.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
+            })
+        }
+    }
+
+    private func stopBroadcastWaves() {
+        for wave in broadcastWaves {
+            wave.removeFromSuperview()
+        }
+        broadcastWaves.removeAll()
+    }
 }

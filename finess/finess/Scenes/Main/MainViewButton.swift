@@ -19,7 +19,7 @@ class MainViewButton: UIButton {
         return stackView
     }()
 
-    private var iconView: UIView = {
+    var iconView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
         view.clipsToBounds = true
@@ -29,7 +29,7 @@ class MainViewButton: UIButton {
         return view
     }()
 
-    private var iconImageView: UIImageView = {
+    var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .tinkoffBlack
