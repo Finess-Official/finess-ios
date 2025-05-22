@@ -51,4 +51,12 @@ class BeaconProvider {
             completion: completion
         )
     }
+
+    func getPaymentInfo(major: UInt16, minor: UInt16, completion: @escaping (Result<BeaconInfoResponse, APIErrorHandler>) -> Void) {
+        client.request(
+            with: BeaconAPI.getBeacon(major: major, minor: minor),
+            map: BeaconCreationDTOToDomainConverter.convert(from:),
+            completion: completion
+        )
+    }
 }

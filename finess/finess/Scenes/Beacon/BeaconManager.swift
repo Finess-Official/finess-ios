@@ -16,7 +16,7 @@ final class BeaconManager: NSObject, CLLocationManagerDelegate {
 
     var uuid: UUID? = nil
 
-    var onBeaconFound: ((UUID, Int, Int, Int) -> Void)?
+    var onBeaconFound: ((UUID, UInt16, UInt16, Int) -> Void)?
 
     override init() {
         super.init()
@@ -89,8 +89,8 @@ final class BeaconManager: NSObject, CLLocationManagerDelegate {
         // Обработка найденных маяков
         for beacon in beacons {
             onBeaconFound?(beacon.uuid,
-                          beacon.major.intValue,
-                          beacon.minor.intValue,
+                           beacon.major.uint16Value,
+                          beacon.minor.uint16Value,
                           beacon.rssi)
         }
     }

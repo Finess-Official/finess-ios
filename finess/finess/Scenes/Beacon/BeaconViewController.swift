@@ -51,28 +51,62 @@ class BeaconViewController: UIViewController {
         return button
     }()
 
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+
+    private var beaconsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = Constants.mediumSpacing
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     private var broadcastingModeActive = false
     private var scanningModeActive = false
     private var broadcastWaves: [UIView] = []
     private var stopButton: UIButton?
     private let beaconManager: BeaconManager
+    private let provider: BeaconProvider
+    private let loggingService = APILoggingService()
+    private var uniqueBeacons = Set<String>()
 
-    init(beaconManager: BeaconManager) {
+    init(beaconManager: BeaconManager, provider: BeaconProvider) {
         self.beaconManager = beaconManager
+        self.provider = provider
         super.init(nibName: nil, bundle: nil)
 
         beaconManager.onBeaconFound = { [weak self] uuid, major, minor, rssi in
-            print("Ураааа: \(uuid)")
+            guard let self = self else { return }
+            let beaconKey = "\(uuid)-\(major)-\(minor)"
+            if !self.uniqueBeacons.contains(beaconKey) {
+                self.uniqueBeacons.insert(beaconKey)
+                self.provider.getPaymentInfo(major: major, minor: minor) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let success):
+                        self.addBeacon(name: success.account.ownerName)
+                    case .failure(let failure):
+                        self.showError(failure, loggingService: self.loggingService)
+                    }
+                }
+            }
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupBeaconsStackView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +137,25 @@ class BeaconViewController: UIViewController {
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
             broadcastButton.heightAnchor.constraint(equalToConstant: 80),
             scanButton.heightAnchor.constraint(equalToConstant: 80)
+        ])
+    }
+
+    private func setupBeaconsStackView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(beaconsStackView)
+
+        NSLayoutConstraint.activate([
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: 100),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16),
+
+            beaconsStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            beaconsStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            beaconsStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            beaconsStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            beaconsStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
 
@@ -155,6 +208,7 @@ class BeaconViewController: UIViewController {
         scanningModeActive = active
         broadcastingModeActive = false
         buttonsStackView.isHidden = active
+        scrollView.isHidden = !active 
         if active {
             showCenterButton(title: "Стоп", color: UIColor.systemBlue, action: #selector(stopScanTapped))
             startBroadcastWaves(outward: false)
@@ -162,6 +216,8 @@ class BeaconViewController: UIViewController {
             hideCenterButton()
             stopBroadcastWaves()
             buttonsStackView.isHidden = false
+            scrollView.isHidden = true
+            beaconsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         }
     }
 
@@ -214,6 +270,7 @@ class BeaconViewController: UIViewController {
                 wave.widthAnchor.constraint(equalToConstant: waveDiameter),
                 wave.heightAnchor.constraint(equalToConstant: waveDiameter)
             ])
+            wave.isUserInteractionEnabled = false
             broadcastWaves.append(wave)
             animateWave(wave, delay: Double(i) * 0.5, outward: outward)
         }
@@ -243,4 +300,28 @@ class BeaconViewController: UIViewController {
         }
         broadcastWaves.removeAll()
     }
+
+    private func addBeacon(name: String) {
+        let beaconButton = createBeaconButton(name: name)
+        DispatchQueue.main.async {
+            self.beaconsStackView.addArrangedSubview(beaconButton)
+        }
+    }
+
+    private func createBeaconButton(name: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle("\(name)", for: .normal)
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.tinkoffBlack, for: .normal)
+        button.backgroundColor = .tinkoffYellow
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.addAction(UIAction(handler: { [weak self] _ in
+            guard let self else { return }
+            self.animateButtonTap(button)
+        }), for: .touchUpInside)
+        return button
+    }
 }
+

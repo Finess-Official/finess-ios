@@ -19,7 +19,7 @@ class BeaconCoordinator {
 
     init() {
         self.addAccountViewController = AddAccountViewController(provider: qrProvider)
-        self.beaconViewController = BeaconViewController(beaconManager: beaconManager)
+        self.beaconViewController = BeaconViewController(beaconManager: beaconManager, provider: beaconProvider)
         self.mainNavigationController = UINavigationController(rootViewController: beaconViewController)
         self.enterSummViewController = EnterSummViewController(provider: BeaconProvider())
         enterSummViewController.delegate = self
