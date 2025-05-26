@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum CheckStatus: String {
+    case failed = "FAILED"
+    case completed = "COMPLETED"
+}
+
 struct QRAPI: APIProvider {
     var path: String
     var queryParameters: URLEncodable
@@ -30,6 +35,30 @@ struct QRAPI: APIProvider {
 }
 
 extension QRAPI {
+    static func getChecks(startDate: Date?, endDate: Date?, minAmount: Float?, maxAmount: Float?, status: CheckStatus?) -> QRAPI {
+        var path = "/payments"
+        if let startDate = startDate {
+            path += "startDate=\(startDate.formatted(date: .long, time: .complete))&"
+        }
+        if let endDate = endDate {
+            path += "endDate=\(endDate.formatted(date: .long, time: .complete))&"
+        }
+        if let minAmount = minAmount {
+            path += "minAmount=\(minAmount)&"
+        }
+        if let maxAmount = maxAmount {
+            path += "maxAmount=\(maxAmount)&"
+        }
+        if let status = status {
+            path += "status=\(status.rawValue)&"
+        }
+        
+        return QRAPI(
+            method: .get,
+            path: path,
+            action: .request
+        )
+    }
     static func createAccount(
         params: CreateAccountParams
     ) -> QRAPI {

@@ -65,6 +65,13 @@ final class QRProvider {
             completion: completion)
     }
 
+    func getChecks(startDate: Date?, endDate: Date?, minAmount: Float?, maxAmount: Float?, status: CheckStatus?, completion: @escaping (Result<[PaymentResponse], APIErrorHandler>) -> Void) {
+        client.request(
+            with: QRAPI.getChecks(startDate: startDate, endDate: endDate, minAmount: minAmount, maxAmount: maxAmount, status: status),
+            map: PaymentCheckDTOToDomainConverter.convert(_:),
+            completion: completion)
+    }
+
     func createQR(
         amount: String?,
         completion: @escaping (Result<CreateQRResponse, APIErrorHandler>) -> Void

@@ -45,7 +45,10 @@ class HistoryViewController: UIViewController {
     private var collectionView: UICollectionView!
     private let provider = QRProvider()
     private var items: [CreateAccountResponse]? = nil
+    private var filteredItems: [PaymentResponse]? = nil
     private let loggingService = APILoggingService()
+    private var horizontalCollectionView: UICollectionView!
+    private let horizontalLayout = UICollectionViewFlowLayout()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +58,7 @@ class HistoryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchAccounts()
+        fetchHistory(startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, status: nil)
     }
 
     private func fetchAccounts() {
@@ -75,8 +79,25 @@ class HistoryViewController: UIViewController {
         }
     }
 
-    private func fetchHistory() {
-
+    private func fetchHistory(startDate: Date?, endDate: Date?, minAmount: Float?, maxAmount: Float?, status: CheckStatus?) {
+        provider.getChecks(
+            startDate: startDate,
+            endDate: endDate,
+            minAmount: minAmount,
+            maxAmount: maxAmount,
+            status: status) { result in
+                switch result {
+                case .success(let success):
+                    DispatchQueue.main.async { [weak self] in
+                        self?.filteredItems = success
+                    }
+                case .failure(let failure):
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self else { return }
+                        showError(failure, loggingService: loggingService)
+                    }
+                }
+        }
     }
 
     private func setupUI() {
@@ -92,6 +113,7 @@ class HistoryViewController: UIViewController {
         ])
 
         setupCollectionView()
+        setupHorizontalCollectionView()
     }
 
     private func setupCollectionView() {
@@ -131,37 +153,79 @@ class HistoryViewController: UIViewController {
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
     }
 
+    private func setupHorizontalCollectionView() {
+        horizontalLayout.scrollDirection = .horizontal
+        horizontalLayout.itemSize = CGSize(width: 80, height: 40)
+        horizontalLayout.minimumLineSpacing = 10
+        horizontalLayout.sectionInset = UIEdgeInsets(top: 0, left: Constants.horizontalPadding, bottom: 0, right: Constants.horizontalPadding)
+
+        horizontalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: horizontalLayout)
+        horizontalCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        horizontalCollectionView.backgroundColor = .clear
+        horizontalCollectionView.showsHorizontalScrollIndicator = false
+        horizontalCollectionView.dataSource = self
+        horizontalCollectionView.delegate = self
+        horizontalCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "HorizontalCollectionViewCell")
+
+        view.addSubview(horizontalCollectionView)
+
+        NSLayoutConstraint.activate([
+            horizontalCollectionView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor),
+            horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            horizontalCollectionView.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+
     @objc private func filterButtonTapped() {
         let filterViewController = FilterViewController()
+        filterViewController.onFiltersApplied = { filters in
+            print("Received filters: \(filters)")
+        }
         present(filterViewController, animated: true, completion: nil)
     }
 }
 
 extension HistoryViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (items?.count ?? 0) + 1 // +1 for the action button
+        if collectionView == horizontalCollectionView {
+            return 10
+        } else {
+            return (items?.count ?? 0) + 1 // +1 for the action button
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonCollectionViewCell", for: indexPath) as! ActionButtonCollectionViewCell
+        if collectionView == horizontalCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCollectionViewCell", for: indexPath)
+            cell.backgroundColor = .lightGray
+            cell.layer.cornerRadius = 15 // Устанавливаем cornerRadius равным половине высоты ячейки
+            cell.layer.masksToBounds = true // Убедитесь, что закругление применяется
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HistoryCollectionViewCell", for: indexPath) as! HistoryCollectionViewCell
-            if let item = items?[indexPath.item - 1] {
-                cell.configure(with: item)
+            if indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonCollectionViewCell", for: indexPath) as! ActionButtonCollectionViewCell
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HistoryCollectionViewCell", for: indexPath) as! HistoryCollectionViewCell
+                if let item = items?[indexPath.item - 1] {
+                    cell.configure(with: item)
+                }
+                return cell
             }
-            return cell
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.item == 0 {
-            return CGSize(width: 60, height: 140) // Width is 1/3 of the collectionView item width (200 / 3)
+        if collectionView == horizontalCollectionView {
+            return CGSize(width: 80, height: 30)
         } else {
-            return CGSize(width: 200, height: 140)
+            if indexPath.item == 0 {
+                return CGSize(width: 60, height: 140)
+            } else {
+                return CGSize(width: 200, height: 140)
+            }
         }
     }
 }
-
-

@@ -9,6 +9,9 @@ import UIKit
 
 class FilterViewController: UIViewController {
 
+    // Добавьте свойство замыкания
+    var onFiltersApplied: (([String: Any]) -> Void)?
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .tinkoffTitle1()
@@ -290,8 +293,17 @@ class FilterViewController: UIViewController {
         }
 
         if !summViewsContainer.isHidden {
-            let minAmount = Double(minAmountTextField.text ?? "0") ?? 0
-            let maxAmount = Double(maxAmountTextField.text ?? "0") ?? 0
+            guard let minAmountText = minAmountTextField.text, !minAmountText.isEmpty else {
+                showError(message: "Поле минимальной суммы не может быть пустым")
+                return
+            }
+            guard let maxAmountText = maxAmountTextField.text, !maxAmountText.isEmpty else {
+                showError(message: "Поле максимальной суммы не может быть пустым")
+                return
+            }
+
+            let minAmount = Double(minAmountText) ?? 0
+            let maxAmount = Double(maxAmountText) ?? 0
             filters["minAmount"] = minAmount
             filters["maxAmount"] = maxAmount
         }
@@ -312,11 +324,18 @@ class FilterViewController: UIViewController {
 
         print("Filters: \(filters)")
 
-        // Dismiss the view controller
+        // Вызовите замыкание с фильтрами
+        onFiltersApplied?(filters)
+
+        // Закройте контроллер
         dismiss(animated: true, completion: nil)
     }
+
+    private func showError(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
-
-
 
 
