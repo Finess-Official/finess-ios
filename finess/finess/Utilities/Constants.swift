@@ -11,6 +11,7 @@ enum Constants {
     // UIFont
     static let errorFont: UIFont = .systemFont(ofSize: Constants.errorLableFontSize, weight: .regular)
     static let titleFont: UIFont = .systemFont(ofSize: Constants.titleFontSize, weight: .bold)
+    static let subtitleFont: UIFont = .systemFont(ofSize: Constants.subtitleFontSize, weight: .regular)
     static let largeButtonFont: UIFont = .systemFont(ofSize: Constants.largeButtonFontSize, weight: .medium)
     static let middleButtonFont: UIFont = .systemFont(ofSize: Constants.middleButtonFontSize, weight: .medium)
     static let smallButtonFont: UIFont = .systemFont(ofSize: Constants.smallButtonFontSize, weight: .regular)
@@ -18,6 +19,7 @@ enum Constants {
     // FontSize
     static let errorLableFontSize: CGFloat = 13
     static let titleFontSize: CGFloat = 32
+    static let subtitleFontSize: CGFloat = 16
     static let largeButtonFontSize: CGFloat = 17
     static let middleButtonFontSize: CGFloat = 12
     static let smallButtonFontSize: CGFloat = 16
@@ -30,13 +32,14 @@ enum Constants {
     static let activeButtonColor = UIColor.activeButton
     static let errorColor: UIColor = .red
     static let textColor: UIColor = .black
+    static let transparentTextColor: UIColor = .black.withAlphaComponent(0.5)
     static let normalButtonColor: UIColor = .black
     static let buttonTitleColor: UIColor = .white
     static let authBackgroundColor: UIColor = .white
     static let mainViewButtonBackgroundColor: UIColor = .white
     static let tabBarActive = UIColor.tabBarActive
     static let tabBarInactive = UIColor.tabBarInactive
-    static let backgroundColor = UIColor.background
+    static let backgroundColor = UIColor.white
     static let tabBarBorderColor = UIColor.gray.cgColor
 
     // Numeric

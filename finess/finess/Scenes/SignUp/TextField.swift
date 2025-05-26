@@ -18,8 +18,8 @@ final class RegisterTextField: UITextField {
 
     var isInErrorState: Bool = false {
         didSet {
-            currentButtonState = isInErrorState ? .exclamationmark : .eye
-            isSecureTextEntry = false
+            layer.borderColor = isInErrorState ? Constants.errorColor.cgColor : UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+            layer.borderWidth = 1
         }
     }
 
@@ -29,23 +29,19 @@ final class RegisterTextField: UITextField {
     private enum ButtonImage: String {
         case eye = "eye"
         case eyeFill = "eye.slash"
-        case exclamationmark = "exclamationmark.triangle"
-        case asterisk = "asterisk"
     }
 
     private var currentButtonState: ButtonImage? {
         didSet {
-            rightButton.tintColor = isInErrorState ? Constants.errorColor: Constants.normalButtonColor
             switch currentButtonState {
             case .eye:
                 rightButton.setImage(UIImage(systemName: ButtonImage.eyeFill.rawValue), for: .normal)
+                rightButton.tintColor = Constants.normalButtonColor
+                isSecureTextEntry = false
             case .eyeFill:
                 rightButton.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
-            case .asterisk:
-                rightButton.setImage(UIImage(systemName: ButtonImage.asterisk.rawValue), for: .normal)
-                rightButton.tintColor = Constants.errorColor
-            case .exclamationmark:
-                rightButton.setImage(UIImage(systemName: isInErrorState ? ButtonImage.exclamationmark.rawValue: ButtonImage.eye.rawValue), for: .normal)
+                rightButton.tintColor = Constants.normalButtonColor
+                isSecureTextEntry = true
             case .none:
                 break
             }
@@ -63,13 +59,11 @@ final class RegisterTextField: UITextField {
             switch currentButtonState {
             case .eye:
                 currentButtonState = .eyeFill
-                button.setImage(UIImage(systemName: ButtonImage.eyeFill.rawValue), for: .normal)
                 isSecureTextEntry = true
             case .eyeFill:
                 currentButtonState = .eye
-                button.setImage(UIImage(systemName: ButtonImage.eye.rawValue), for: .normal)
                 isSecureTextEntry = false
-            case .exclamationmark, .asterisk, .none:
+            case .none:
                 break
             }
         }), for: .touchUpInside)
@@ -106,16 +100,10 @@ final class RegisterTextField: UITextField {
         layer.backgroundColor = UIColor.systemGray6.cgColor
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
 
+        if currentMode == .secure {
         addSubview(rightButton)
-
-        heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
         rightButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalPadding).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
-        switch currentMode {
-        case .required:
-            currentButtonState = .asterisk
-        case .secure:
             currentButtonState = .eye
         }
     }

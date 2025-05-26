@@ -33,7 +33,7 @@
         }
       }
     },
-    "bankBIK" : {
+    "bankBik" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -44,7 +44,56 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "БИК банка"
+            "value" : "БИК Банка"
+          }
+        }
+      }
+    },
+    "Beacon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beacon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бикон"
+          }
+        }
+      }
+    },
+    "BeaconTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beacon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бикон"
+          }
+        }
+      }
+    },
+    "broadcast" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Broadcast"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вещать"
           }
         }
       }
@@ -61,6 +110,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Номер карты или счёта"
+          }
+        }
+      }
+    },
+    "cardNumberTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card number"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Номер счета зачисления"
           }
         }
       }
@@ -405,6 +470,17 @@
         }
       }
     },
+    "QR" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        }
+      }
+    },
     "QRTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -438,6 +514,22 @@
         }
       }
     },
+    "recipientTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The name of recipient"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ФИО получателя"
+          }
+        }
+      }
+    },
     "repeatPassword" : {
       "localizations" : {
         "en" : {
@@ -450,6 +542,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Повторите пароль"
+          }
+        }
+      }
+    },
+    "returnToMain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to Main Screen"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуться на главный экран"
           }
         }
       }
@@ -567,18 +675,100 @@
         }
       }
     },
-    "summToTransfer" : {
+    "start" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Amount to transfer"
+            "value" : "Start"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Начать"
+          }
+        }
+      }
+    },
+    "startBroadcasting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start broadcasting"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать вещание"
+          }
+        }
+      }
+    },
+    "summ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summ"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сумма для перевода"
+          }
+        }
+      }
+    },
+    "transferAction" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевести"
+          }
+        }
+      }
+    },
+    "transferDetails" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer Details"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Детали перевода"
+          }
+        }
+      }
+    },
+    "transferSummTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer summ"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сумма перевода"
           }
         }
       }

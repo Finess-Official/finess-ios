@@ -15,6 +15,8 @@ protocol AuthProtocol: ObservableObject {
     func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void)
     func getCredentials() -> Auth.Credentials
     func logout()
+    func saveAccountData(name: String, cardNumber: String, inn: String, bik: String)
+    func getAccountData() -> (name: String?, cardNumber: String?, inn: String?, bik: String?)
 }
 
 class Auth: AuthProtocol {
@@ -29,6 +31,10 @@ class Auth: AuthProtocol {
         case userId
         case accessTokenExpirationDate
         case refreshTokenExpirationDate
+        case accountName
+        case accountCardNumber
+        case accountINN
+        case accountBIK
     }
 
     static let shared: Auth = Auth()
@@ -86,6 +92,7 @@ class Auth: AuthProtocol {
     }
 
     func getCredentials() -> Credentials {
+        print("Access token \(keychain.string(forKey: KeychainKey.accessToken.rawValue))")
         return Credentials(
             accessToken: keychain.string(forKey: KeychainKey.accessToken.rawValue),
             refreshToken: keychain.string(forKey: KeychainKey.refreshToken.rawValue)
@@ -120,5 +127,21 @@ class Auth: AuthProtocol {
         } else {
             return false
         }
+    }
+
+    func saveAccountData(name: String, cardNumber: String, inn: String, bik: String) {
+        keychain.set(name, forKey: KeychainKey.accountName.rawValue)
+        keychain.set(cardNumber, forKey: KeychainKey.accountCardNumber.rawValue)
+        keychain.set(inn, forKey: KeychainKey.accountINN.rawValue)
+        keychain.set(bik, forKey: KeychainKey.accountBIK.rawValue)
+    }
+
+    func getAccountData() -> (name: String?, cardNumber: String?, inn: String?, bik: String?) {
+        (
+            name: keychain.string(forKey: KeychainKey.accountName.rawValue),
+            cardNumber: keychain.string(forKey: KeychainKey.accountCardNumber.rawValue),
+            inn: keychain.string(forKey: KeychainKey.accountINN.rawValue),
+            bik: keychain.string(forKey: KeychainKey.accountBIK.rawValue)
+        )
     }
 }

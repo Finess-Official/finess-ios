@@ -2,7 +2,7 @@
 //  CreateQRViewController.swift
 //  finess
 //
-//  Created by Elina Karapetyan on 27.04.2025.
+//  Created by Elina Karapetyan on 20.04.2025.
 //
 
 import UIKit
@@ -20,9 +20,9 @@ class CreateQRViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("createQR", comment: "")
-        label.font = Constants.titleFont
-        label.textAlignment = Constants.textAlignment
-        label.textColor = Constants.textColor
+        label.font = .tinkoffTitle1()
+        label.textAlignment = .center
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -39,33 +39,51 @@ class CreateQRViewController: UIViewController {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("enterSumm", comment: "")
-        label.font = Constants.smallButtonFont
-        label.textAlignment = Constants.textAlignment
-        label.textColor = Constants.textColor
+        label.font = .tinkoffHeading()
+        label.textAlignment = .center
+        label.textColor = .tinkoffBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    private let summTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("summ", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return textField
     }()
 
     private lazy var createQRButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
-        button.titleLabel?.font = Constants.largeButtonFont
-        button.setTitleColor(Constants.buttonTitleColor, for: .normal)
-        button.backgroundColor = Constants.disabledButtonColor
-        button.layer.cornerRadius = Constants.buttonCornerRadius
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.tinkoffBlack, for: .normal)
+        button.backgroundColor = .tinkoffYellow.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
         button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
-            loadingViewController.start()
+            // Add button press animation
+            UIView.animate(withDuration: 0.1, animations: {
+                self.createQRButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                UIView.animate(withDuration: 0.1) {
+                    self.createQRButton.transform = .identity
+                }
+            }
+            
+            loadingView.start()
             didTapCreateButton()
         }), for: .touchUpInside)
         return button
     }()
 
-    private let summTextField = RegisterTextField(placeholder: NSLocalizedString("summToTransfer", comment: ""), mode: .required)
     private let provider: QRProvider
-    private let loadingViewController = LoadingViewController()
+    private let loadingView = LoadingView()
     private let loggingService = APILoggingService()
 
     init(provider: QRProvider) {
@@ -73,19 +91,24 @@ class CreateQRViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         summTextField.delegate = self
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateUIElements()
+    }
 
     // MARK: - Private methods
     private func setupUI() {
-        view.backgroundColor = Constants.backgroundColor
+        view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(subtitleLabel)
@@ -93,17 +116,18 @@ class CreateQRViewController: UIViewController {
         view.addSubview(createQRButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.largeSpacing),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            createQRButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: Constants.mediumSpacing),
-            createQRButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
-            createQRButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            createQRButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            createQRButton.heightAnchor.constraint(equalToConstant: 50),
+            createQRButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            createQRButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            view.keyboardLayoutGuide.topAnchor.constraint(equalTo: createQRButton.bottomAnchor, constant: 20)
         ])
 
         summTextField.becomeFirstResponder()
@@ -111,54 +135,70 @@ class CreateQRViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
     }
+    
+    private func animateUIElements() {
+        // Animate title with bounce
+        titleLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0.3,
+            usingSpringWithDamping: 0.6,
+            initialSpringVelocity: 0.2,
+            options: [],
+            animations: {
+                self.titleLabel.transform = .identity
+            }
+        )
+
+        // Fade in other elements
+        let views = [contentStackView, createQRButton]
+        views.forEach { $0.alpha = 0 }
+        
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0.6,
+            options: [],
+            animations: {
+                views.forEach { $0.alpha = 1 }
+            }
+        )
+    }
 
     private func changeButtonState(isEnabled: Bool) {
         createQRButton.isEnabled = isEnabled
-        createQRButton.backgroundColor = isEnabled ? Constants.activeButtonColor: Constants.disabledButtonColor
+        createQRButton.backgroundColor = isEnabled ? .tinkoffYellow : .tinkoffYellow.withAlphaComponent(0.5)
+        createQRButton.setTitleColor(isEnabled ? .tinkoffBlack : .tinkoffBlack.withAlphaComponent(0.5), for: .normal)
+    }
+
+    private func didTapCreateButton() {
+        provider.createQR(amount: summTextField.text) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.loadingView.stop() { [weak self] in
+                    guard let self else { return }
+                    switch result {
+                    case .success(let success):
+                        self.delegate?.didTapCreateButton(with: success.id)
+                    case .failure(let error):
+                        showError(error, loggingService: loggingService)
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Actions
     @objc func tapGesture() {
         summTextField.resignFirstResponder()
     }
-
-    private func didTapCreateButton() {
-        navigationController?.pushViewController(loadingViewController, animated: false)
-        provider.createQR(amount: summTextField.text) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.loadingViewController.stop() { [weak self] in
-                    self?.navigationController?.popViewController(animated: false) { [weak self] in
-                        guard let self else { return }
-                        switch result {
-                        case .success(let success):
-                            self.delegate?.didTapCreateButton(with: success.id)
-                        case .failure(let error):
-                            self.showError(error, loggingService: loggingService)
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 // MARK: - UITextFieldDelegate
 extension CreateQRViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        let summTextFieldIsEmpty = summTextField.text?.isEmpty ?? true
-
-        if !summTextFieldIsEmpty {
-            changeButtonState(isEnabled: true)
-        } else {
+        if summTextField.text?.isEmpty ?? true {
             changeButtonState(isEnabled: false)
+        } else {
+            changeButtonState(isEnabled: true)
         }
-    }
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        let replacementText = (currentText as NSString).replacingCharacters(in: range, with: string)
-
-        return replacementText.isValidDecimal(maximumFractionDigits: Constants.maximumFractionDigits)
-
     }
 }

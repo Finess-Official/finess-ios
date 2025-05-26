@@ -20,12 +20,125 @@ class AppCoordinator {
         self.window = window
         self.navigationController = navigationController
         self.navigationController?.navigationBar.isHidden = true
-        self.tabBarController = TabBarController()
+        let tabBarController = TabBarController()
+        self.tabBarController = tabBarController
     }
 
     func start() {
         self.window.rootViewController = self.navigationController
         self.authCoordinator = AuthCoordinator(window: window, navigationController: navigationController, tabBarController: tabBarController)
         self.authCoordinator?.start()
+    }
+    
+    private func returnToMainScreen() {
+        tabBarController.selectedIndex = Tabs.qr.rawValue
+        if let navController = tabBarController.selectedViewController as? UINavigationController {
+            navController.popToRootViewController(animated: true)
+            navController.dismiss(animated: true)
+        }
+    }
+    
+    private func showSuccessNotification() {
+        let notificationView = UIView()
+        notificationView.backgroundColor = .white
+        notificationView.layer.cornerRadius = 24
+        notificationView.layer.masksToBounds = false
+        notificationView.layer.shadowColor = UIColor.black.cgColor
+        notificationView.layer.shadowOpacity = 0.08
+        notificationView.layer.shadowOffset = CGSize(width: 0, height: 4)
+        notificationView.layer.shadowRadius = 16
+        notificationView.translatesAutoresizingMaskIntoConstraints = false
+
+        let iconContainer = UIView()
+        iconContainer.backgroundColor = UIColor(red: 0.22, green: 0.78, blue: 0.36, alpha: 1)
+        iconContainer.layer.cornerRadius = 18
+        iconContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        let checkmark = UIImageView()
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        checkmark.image = UIImage(systemName: "checkmark", withConfiguration: config)
+        checkmark.tintColor = .white
+        checkmark.translatesAutoresizingMaskIntoConstraints = false
+        
+        iconContainer.addSubview(checkmark)
+        
+        let label = UILabel()
+        label.text = "Успешный перевод"
+        label.textColor = .tinkoffBlack
+        label.font = .tinkoffBody()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        notificationView.addSubview(iconContainer)
+        notificationView.addSubview(label)
+        
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            return
+        }
+        
+        window.addSubview(notificationView)
+        
+        NSLayoutConstraint.activate([
+            notificationView.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: 16),
+            notificationView.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -16),
+            notificationView.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 16),
+            notificationView.heightAnchor.constraint(equalToConstant: 56),
+
+            iconContainer.leadingAnchor.constraint(equalTo: notificationView.leadingAnchor, constant: 16),
+            iconContainer.centerYAnchor.constraint(equalTo: notificationView.centerYAnchor),
+            iconContainer.widthAnchor.constraint(equalToConstant: 36),
+            iconContainer.heightAnchor.constraint(equalToConstant: 36),
+
+            checkmark.centerXAnchor.constraint(equalTo: iconContainer.centerXAnchor),
+            checkmark.centerYAnchor.constraint(equalTo: iconContainer.centerYAnchor),
+
+            label.leadingAnchor.constraint(equalTo: iconContainer.trailingAnchor, constant: 12),
+            label.centerYAnchor.constraint(equalTo: notificationView.centerYAnchor),
+            label.trailingAnchor.constraint(equalTo: notificationView.trailingAnchor, constant: -16)
+        ])
+        
+        // Анимация появления
+        notificationView.alpha = 0
+        notificationView.transform = CGAffineTransform(translationX: 0, y: -20)
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            notificationView.alpha = 1
+            notificationView.transform = .identity
+        }) { _ in
+            // Анимация исчезновения через 2 секунды
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                UIView.animate(withDuration: 0.3, animations: {
+                    notificationView.alpha = 0
+                    notificationView.transform = CGAffineTransform(translationX: 0, y: -20)
+                }) { _ in
+                    notificationView.removeFromSuperview()
+                }
+            }
+        }
+    }
+}
+
+// MARK: - DeepLinkHandlerDelegate
+extension AppCoordinator: DeepLinkHandlerDelegate {
+    func handle(deepLinkType: DeepLinkType) {
+        switch deepLinkType {
+        case .mainScreen:
+            if Auth.shared.isSignedUp {
+                navigationController?.setViewControllers([tabBarController], animated: true)
+                returnToMainScreen()
+            } else {
+                authCoordinator?.showSignIn()
+            }
+        case .tkassa:
+            if Auth.shared.isSignedUp {
+                navigationController?.setViewControllers([tabBarController], animated: true)
+                returnToMainScreen()
+                showSuccessNotification()
+            } else {
+                authCoordinator?.showSignIn()
+            }
+        case .unknown:
+            break
+        }
     }
 }

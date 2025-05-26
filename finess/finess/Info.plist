@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string></string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string></string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Пожалуйста, предоставьте доступ к bluetooth</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Пожалуйста, предоставьте доступ к камере</string>
 	<key>BaseURL</key>
@@ -23,5 +36,18 @@
 			</array>
 		</dict>
 	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>finesspay</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.elina.finess</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
 </dict>
 </plist>

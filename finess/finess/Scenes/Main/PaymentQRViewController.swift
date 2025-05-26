@@ -1,13 +1,14 @@
 //
-//  QRViewController.swift
+//  PaymentQRViewController.swift
 //  finess
 //
 //  Created by Elina Karapetyan on 03.05.2025.
 //
 
 import UIKit
+import LinkPresentation
 
-class QRViewController: UIViewController {
+class PaymentQRViewController: UIViewController {
 
     private let qrCodeId: String
 
@@ -16,6 +17,32 @@ class QRViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    private lazy var returnToMainButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(NSLocalizedString("returnToMain", comment: ""), for: .normal)
+        button.titleLabel?.font = .tinkoffHeading()
+        button.setTitleColor(.tinkoffBlack, for: .normal)
+        button.backgroundColor = .tinkoffYellow
+        button.layer.cornerRadius = 25
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(UIAction(handler: { [weak self] _ in
+            guard let self else { return }
+            // Add button press animation
+            UIView.animate(withDuration: 0.1, animations: {
+                self.returnToMainButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                UIView.animate(withDuration: 0.1) {
+                    self.returnToMainButton.transform = .identity
+                }
+
+                if let url = URL(string: "finesspay://main_screen") {
+                    UIApplication.shared.open(url)
+                }
+            }
+        }), for: .touchUpInside)
+        return button
     }()
 
     init(qrCodeId: String) {
@@ -44,13 +71,19 @@ class QRViewController: UIViewController {
         view.backgroundColor = Constants.backgroundColor
 
         view.addSubview(qrCodeImageView)
+        view.addSubview(returnToMainButton)
 
         NSLayoutConstraint.activate([
             qrCodeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             qrCodeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             qrCodeImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
             qrCodeImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
-            qrCodeImageView.topAnchor.constraint(equalTo: view.topAnchor)
+            qrCodeImageView.topAnchor.constraint(equalTo: view.topAnchor),
+
+            returnToMainButton.heightAnchor.constraint(equalToConstant: 50),
+            returnToMainButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            returnToMainButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            returnToMainButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
     }
 
@@ -75,8 +108,26 @@ class QRViewController: UIViewController {
 
     // MARK: - Actions
     @objc func shareButtonTapped() {
-        let activityItem: [AnyObject] = [self.qrCodeImageView.image!]
+        let activityItem: [AnyObject] = [self, self.qrCodeImageView.image!]
         let avc = UIActivityViewController(activityItems: activityItem as [AnyObject], applicationActivities: nil)
         present(avc, animated: true, completion: nil)
+    }
+} 
+
+extension PaymentQRViewController: UIActivityItemSource {
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return ""
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        return nil
+    }
+
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        let image = UIImage(named: "AppIcon")!
+        let imageProvider = NSItemProvider(object: image)
+        let metadata = LPLinkMetadata()
+        metadata.imageProvider = imageProvider
+        return metadata
     }
 }

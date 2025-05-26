@@ -23,7 +23,6 @@ public final class ScanQrViewController: UIViewController {
 
     private var captureSession: QRCodeCaptureSession?
     private var focusResetTimer: Timer?
-    private var isQRCodeFinded: Bool = false
     private let codeConverter = QRCodeConverter()
 
     public init(
@@ -141,9 +140,7 @@ extension ScanQrViewController: CaptureSessionQRCodesDelegate {
             guard let qrCodeId = codeConverter.convert(code: code) else {
                 return
             }
-            guard !isQRCodeFinded else { return }
 
-            isQRCodeFinded = true
             delegate?.scanQrViewController(
                 didRecognizeQRCodeId: qrCodeId
             )
