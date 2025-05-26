@@ -51,6 +51,15 @@ class FilterViewController: UIViewController {
         return label
     }()
 
+    private let summToggleButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(systemName: "plus")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+
     private let statusTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .tinkoffTitle2()
@@ -119,7 +128,7 @@ class FilterViewController: UIViewController {
     private let statusSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Failed", "Completed", "All"])
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentIndex = 2
         return segmentedControl
     }()
 
@@ -158,6 +167,31 @@ class FilterViewController: UIViewController {
         return stackView
     }()
 
+    private let minAmountViewsContainer: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        return stackView
+    }()
+
+    private let maxAmountViewsContainer: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        return stackView
+    }()
+
+    private let summViewsContainer: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.isHidden = true
+        return stackView
+    }()
+
     private let mainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -181,18 +215,23 @@ class FilterViewController: UIViewController {
         dateViewsContainer.addArrangedSubview(startDateViewsContainer)
         dateViewsContainer.addArrangedSubview(endDateViewsContainer)
 
+        minAmountViewsContainer.addArrangedSubview(minAmountTextField)
+        maxAmountViewsContainer.addArrangedSubview(maxAmountTextField)
+        summViewsContainer.addArrangedSubview(minAmountViewsContainer)
+        summViewsContainer.addArrangedSubview(maxAmountViewsContainer)
+
         mainStackView.addArrangedSubview(titleLabel)
         mainStackView.addArrangedSubview(dateTitleLabel)
         mainStackView.addArrangedSubview(dateViewsContainer)
         mainStackView.addArrangedSubview(summTitleLabel)
-        mainStackView.addArrangedSubview(minAmountTextField)
-        mainStackView.addArrangedSubview(maxAmountTextField)
+        mainStackView.addArrangedSubview(summViewsContainer)
         mainStackView.addArrangedSubview(statusTitleLabel)
         mainStackView.addArrangedSubview(statusSegmentedControl)
         mainStackView.addArrangedSubview(applyButton)
 
         view.addSubview(mainStackView)
         view.addSubview(dateToggleButton)
+        view.addSubview(summToggleButton)
 
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -203,15 +242,31 @@ class FilterViewController: UIViewController {
             dateToggleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             dateToggleButton.widthAnchor.constraint(equalToConstant: 40),
             dateToggleButton.heightAnchor.constraint(equalToConstant: 40),
+
+            summToggleButton.centerYAnchor.constraint(equalTo: summTitleLabel.centerYAnchor),
+            summToggleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            summToggleButton.widthAnchor.constraint(equalToConstant: 40),
+            summToggleButton.heightAnchor.constraint(equalToConstant: 40),
+
+            applyButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)
         ])
 
         dateToggleButton.addTarget(self, action: #selector(dateToggleButtonTapped), for: .touchUpInside)
+        summToggleButton.addTarget(self, action: #selector(summToggleButtonTapped), for: .touchUpInside)
         applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
     }
 
     @objc private func dateToggleButtonTapped() {
         let isHidden = dateViewsContainer.isHidden
         self.dateViewsContainer.isHidden = !isHidden
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func summToggleButtonTapped() {
+        let isHidden = summViewsContainer.isHidden
+        self.summViewsContainer.isHidden = !isHidden
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
@@ -246,4 +301,5 @@ class FilterViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 }
+
 
