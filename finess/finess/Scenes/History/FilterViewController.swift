@@ -259,6 +259,9 @@ class FilterViewController: UIViewController {
     @objc private func dateToggleButtonTapped() {
         let isHidden = dateViewsContainer.isHidden
         self.dateViewsContainer.isHidden = !isHidden
+        let imageName = isHidden ? "minus" : "plus"
+        let image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
+        dateToggleButton.setImage(image, for: .normal)
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
@@ -267,6 +270,9 @@ class FilterViewController: UIViewController {
     @objc private func summToggleButtonTapped() {
         let isHidden = summViewsContainer.isHidden
         self.summViewsContainer.isHidden = !isHidden
+        let imageName = isHidden ? "minus" : "plus"
+        let image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
+        summToggleButton.setImage(image, for: .normal)
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
@@ -274,10 +280,22 @@ class FilterViewController: UIViewController {
 
     @objc private func applyButtonTapped() {
         // Handle filter application here
-        let startDate = startDatePicker.date
-        let endDate = endDatePicker.date
-        let minAmount = Double(minAmountTextField.text ?? "0") ?? 0
-        let maxAmount = Double(maxAmountTextField.text ?? "0") ?? 0
+        var filters: [String: Any] = [:]
+
+        if !dateViewsContainer.isHidden {
+            let startDate = startDatePicker.date
+            let endDate = endDatePicker.date
+            filters["startDate"] = startDate
+            filters["endDate"] = endDate
+        }
+
+        if !summViewsContainer.isHidden {
+            let minAmount = Double(minAmountTextField.text ?? "0") ?? 0
+            let maxAmount = Double(maxAmountTextField.text ?? "0") ?? 0
+            filters["minAmount"] = minAmount
+            filters["maxAmount"] = maxAmount
+        }
+
         let statusIndex = statusSegmentedControl.selectedSegmentIndex
         let status: String
         switch statusIndex {
@@ -290,16 +308,15 @@ class FilterViewController: UIViewController {
         default:
             status = "All"
         }
+        filters["status"] = status
 
-        print("Start Date: \(startDate)")
-        print("End Date: \(endDate)")
-        print("Min Amount: \(minAmount)")
-        print("Max Amount: \(maxAmount)")
-        print("Status: \(status)")
+        print("Filters: \(filters)")
 
         // Dismiss the view controller
         dismiss(animated: true, completion: nil)
     }
 }
+
+
 
 
