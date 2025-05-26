@@ -80,6 +80,7 @@ class Auth: AuthProtocol {
                 completion(error)
             }
         }
+        saveName(name: "\(firstName) \(lastName) \(middleName)")
     }
 
     func logout() {
@@ -129,8 +130,12 @@ class Auth: AuthProtocol {
         }
     }
 
-    func saveAccountData(name: String, cardNumber: String, inn: String, bik: String) {
+    private func saveName(name: String) {
         keychain.set(name, forKey: KeychainKey.accountName.rawValue)
+    }
+
+    func saveAccountData(name: String, cardNumber: String, inn: String, bik: String) {
+        saveName(name: name)
         keychain.set(cardNumber, forKey: KeychainKey.accountCardNumber.rawValue)
         keychain.set(inn, forKey: KeychainKey.accountINN.rawValue)
         keychain.set(bik, forKey: KeychainKey.accountBIK.rawValue)

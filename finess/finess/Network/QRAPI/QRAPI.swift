@@ -89,4 +89,12 @@ extension QRAPI {
             action: .request
         )
     }
+
+    static func getAccounts() -> QRAPI {
+        return QRAPI(
+            method: .get,
+            path: "/accounts",
+            action: .request
+        )
+    }
 }

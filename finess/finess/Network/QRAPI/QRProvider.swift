@@ -58,6 +58,13 @@ final class QRProvider {
         }
     }
 
+    func getAccounts(completion: @escaping (Result<AccountsInfoResponse, APIErrorHandler>) -> Void) {
+        client.request(
+            with: QRAPI.getAccounts(),
+            map: AccountsInfoDTOToDomainConverter.convert(_:),
+            completion: completion)
+    }
+
     func createQR(
         amount: String?,
         completion: @escaping (Result<CreateQRResponse, APIErrorHandler>) -> Void

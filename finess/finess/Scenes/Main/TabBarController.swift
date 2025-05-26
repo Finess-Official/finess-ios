@@ -9,12 +9,15 @@ import UIKit
 
 enum Tabs: Int {
     case qr
+    case beacon
+    case history
 }
 
 class TabBarController: UITabBarController {
 
     private let mainCoordinator = MainCoordinator()
     private let beaconCoordinator = BeaconCoordinator()
+    private let historyCoordinator = HistoryCoordinator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +76,16 @@ class TabBarController: UITabBarController {
             selectedImage: beaconImage
         )
 
-        setViewControllers([qrNav, beaconVC], animated: false)
-    }
+        let historyVC = historyCoordinator.start()
+        historyVC.view.backgroundColor = .white
+        let historyImage = UIImage(systemName: "house")
+        historyVC.tabBarItem = UITabBarItem(
+            title: nil,
+            image: historyImage,
+            selectedImage: historyImage
+        )
 
+        setViewControllers([historyVC, qrNav, beaconVC], animated: false)
+    }
 }
+
