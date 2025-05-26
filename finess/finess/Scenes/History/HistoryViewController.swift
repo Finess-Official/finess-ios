@@ -33,6 +33,15 @@ class HistoryViewController: UIViewController {
         return label
     }()
 
+    private let filterButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(named: "Filter")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+
     private var collectionView: UICollectionView!
     private let provider = QRProvider()
     private var items: [CreateAccountResponse]? = nil
@@ -66,10 +75,15 @@ class HistoryViewController: UIViewController {
         }
     }
 
+    private func fetchHistory() {
+
+    }
+
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(subtitleLabel)
+        view.addSubview(filterButton)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -104,10 +118,22 @@ class HistoryViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             collectionView.heightAnchor.constraint(equalToConstant: 180),
 
+            filterButton.centerYAnchor.constraint(equalTo: subtitleLabel.centerYAnchor),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
+            filterButton.widthAnchor.constraint(equalToConstant: 20),
+            filterButton.heightAnchor.constraint(equalToConstant: 20),
+
             subtitleLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            subtitleLabel.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -10),
             subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding),
         ])
+
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+    }
+
+    @objc private func filterButtonTapped() {
+        let filterViewController = FilterViewController()
+        present(filterViewController, animated: true, completion: nil)
     }
 }
 
@@ -137,3 +163,5 @@ extension HistoryViewController: UICollectionViewDataSource, UICollectionViewDel
         }
     }
 }
+
+
