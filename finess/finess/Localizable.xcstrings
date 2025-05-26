@@ -50,6 +50,7 @@
       }
     },
     "Beacon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -470,6 +471,7 @@
       }
     },
     "QR" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ru" : {
           "stringUnit" : {

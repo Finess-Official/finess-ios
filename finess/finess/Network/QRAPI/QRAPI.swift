@@ -66,7 +66,15 @@ extension QRAPI {
         )
     }
 
-    static func initPayment(params: PaymentCreationParams) -> QRAPI {
+    static func initPaymentQR(params: PaymentCreationParamsQR) -> QRAPI {
+        return QRAPI(
+            method: .post,
+            path: "/payments:init",
+            action: .requestWithJSONBody(params)
+        )
+    }
+
+    static func initPaymentBeacon(params: PaymentCreationParamsBeacon) -> QRAPI {
         return QRAPI(
             method: .post,
             path: "/payments:init",

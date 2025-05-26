@@ -13,6 +13,11 @@ enum QRProviderState {
     case accountCreated(accountId: String)
 }
 
+enum PaymentType: String {
+    case qr = "QRCODE"
+    case beacon = "BEACON"
+}
+
 final class QRProvider {
     private let client: QRClient
     private let logger = Logger(label: "com.finess.qrProviderError")
@@ -106,16 +111,33 @@ final class QRProvider {
         )
     }
 
-    func initializePayment(
+    func initializePaymentQR(
         qrCodeId: String,
+        type: PaymentType,
         completion: @escaping (Result<PaymentInitializationTask, APIErrorHandler>) -> Void
     ) {
-        let params = PaymentCreationParams(
-            associationId: .init(type: "QRCODE", qrCodeId: qrCodeId)
+        let params = PaymentCreationParamsQR(
+            associationId: .init(type: type.rawValue, qrCodeId: qrCodeId)
         )
 
         client.request(
-            with: QRAPI.initPayment(params: params),
+            with: QRAPI.initPaymentQR(params: params),
+            map: PaymentDTOToDomainConverter.convert(from:),
+            completion: completion
+        )
+    }
+
+    func initializePaymentBeacon(
+        qrCodeId: String,
+        type: PaymentType,
+        completion: @escaping (Result<PaymentInitializationTask, APIErrorHandler>) -> Void
+    ) {
+        let params = PaymentCreationParamsBeacon(
+            associationId: .init(type: type.rawValue, beaconId: qrCodeId)
+        )
+
+        client.request(
+            with: QRAPI.initPaymentBeacon(params: params),
             map: PaymentDTOToDomainConverter.convert(from:),
             completion: completion
         )

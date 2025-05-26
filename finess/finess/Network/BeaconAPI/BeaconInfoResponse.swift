@@ -8,6 +8,7 @@
 import Foundation
 
 struct BeaconInfoResponse {
+    let id: String
     let major: UInt16
     let minor: UInt16
     let bluetoothId: String

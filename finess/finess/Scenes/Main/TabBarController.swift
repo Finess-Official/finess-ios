@@ -58,7 +58,7 @@ class TabBarController: UITabBarController {
         let qrNav = mainCoordinator.start()
         let qrImage = UIImage(named: "QR")?.withRenderingMode(.alwaysTemplate)
         qrNav.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("QR", comment: ""),
+            title: nil,
             image: qrImage,
             selectedImage: qrImage
         )
@@ -68,7 +68,7 @@ class TabBarController: UITabBarController {
         let iconSize = CGSize(width: 25, height: 25)
         let beaconImage = resizeImage(UIImage(named: "Beacon"), to: iconSize)?.withRenderingMode(.alwaysTemplate)
         beaconVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Beacon", comment: ""),
+            title: nil,
             image: beaconImage,
             selectedImage: beaconImage
         )

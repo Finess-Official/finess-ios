@@ -10,6 +10,7 @@ import Foundation
 struct BeaconCreationDTOToDomainConverter {
     static func convert(from dto: BeaconInfoResult) -> BeaconInfoResponse {
         return BeaconInfoResponse(
+            id: dto.id,
             major: dto.major,
             minor: dto.minor,
             bluetoothId: dto.bluetoothId,

@@ -90,7 +90,7 @@ class BeaconViewController: UIViewController {
                     guard let self = self else { return }
                     switch result {
                     case .success(let success):
-                        self.addBeacon(name: success.account.ownerName)
+                        self.addBeacon(name: success.account.ownerName, id: success.id, cardNumber: success.account.accountNumber)
                     case .failure(let failure):
                         self.showError(failure, loggingService: self.loggingService)
                     }
@@ -301,27 +301,37 @@ class BeaconViewController: UIViewController {
         broadcastWaves.removeAll()
     }
 
-    private func addBeacon(name: String) {
-        let beaconButton = createBeaconButton(name: name)
+    private func addBeacon(name: String, id: String, cardNumber: String) {
+        let beaconButton = createBeaconButton(name: name, id: id, cardNumber: cardNumber)
         DispatchQueue.main.async {
             self.beaconsStackView.addArrangedSubview(beaconButton)
         }
     }
 
-    private func createBeaconButton(name: String) -> UIButton {
+    private func createBeaconButton(name: String, id: String, cardNumber: String) -> UIButton {
         let button = UIButton(type: .system)
-        button.setTitle("\(name)", for: .normal)
+        button.setTitle(name, for: .normal)
         button.titleLabel?.font = .tinkoffHeading()
         button.setTitleColor(.tinkoffBlack, for: .normal)
         button.backgroundColor = .tinkoffYellow
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             self.animateButtonTap(button)
+            self.showDetails(for: id, name: name, cardNumber: cardNumber)
         }), for: .touchUpInside)
+
         return button
     }
+
+    private func showDetails(for id: String, name: String, cardNumber: String) {
+        let detailsViewController = BeaconTransferDetailsViewController(id: id)
+        detailsViewController.configure(name: name, cardNumber: cardNumber)
+        navigationController?.present(detailsViewController, animated: true)
+    }
+
 }
 
