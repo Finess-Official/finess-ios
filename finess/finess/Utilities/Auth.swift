@@ -12,7 +12,7 @@ import Combine
 protocol AuthProtocol: ObservableObject {
     var loggedIn: CurrentValueSubject<Bool, Never> { get }
     func signIn(password: String, completion: @escaping (APIErrorHandler?) -> Void)
-    func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void)
+    func signUp(firstName: String, lastName: String, middleName: String, password: String, completion: @escaping (APIErrorHandler?) -> Void)
     func getCredentials() -> Auth.Credentials
     func logout()
     func saveAccountData(name: String, cardNumber: String, inn: String, bik: String)
@@ -70,8 +70,8 @@ class Auth: AuthProtocol {
         }
     }
 
-    func signUp(password: String, completion: @escaping (APIErrorHandler?) -> Void) {
-        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password))) { result in
+    func signUp(firstName: String, lastName: String, middleName: String, password: String, completion: @escaping (APIErrorHandler?) -> Void) {
+        authClient.request(with: AuthAPI.signUp(params: SignUpParams(password: password, firstName: firstName, lastName: lastName, middleName: middleName))) { result in
             switch result {
             case let .success(success):
                 Auth.shared.setCredentials(authData: success)

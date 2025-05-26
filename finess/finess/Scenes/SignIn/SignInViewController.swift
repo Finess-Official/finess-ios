@@ -52,7 +52,6 @@ class SignInViewController: UIViewController {
             guard let self else { return }
             loadingView.start()
             didTapSignInButton(with: passwordTextField.text)
-            passwordTextField.text = ""
         }), for: .touchUpInside)
         return button
     }()
@@ -87,7 +86,6 @@ class SignInViewController: UIViewController {
     // MARK: - Initializer
     init(userDidSignedUp: Bool) {
         super.init(nibName: nil, bundle: nil)
-//        self.signupButton.isHidden = userDidSignedUp
         self.signupButton.isHidden = false
     }
     
@@ -149,7 +147,6 @@ class SignInViewController: UIViewController {
             signinButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             signinButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-//            signupButton.heightAnchor.constraint(equalToConstant: 44),
             signupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 

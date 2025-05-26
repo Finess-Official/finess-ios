@@ -339,6 +339,22 @@
         }
       }
     },
+    "firstName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Имя"
+          }
+        }
+      }
+    },
     "haveAccountSignIn" : {
       "localizations" : {
         "en" : {
@@ -371,6 +387,22 @@
         }
       }
     },
+    "lastName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фамилия"
+          }
+        }
+      }
+    },
     "lessThanSixSymbols" : {
       "localizations" : {
         "en" : {
@@ -383,6 +415,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В пароле меньше 6 символов"
+          }
+        }
+      }
+    },
+    "middleName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middle name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отчество"
           }
         }
       }
@@ -473,13 +521,20 @@
     "QR" : {
       "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "QRTitle" : {
       "extractionState" : "manual",

@@ -114,6 +114,33 @@ class SignUpViewController: UIViewController {
         return textField
     }()
 
+    private let firstNameTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("firstName", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        return textField
+    }()
+
+    private let lastNameTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("lastName", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        return textField
+    }()
+
+    private let middleNameTextField: RegisterTextField = {
+        let textField = RegisterTextField(placeholder: NSLocalizedString("middleName", comment: ""), mode: .required)
+        textField.layer.cornerRadius = 12
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.tinkoffBlack.withAlphaComponent(0.1).cgColor
+        textField.backgroundColor = .white
+        return textField
+    }()
+
     private let loggingService = APILoggingService()
 
     // MARK: - Init
@@ -132,6 +159,10 @@ class SignUpViewController: UIViewController {
         setupUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
         view.addGestureRecognizer(tapGesture)
+
+        // Register for keyboard notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +177,7 @@ class SignUpViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        passwordTextField.becomeFirstResponder()
+        firstNameTextField.becomeFirstResponder()
         animateUIElements()
     }
 
@@ -166,9 +197,9 @@ class SignUpViewController: UIViewController {
         )
 
         // Fade in other elements
-        let views = [passwordTextField, repeatPasswordTextField, signupButton, signinButton]
+        let views = [firstNameTextField, lastNameTextField, middleNameTextField, passwordTextField, repeatPasswordTextField, signupButton, signinButton]
         views.forEach { $0.alpha = 0 }
-        
+
         UIView.animate(
             withDuration: 0.4,
             delay: 0.6,
@@ -184,11 +215,20 @@ class SignUpViewController: UIViewController {
 
         passwordTextField.delegate = self
         repeatPasswordTextField.delegate = self
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        middleNameTextField.delegate = self
 
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         repeatPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
+        firstNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        lastNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        middleNameTextField.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(titleLabel)
+        view.addSubview(firstNameTextField)
+        view.addSubview(lastNameTextField)
+        view.addSubview(middleNameTextField)
         view.addSubview(passwordTextField)
         view.addSubview(repeatPasswordTextField)
         view.addSubview(signupButton)
@@ -201,7 +241,22 @@ class SignUpViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            passwordTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            firstNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            firstNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            firstNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            firstNameTextField.heightAnchor.constraint(equalToConstant: 50),
+
+            lastNameTextField.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 16),
+            lastNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            lastNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            lastNameTextField.heightAnchor.constraint(equalToConstant: 50),
+
+            middleNameTextField.topAnchor.constraint(equalTo: lastNameTextField.bottomAnchor, constant: 16),
+            middleNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            middleNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            middleNameTextField.heightAnchor.constraint(equalToConstant: 50),
+
+            passwordTextField.topAnchor.constraint(equalTo: middleNameTextField.bottomAnchor, constant: 16),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
@@ -275,12 +330,29 @@ class SignUpViewController: UIViewController {
     }
 
     private func cleanTextFields() {
+        firstNameTextField.text = ""
+        lastNameTextField.text = ""
+        middleNameTextField.text = ""
         passwordTextField.text = ""
         repeatPasswordTextField.text = ""
     }
 
+    // MARK: - Keyboard Notifications
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        signinButton.isHidden = true
+        signupButton.isHidden = true
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        signinButton.isHidden = false
+        signupButton.isHidden = false
+    }
+
     // MARK: - Actions
     @objc func tapGesture() {
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
+        middleNameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         repeatPasswordTextField.resignFirstResponder()
     }
@@ -295,8 +367,12 @@ class SignUpViewController: UIViewController {
                 self.signupButton.transform = .identity
             }
         }
-        
-        Auth.shared.signUp(password: password) { [weak self] error in
+
+        let firstName = firstNameTextField.text ?? ""
+        let lastName = lastNameTextField.text ?? ""
+        let middleName = middleNameTextField.text ?? ""
+
+        Auth.shared.signUp(firstName: firstName, lastName: lastName, middleName: middleName, password: password) { [weak self] error in
             DispatchQueue.main.async {
                 guard let self else { return }
                 if let error = error {
@@ -306,7 +382,7 @@ class SignUpViewController: UIViewController {
                     animation.duration = 0.6
                     animation.values = [-10.0, 10.0, -10.0, 10.0, -5.0, 5.0, -2.5, 2.5, 0.0]
                     self.repeatPasswordTextField.layer.add(animation, forKey: "shake")
-                    
+
                     self.showError(error, loggingService: self.loggingService)
                 } else {
                     self.navigationController?.popViewController(animated: false)
@@ -320,25 +396,54 @@ class SignUpViewController: UIViewController {
 // MARK: - UITextFieldDelegate
 extension SignUpViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        tapGesture()
+        if textField == firstNameTextField {
+            lastNameTextField.becomeFirstResponder()
+        } else if textField == lastNameTextField {
+            middleNameTextField.becomeFirstResponder()
+        } else if textField == middleNameTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            repeatPasswordTextField.becomeFirstResponder()
+        } else {
+            tapGesture()
+        }
         return true
     }
 
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == passwordTextField {
+            if let count = passwordTextField.text?.count, count < Constants.minSymbolCount {
+                passwordTextField.isInErrorState = true
+                passwordTextFieldErrorLabel.isHidden = false
+                updateRepeatPasswordTextFieldConstraint()
+            }
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == passwordTextField {
+            passwordTextField.isInErrorState = false
+            passwordTextFieldErrorLabel.isHidden = true
+            updateRepeatPasswordTextFieldConstraint()
+        }
+    }
+
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        if passwordTextField.text?.isEmpty ?? true || repeatPasswordTextField.text?.isEmpty ?? true {
+        if passwordTextField.text?.isEmpty ?? true || repeatPasswordTextField.text?.isEmpty ?? true ||
+           firstNameTextField.text?.isEmpty ?? true || lastNameTextField.text?.isEmpty ?? true {
             changeButtonState(isEnabled: false)
         } else {
             changeButtonState(isEnabled: true)
         }
 
-        if let count = passwordTextField.text?.count, count < Constants.minSymbolCount {
-            changeButtonState(isEnabled: false)
-            passwordTextField.isInErrorState = true
-            passwordTextFieldErrorLabel.isHidden = false
-        } else {
-            changeButtonState(isEnabled: true)
-            passwordTextField.isInErrorState = false
-            passwordTextFieldErrorLabel.isHidden = true
+        if textField == passwordTextField {
+            if let count = passwordTextField.text?.count, count < Constants.minSymbolCount {
+                passwordTextField.isInErrorState = true
+                passwordTextFieldErrorLabel.isHidden = false
+            } else {
+                passwordTextField.isInErrorState = false
+                passwordTextFieldErrorLabel.isHidden = true
+            }
         }
 
         // Check if passwords match when both fields are not empty
@@ -362,5 +467,6 @@ extension SignUpViewController: UITextFieldDelegate {
         updateRepeatPasswordTextFieldConstraint()
     }
 }
+
 
 

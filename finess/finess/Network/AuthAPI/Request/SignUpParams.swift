@@ -9,4 +9,7 @@ import Foundation
 
 struct SignUpParams: Encodable {
     let password: String
+    let firstName: String
+    let lastName: String
+    let middleName: String
 }
